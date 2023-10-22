@@ -1,0 +1,935 @@
+syntax = "proto3";
+package trx;
+
+import "google/protobuf/any.proto";
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/timestamp.proto";
+
+message TrxMember {
+  string DocNo = 1;
+  string PartnerCode = 2;
+  string FirstName = 3;
+  string LastName = 4;
+  string RoleType = 5;
+  string PhoneNumber = 6;
+  string Email = 7;
+  string Active = 8;
+  string ActiveAt = 9;
+  google.protobuf.StringValue NonActiveAt = 10; // Untuk tipe yang opsional atau bisa nil/null, Anda mungkin ingin menggunakan "google.protobuf.StringValue" atau mekanisme serupa tergantung pada kebutuhan Anda.
+  int64 OuId = 11;
+  string TypePartner = 12;
+  string CardNumber = 13;
+  string VehicleNumber = 14;
+  string RegisteredDatetime = 15;
+  string DateFrom = 16;
+  string DateTo = 17;
+  int64 ProductId = 18;
+  string ProductCode = 19;
+}
+
+message MerchantKey {
+  int64 ID = 1;
+  int64 OuId = 2;
+  string OuName = 3;
+  string OuCode = 4;
+  int64 OuSubBranchId = 5;
+  string OuSubBranchName = 6;
+  string OuSubBranchCode = 7;
+  int64 MainOuId = 8;
+  string MainOuCode = 9;
+  string MainOuName = 10;
+}
+
+message ResMerchantKey {
+  MerchantKey merchantkey =1 ;
+}
+
+
+message Empty{}
+
+message Param {
+  string param = 1;
+}
+
+message ResponseMap{
+  map<string, google.protobuf.Any> response = 1;
+}
+
+message RequestTrxCheckin {
+      string checkInDatetime = 1;
+      string productCode = 2;
+      string deviceId = 3;
+      string ipTerminal = 4;
+      string cardNumber = 6;
+      string uuidCard = 7;
+      string typeCard = 8;
+      double beginningBalance = 9;
+}
+
+message ResponseErr {
+  bool response = 1 ;
+}
+
+message RequestTrxCheckInWithoutCard {
+  string checkInDatetime = 1;
+  string productCode = 2;
+  string ipTerminal = 3;
+  string refId = 4;
+}
+
+message Trx {
+  string docNo = 1;
+  string docDate = 2;
+  string paymentRefDocno = 3;
+  string checkinDateTime = 4;
+  string checkoutDateTime = 5;
+  string deviceIdIn = 6;
+  string deviceId = 7;
+  string getIn = 8;
+  string getOut = 9;
+  string cardNumberUUIDIn = 10;
+  string cardNumberIn = 11;
+  string cardNumberUUID = 12;
+  string cardNumber = 13;
+  string typeCard = 14;
+  double beginningBalance = 15;
+  string extLocalDateTime = 16;
+  double chargeAmount = 17;
+  double grandTotal = 18;
+  string productCode = 19;
+  string productName = 20;
+  string productData = 21;
+  string requestData = 22;
+  string requestOutData = 23;
+  int64 ouId = 24;
+  string ouName = 25;
+  string ouCode = 26;
+  int64 ouSubBranchId = 27;
+  string uSubBranchName = 28;
+  string ouSubBranchCode = 29;
+  int64 mainOuId = 30;
+  string mainOuCode = 31;
+  string mainOuName = 32;
+  string memberCode = 33;
+  string memberName = 34;
+  string memberType = 35;
+  string memberStatus = 36;
+  string memberExpiredDate = 37;
+  int64 checkInTime = 38;
+  int64 checkOutTime = 39;
+  int64 durationTime = 40;
+  string vehicleNumberIn = 41;
+  string vehicleNumberOut = 42;
+  string logTrans = 43;
+  string merchantKey = 44;
+  string qrText = 45;
+  string qrA2P = 46;
+  string qrTextPaymentOnline = 47;
+  repeated TrxInvoiceItem trxInvoiceItem = 48;
+  bool flagSyncData = 49;
+  TrxMember memberData = 50;
+  map<string, google.protobuf.Any> trxAddInfo = 51; //interface
+  bool flagTrxFromCloud = 52;
+  bool isRsyncDataTrx = 53;
+  bool excludeSf = 54;
+  bool flagCharge = 55;
+  TrxInvoiceDetailItem requestAddTrxInvoiceDetailItem = 56;
+  string lastUpdatedAt = 57;
+}
+
+message ResponseTrxTicket {
+  string id = 1;
+  string checkInDateTime = 2;
+  string docNo = 3;
+  string productName = 4;
+  string vehicleNumberIn = 5;
+  string qrCode = 6;
+  string qrCodePaymentOnlinet = 7;
+  string ouCode = 8;
+  string ouName = 9;
+  string address = 10;
+}
+
+message RequestInquiryWithoutCard {
+  string qrCode = 1;
+  string productCode = 2;
+  string inquiryDateTime = 3;
+  string terminalId = 4;
+}
+
+message RequestCustomInquiryWithoutCard {
+  string qrCode = 1;
+  string productCode = 2;
+  string inquiryDateTime = 3;
+  string terminalId = 4;
+  string vehicleNumber = 5;
+}
+
+message RequestInquiryTrxDepoWithoutCard {
+  string docNoDepo = 1;
+  string productCode = 2;
+  string inquiryDateTime = 3;
+  string terminalId = 4;
+}
+
+message RequestInquiryWithCard {
+  string uuidCard = 1;
+  string productCode = 2;
+  string inquiryDateTime = 3;
+  string terminalId = 4;
+}
+
+message RequestInquiryWithCardP3 {
+  string cardNumber = 1;
+  string uuidCard = 2;
+  string typeCard = 3;
+  double beginningBalance = 4;
+  string productCode = 5;
+  string checkInDateTime = 6;
+  string deviceId = 7;
+  string terminalId = 8;
+}
+
+message RequestInquiryWithCardCustom {
+  string  uuidCard = 1;
+  string vehicleNumber = 2;
+  string productCode = 3;
+  string inquiryDateTime = 4;
+  string terminalId = 5;
+}
+
+message ResultFindTrxOutstanding {
+  string id = 1;
+  string docNo = 2;
+  double grandTotal = 3;
+  string checkInDatetime = 4;
+  double overNightPrice = 5;
+  string is24H = 6;
+  string cardNumber = 7;
+  string cardNumberUUID = 8;
+  string ouCode = 9;
+  string vehicleNumberIn = 10;
+  repeated TrxInvoiceItem trxInvoiceItem = 11;
+}
+
+message ResultInquiryTrx{ //
+  string id = 1;
+  string docNo = 2;
+  double nominal = 3;
+  string productCode = 4;
+  string productName = 5;
+  string vehicleNumberIn = 6;
+  string qrCode = 7;
+  bool excludeSf = 8;
+  google.protobuf.Any duration = 9;
+  google.protobuf.Any invoiceDetail = 10;
+  string ouCode = 11;
+}
+
+message ResultInquiryTrxCustomV2 {
+  string id = 1;
+  string docNo = 2;
+  double nominal = 3;
+  string productCode = 4;
+  string productName = 5;
+  string vehicleNumberIn = 6;
+  string memberCode = 7;
+  string memberName = 8;
+  string memberExpiredDate = 9;
+  string memberType = 10;
+  string memberStatus = 11;
+  string qrCode = 12;
+  bool excludeSf = 13;
+  google.protobuf.Any duration = 14;
+  google.protobuf.Any invoiceDetail = 15;
+  string ouCode = 16;
+}
+
+message ResultInquiryTrxCustom {
+  string id = 1;
+  string docNo = 2;
+  double nominal = 3;
+  string productCode = 4;
+  string productName = 5;
+  string vehicleNumberIn = 6;
+  string qrCode = 7;
+  bool excludeSf = 8;
+  google.protobuf.Any duration = 9;
+  string memberCode = 10;
+  string memberName = 11;
+  string memberType = 12;
+  string ouCode = 13;
+}
+
+message ResultInquiryTrxWithCard {
+  string id = 1;
+  string docNo = 2;
+  string cardNumberUUID = 3;
+  string cardNumber = 4;
+  double nominal = 5;
+  string productCode = 6;
+  string productName = 7;
+  string vehicleNumberIn = 8;
+  string qrCode = 9;
+  bool excludeSf = 10;
+  google.protobuf.Any duration = 11;
+  google.protobuf.Any duration24H = 12;
+  string memberCode = 13;
+  string memberName = 14;
+  string memberType = 15;
+  string memberExpiredDate = 16;
+  string memberStatus = 17;
+  google.protobuf.Any invoiceDetail = 18;
+  string ouCode = 19;
+}
+
+message RequestConfirmTrx {
+  string id = 1;
+  string deviceId = 2;
+  string ipTerminal = 3;
+  string cardNumber = 4;
+  string cardType = 5;
+  int64 lastBalance = 6;
+  int64 currentBalance = 7;
+  string uuidCard = 8;
+  string productCode = 9;
+  string productName = 10;
+  string checkOutDatetime = 11;
+  double grandTotal = 12;
+  string logTrans = 13;
+  string vehicleNumber = 14;
+  string username = 15;
+  string shiftCode = 16;
+  bool excludeSf = 17;
+}
+
+message RequestConfirmTrxDepositCounter {
+  string id = 1;
+  string deviceId = 2;
+  string ipTerminal = 3;
+  string cardNumber = 4;
+  string cardType = 5;
+  int64 lastBalance = 6;
+  int64 currentBalance = 7;
+  string uuidCard = 8;
+  string productCode = 9;
+  string productName = 10;
+  string checkOutDatetime = 11;
+  double grandTotal = 12;
+  string logTrans = 13;
+  string username = 14;
+  string shiftCode = 15;
+  bool excludeSf = 16;
+}
+
+message TrxCheckOut {
+  Trx trxOutStanding = 1;
+  Trx trx = 2;
+}
+
+message LogActivityTrx {
+  string docNo = 1;
+  string createdAt = 2;
+  string remark = 3;
+}
+
+message InvoiceTrx {
+  string docNo = 1;
+  string createdBy = 2;
+  string createdDate = 3;
+  double totalAmount = 4;
+  string typeInvoice = 5;
+}
+
+message TrxInvoiceItem {
+  string docNo = 1;
+  int64 productId = 2;
+  string productCode = 3;
+  string productName = 4;
+  string isPctServiceFee = 5;
+  double serviceFee = 6;
+  double serviceFeeMember = 7;
+  double price = 8;
+  int64 baseTime = 9;
+  int64 progressiveTime = 10;
+  double progressivePrice = 11;
+  string isPct = 12;
+  int64 progressivePct = 13;
+  double maxPrice = 14;
+  string is24H = 15;
+  string overnightTime = 16;
+  double overnightPrice = 17;
+  int64 gracePeriod = 18;
+  string flgRepeat = 19;
+  double totalAmount = 20;
+  double totalProgressiveAmount = 21;
+}
+
+message TrxInvoiceDetailItem {
+  string docNo = 1;
+  string productCode = 2;
+  double invoiceAmount = 3;
+  string createdAt = 4;
+  string createdDate = 5;
+}
+
+message ResponseTrxInvoiceDetailsItemList {
+  double totalAmount = 1;
+}
+
+message RequestInquiryRedis {
+  string docNo = 1;
+  string productCode = 2;
+  string productName = 3;
+  double grandTotal = 4;
+  string ouCode = 5;
+  string mKey = 6;
+  string paymentCategory = 7;
+  string deviceId = 8;
+  string channelCallback = 9;
+}
+
+message InvoiceFeeDetailParking {
+  double amount = 1;
+  double overnightFee = 2;
+}
+
+message ResponseConfirm {
+  string docNo = 1;
+  string productData = 2;
+  string productName = 3;
+  string cardNumber = 4;
+  string cardType = 5;
+  string checkInDatetime = 6;
+  string checkOutDatetime = 7;
+  string vehicleNumberIn = 8;
+  string vehicleNumberOut = 9;
+  string uuidCard = 10;
+  string showQRISArea = 11;
+  int64 currentBalance = 12;
+  double grandTotal = 13;
+  google.protobuf.Any invoiceDetail = 14;
+  string ouCode = 15;
+  string ouName = 16;
+  string address = 17;
+  string ipAddr = 18;
+}
+
+message ResponseConfirmTrxDeposit {
+  string docNo = 1;
+  string productData = 2;
+  string productName = 3;
+  string cardNumber = 4;
+  string cardType = 5;
+  string checkInDatetime = 6;
+  string checkOutDatetime = 7;
+  string uuidCard = 8;
+  string showQRISArea = 9;
+  int64 currentBalance = 10;
+  double grandTotal = 11;
+  string ouCode = 12;
+  string ouName = 13;
+  string address = 14;
+  string ipAddr = 15;
+}
+
+message ConfirmTrxByPass {
+  string cardType = 1;
+  string deviceId = 2;
+  string cardNumber = 3;
+  string productCode = 4;
+  string logTrans = 5;
+  string ipTerminal = 6;
+  double grandTotal = 7;
+}
+
+message RequestInquiryPayment {
+  string docNo = 1;
+  string productCode = 2;
+  string productName = 3;
+  string paymentMethod = 4;
+  double grandTotal = 5;
+}
+
+message RequestInquiryPaymentP3 {
+  string productCode = 1;
+  string paymentMethod = 2;
+  string inquiryDatetime = 3;
+  double grandTotal = 4;
+  string terminalId = 5;
+}
+
+message TrxOutstandingForClearSession {
+  string refDocNo = 1;
+  string tappingDate = 2;
+  string tappingDatetime = 3;
+  string cardNumberUuid = 4;
+  bool flagClearSession = 5;
+  string clearDatetime = 6;
+  Trx trxOutstandingSnapshot = 7; // Assuming Trx is another message defined elsewhere
+}
+
+message RequestSyncTrxToCLoud {
+  string dateFrom = 1;
+  string dateTo = 2;
+  string ouCode = 3;
+  int64 limit = 4;
+}
+
+message RequestUpdateProductPrice {
+  string id = 1;
+  string username = 2;
+  int64 pin = 3;
+  string productCode = 4;
+  int64 productId = 5;
+}
+
+message UpdateProductCloud {
+  int64 ouId = 1;
+  string docNo = 2;
+  int64 productId = 3;
+  string productCode = 4;
+  string productName = 5;
+}
+
+message RequestRegistrationMemberLocal {
+  string keyword = 1;
+  string firstName = 2;
+  string lastName = 3;
+  string phoneNumber = 4;
+  string vehicleNumber = 5;
+  string startDate = 6;
+  string endDate = 7;
+  string identifierCustomer = 8;
+}
+
+message TrxProductCustom {
+  string keyword = 1;
+  string productName = 2;
+  string productCode = 3;
+}
+
+message TrxInvoiceDepositCounterItem {
+  string docNoDepo = 1;
+  int64 productId = 2;
+  string productCode = 3;
+  string productName = 4;
+  string isPctServiceFee = 5;
+  double serviceFee = 6;
+  double serviceFeeMember = 7;
+  double price = 8;
+  double totalAmount = 9;
+}
+
+message RequestTrxDepositCounter {
+  string checkInDatetime = 1;
+  string productCode = 2;
+  string depositorName = 3;
+  string merk = 4;
+  string username = 5;
+  string shiftCode = 6;
+}
+
+message TrxDepositCounter {
+  string docNoDepo = 1;
+  string docDateDepo = 2;
+  string productData = 3;
+  string productCode = 4;
+  string productName = 5;
+  string merk = 6;
+  string deviceId = 7;
+  string depositorName = 8;
+  string checkInDatetime = 9;
+  string checkOutDatetime = 10;
+  int64 ouId = 11;
+  string ouName = 12;
+  string ouCode = 13;
+  int64 ouSubBranchId = 14;
+  string ouSubBranchName = 15;
+  string ouSubBranchCode = 16;
+  int64 mainOuId = 17;
+  string mainOuCode = 18;
+  string mainOuName = 19;
+  string memberCode = 20;
+  string memberName = 21;
+  string memberType = 22;
+  string requestData = 23;
+  string requestOutData = 24;
+  string cardNumberUUID = 25;
+  string cardNumber = 26;
+  string typeCard = 27;
+  double beginningBalance = 28;
+  string extLocalDatetime = 29;
+  double grandTotal = 30;
+  string logTrans = 31;
+  string merchantKey = 32;
+  string qrText = 33;
+  repeated TrxInvoiceDepositCounterItem trxInvoiceItem = 34;
+  bool flagSyncData = 35;
+  string username = 36;
+  string shiftCode = 37;
+  string usernameOut = 38;
+  string shiftCodeOut = 39;
+}
+
+message ResponseTrxDepositCounter {
+  string id = 1;  // Asumsi bahwa ObjectID dikonversi menjadi string di protobuf
+  string checkInDatetime = 2;
+  string docNoDepo = 3;
+  string productName = 4;
+  string depositorName = 5;
+  string merk = 6;
+  string qrCode = 7;
+  string ouCode = 8;
+  string ouName = 9;
+  string address = 10;
+}
+
+message ResultFindTrxDepositCounterOutstanding {
+  string id = 1;  // Asumsi bahwa ObjectID dikonversi menjadi string di protobuf
+  string docNoDepo = 2;
+  double grandTotal = 3;
+  string depositorName = 4;
+  string merk = 5;
+  string productName = 6;
+  string checkInDatetime = 7;
+  string ouCode = 8;
+  repeated TrxInvoiceDepositCounterItem trxInvoiceItem = 9;
+}
+
+message TrxItemsDepositCounter {
+  int64 draw = 1;
+  string keyword = 2;
+  string dateFrom = 3;
+  string dateTo = 4;
+  int64 limit = 5;
+  int64 offset = 6;
+  string ascDesc = 7;
+  string columnOrderName = 8;
+}
+
+message ResponseFindTrxDepositCounter {
+  int64 totalData = 1;
+  repeated FindTrxDepositCounter listTrxDepositCounterData = 2;
+}
+
+message FindTrxDepositCounter {
+  // You'll need to determine the proper representation for ObjectID in Protocol Buffers
+  string id = 1;
+  string docNoDepo = 2;
+  string productData = 3;
+  string productCode = 4;
+  string productName = 5;
+  string merk = 6;
+  string depositorName = 7;
+  string checkInDatetime = 8;
+  int64 ouId = 9;
+  string ouName = 10;
+  string ouCode = 11;
+  int64 ouSubBranchId = 12;
+  string ouSubBranchName = 13;
+  string ouSubBranchCode = 14;
+  int64 mainOuId = 15;
+  string mainOuCode = 16;
+  string mainOuName = 17;
+  string qrText = 18;
+  repeated TrxInvoiceDepositCounterItem trxInvoiceItemDepositCounter = 19;
+  string username = 20;
+  string shiftCode = 21;
+}
+
+// ... Assuming TrxInvoiceDepositCounterItem and TrxInvoiceMemberDeposit are defined ...
+
+message ResultInquiryTrxCustomDepositCounter {
+  string id = 1;
+  string docNo = 2;
+  double nominal = 3;
+  string productCode = 4;
+  string productName = 5;
+  string depositorName = 6;
+  string merk = 7;
+  string qrCode = 8;
+  string type = 9;
+  bool excludeSf = 10;
+  string ouCode = 11;
+}
+
+message Decrypt {
+  string keyword = 1;
+}
+
+message TrxCustom {
+  string docNo = 1;
+  string docDate = 2;
+  string extDocNo = 3;
+  string checkInDatetime = 4;
+  string checkOutDatetime = 5;
+  string deviceIdIn = 6;
+  string deviceId = 7;
+  string gateIn = 8;
+  string gateOut = 9;
+  string cardNumberUUIDIn = 10;
+  string cardNumberIn = 11;
+  string cardNumberUUID = 12;
+  string cardNumber = 13;
+  string typeCard = 14;
+  double beginningBalance = 15;
+  string extLocalDatetime = 16;
+  double grandTotal = 17;
+  double chargeAmount = 18;
+  int64 productId = 19;
+  string productCode = 20;
+  string productName = 21;
+  int64 productMembershipId = 22;
+  string productMembershipCode = 23;
+  string productMembershipName = 24;
+  string isPctServiceFee = 25;
+  double serviceFee = 26;
+  double serviceFeeMember = 27;
+  int64 dueDate = 28;
+  string discType = 29;
+  int64 discPct = 30;
+  double discAmount = 31;
+  int64 gracePeriodDate = 32;
+  string productData = 33;
+  string requestData = 34;
+  string requestOutData = 35;
+  int64 ouId = 36;
+  string ouName = 37;
+  string ouCode = 38;
+  int64 ouSubBranchId = 39;
+  string ouSubBranchName = 40;
+  string ouSubBranchCode = 41;
+  int64 mainOuId = 42;
+  string mainOuCode = 43;
+  string mainOuName = 44;
+  double price = 45;
+  string logTrans = 46;
+  string qrText = 47;
+  string merchantKey = 48;
+  repeated TrxInvoiceDepositCounterItem trxInvoiceItemDepositCounter = 49;
+  repeated TrxInvoiceMemberDeposit trxInvoiceItemMemberDeposit = 50;
+  bool flagSyncData = 51;
+  TrxMember memberData = 52;
+  bool flagTrxFromCloud = 53;
+  bool isRsyncDataTrx = 54;
+  bool excludeSf = 55;
+  bool flagCharge = 56;
+  bool flgDepositCounter = 57;
+}
+
+message TrxInvoiceMemberDeposit {
+  string docNoDepo = 1;
+  string partnerCode = 2;
+  int64 productId = 3;
+  string productCode = 4;
+  string productName = 5;
+  int64 productMembershipId = 6;
+  string productMembershipCode = 7;
+  string productMembershipName = 8;
+  string isPctServiceFee = 9;
+  double serviceFee = 10;
+  double serviceFeeMember = 11;
+  int64 dueDate = 12;
+  string discType = 13;
+  int64 discPct = 14;
+  double discAmount = 15;
+  int64 gracePeriodDate = 16;
+  double price = 17;
+  double totalAmount = 18;
+}
+
+
+message RequestInquiryPaymentQris {
+  string docNo = 1;
+  string productCode = 2;
+  string productName = 3;
+  string paymentMethod = 4;
+  double grandTotal = 5;
+  string mKey = 6;
+}
+
+message ResponseInquiryQris {
+  string type = 1;
+  string qrCode = 2;
+  string paymentRefDocNo = 3;
+}
+
+message ResponseConfirmLostTicket {
+  string docNo = 1;
+  string paymentMethod = 2;
+  string productName = 3;
+  string cardNumber = 4;
+  string cardType = 5;
+  string lostTicketInDatetime = 6;
+  string lostTicketOutDatetime = 7;
+  string vehicleNumberIn = 8;
+  string vehicleNumberOut = 9;
+  string uuidCard = 10;
+  string qrCodeLostTicket = 11;
+  int64 currentBalance = 12;
+  double chargeAmount = 13;
+  double grandTotal = 14;
+  string ouCode = 15;
+  string ouName = 16;
+  string address = 17;
+  string ipAddr = 18;
+}
+
+message RequestCheckStatusPaymentQris {
+  string docNo = 1;
+  string merchantKey = 2;
+}
+
+message ResponseCheckStatusA2P {
+  double acquiringID = 1;
+  double amount = 2;
+  string bankNoRef = 3;
+  string cardPan = 4;
+  string cardType = 5;
+  string corporateName = 6;
+  string createdAt = 7;
+  double currentBalance = 8;
+  string deviceID = 9;
+  double discount = 10;
+  double lastBalance = 11;
+  double mdr = 12;
+  string mid = 13;
+  string noHeader = 14;
+  string paymentCategory = 15;
+  double paymentFee = 16;
+  string promoCode = 17;
+  string promoIssuer = 18;
+  double serviceFee = 19;
+  string settleAt = 20;
+  string statusCode = 21;
+  string statusPayment = 22;
+  string tid = 23;
+}
+
+message ResponseConfirmTrxVip {
+  string docNo = 1;
+  string productData = 2;
+  string productName = 3;
+  string cardNumber = 4;
+  string cardType = 5;
+  string checkInDatetime = 6;
+  string checkOutDatetime = 7;
+  string vehicleNumberIn = 8;
+  string vehicleNumberOut = 9;
+  string uuidCard = 10;
+  string showQRISArea = 11;
+  int64 currentBalance = 12;
+  double chargeAmount = 13;
+  double grandTotal = 14;
+  string ouCode = 15;
+  string ouName = 16;
+  string address = 17;
+  string ipAddr = 18;
+}
+
+message TrxWithId {
+  string id = 1;
+  string docNo = 2;
+  string docDate = 3;
+  string checkInDatetime = 4;
+  string checkOutDatetime = 5;
+  string deviceIdIn = 6;
+  string deviceId = 7;
+  string gateIn = 8;
+  string gateOut = 9;
+  string cardNumberUUIDIn = 10;
+  string cardNumberIn = 11;
+  string cardNumberUUID = 12;
+  string cardNumber = 13;
+  string typeCard = 14;
+  double beginningBalance = 15;
+  string extLocalDatetime = 16;
+  double chargeAmount = 17;
+  double grandTotal = 18;
+  string productCode = 19;
+  string productName = 20;
+  string productData = 21;
+  string requestData = 22;
+  string requestOutData = 23;
+  int64 ouId = 24;
+  string ouName = 25;
+  string ouCode = 26;
+  int64 ouSubBranchId = 27;
+  string ouSubBranchName = 28;
+  string ouSubBranchCode = 29;
+  int64 mainOuId = 30;
+  string mainOuCode = 31;
+  string mainOuName = 32;
+  string memberCode = 33;
+  string memberName = 34;
+  string memberType = 35;
+  int64 checkInTime = 36;
+  int64 checkOutTime = 37;
+  int64 durationTime = 38;
+  string vehicleNumberIn = 39;
+  string vehicleNumberOut = 40;
+  string logTrans = 41;
+  string merchantKey = 42;
+  string qrText = 43;
+  repeated TrxInvoiceItem trxInvoiceItem = 44; // Assuming TrxInvoiceItem is defined
+  bool flagSyncData = 45;
+  TrxMember memberData = 46; // Assuming TrxMember is defined
+  map<string, google.protobuf.Any> trxAddInfo = 47; // Represents map<string, interface{}>
+  bool flagTrxFromCloud = 48;
+  bool isRsyncDataTrx = 49;
+  bool excludeSf = 50;
+  bool flagCharge = 51;
+  string chargeType = 52;
+  string qrTextLostTicket = 53; // As it's a pointer in Go, it's optional in protobuf
+  bool statusLostTicket = 54; // Same as above, optional
+}
+
+
+message ResponseIDTrxOutstanding {
+  string id = 1;
+}
+
+message ExtendMember {
+  int64 ouId = 1;
+  string registeredBy = 2;
+  string typePartner = 3;
+  string dateFrom = 4;
+  string dateTo = 5;
+  string vehicleNumber = 6;
+  string cardNumber = 7;
+  int64 productId = 8;
+  string username = 9;
+  string updatedAt = 10;
+  string updatedBy = 11;
+}
+
+message Response {
+  string statusCode = 1;
+  bool success = 2;
+  google.protobuf.Timestamp responseDatetime = 3;
+  google.protobuf.Any result = 4;
+  string message = 5;
+}
+
+
+service TrxService {
+  rpc AddTrxWithCard(RequestTrxCheckin) returns (Response) {}
+  rpc AddTrxWithoutCard(RequestTrxCheckInWithoutCard) returns (Response) {}
+  rpc InquiryTrxWithoutCard(RequestInquiryWithoutCard) returns (Response) {}
+  rpc InquiryTrxWithCard(RequestInquiryWithCard) returns (Response) {}
+  rpc ConfirmTrx(RequestConfirmTrx) returns (Response) {}
+  rpc ConfirmTrxByPassServ(ConfirmTrxByPass) returns (Response) {}
+  rpc ConfirmSyncTrxToCloud(Empty) returns (Response) {}
+  rpc InquiryPayment(RequestInquiryPayment) returns (Response) {}
+  rpc InquiryWithCardP3(RequestInquiryWithCardP3) returns (Response) {}
+  rpc InquiryPaymentP3(RequestInquiryPaymentP3) returns (Response) {}
+  rpc GetTrxListForDocDate(Param) returns (Response) {}
+  rpc UpdateStatusManualTrx(Param) returns (Response) {}
+  rpc FindTrxOutstandingByIndex(Param) returns (Response) {}
+  rpc UpdateProductPrice(RequestUpdateProductPrice) returns (Response) {}
+  rpc RegisterMember(RequestRegistrationMemberLocal) returns (Response) {}
+  rpc DecryptMKey(Decrypt) returns (Response) {}
+}
+
+option go_package = "/;trx";
