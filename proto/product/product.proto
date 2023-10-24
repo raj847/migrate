@@ -1,0 +1,73 @@
+syntax = "proto3";
+
+package product;
+
+message ProductOuWithRules {
+    int64 ouId = 1;
+    int64 productId = 2;
+    double price = 3;
+    int64 baseTime = 4;
+    int64 progressiveTime = 5;
+    double progressivePrice = 6;
+    string isPct = 7;
+    int64 progressivePct = 8;
+    double maxPrice = 9;
+    string is24h = 10;
+    string overnightTime = 11;
+    double overnightPrice = 12;
+    int64 gracePeriod = 13;
+    string flgRepeat = 14;
+}
+
+message PolicyOuProductWithRules {
+    int64 ouId = 1;
+    string ouCode = 2;
+    string ouName = 3;
+    int64 productId = 4;
+    string productCode = 5;
+    string productName = 6;
+    double serviceFee = 7;
+    string isPctServiceFee = 8;
+    string isPctServiceFeeMember = 9;
+    double serviceFeeMember = 10;
+    ProductOuWithRules productRules = 11;
+}
+
+message RequestGetPolicyOuProductList {
+    string keyword = 1;
+    string ascDesc = 2;
+    string columnOrderName = 3;
+}
+
+message ResponseGetPolicyOuProductList {
+    int64 countProductList = 1;
+    repeated PolicyOuProductWithRules data = 2;
+}
+
+message ResponseTrxProduct {
+    string productCode = 1;
+    string productName = 2;
+}
+
+message ProductOuDepositCounterWithRules {
+    int64 ouId = 1;
+    int64 productId = 2;
+    double price = 3;
+    string isPct = 4;
+}
+
+message PolicyOuProductDepositCounterWithRules {
+    int64 ouId = 1;
+    string ouCode = 2;
+    string ouName = 3;
+    int64 productId = 4;
+    string productCode = 5;
+    string productName = 6;
+    double serviceFee = 7;
+    string isPctServiceFee = 8;
+    double serviceFeeMember = 9;
+    string isPctServiceFeeMember = 10;
+    ProductOuDepositCounterWithRules productDepositCounterRules = 11;
+}
+
+option go_package = "/;product";

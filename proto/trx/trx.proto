@@ -5,6 +5,7 @@ import "google/protobuf/any.proto";
 import "google/protobuf/wrappers.proto";
 import "google/protobuf/timestamp.proto";
 
+
 message TrxMember {
   string DocNo = 1;
   string PartnerCode = 2;
@@ -133,6 +134,7 @@ message Trx {
   bool isRsyncDataTrx = 53;
   bool excludeSf = 54;
   bool flagCharge = 55;
+  string ChargeType = 58;
   TrxInvoiceDetailItem requestAddTrxInvoiceDetailItem = 56;
   string lastUpdatedAt = 57;
 }
@@ -912,6 +914,75 @@ message Response {
   string message = 5;
 }
 
+message DurationMessage {
+    int64 value = 1;  // represents duration value
+}
+
+message ResponseTrxCloud {
+    string statusCode = 1;
+    bool success = 2;
+    google.protobuf.Timestamp responseDatetime = 3;
+    Result result = 4;
+    string message = 5;
+}
+
+message Result {
+    Trx trx = 1;
+    ResultFindTrxOutstanding trxInvoiceItem = 2;
+}
+
+message Member {
+    int64 id = 1;
+    string partnerCode = 2;
+    string firstName = 3;
+    string lastName = 4;
+    string roleType = 5;
+    string phoneNumber = 6;
+    string email = 7;
+    string active = 8;
+    string activeAt = 9;
+    google.protobuf.StringValue nonActiveAt = 10;   // Used string as equivalent of *string in Go for nullable string.
+    int64 ouId = 11;
+    string typePartner = 12;
+    string cardNumber = 13;
+    string vehicleNumber = 14;
+    string registeredDatetime = 15;
+    string dateFrom = 16;
+    string dateTo = 17;
+    int64 productId = 18;
+    string productCode = 19;
+    int64 productMembershipId = 20;
+    double price = 21;         // Using double as equivalent of float64 in Go.
+    double serviceFee = 22;
+    string isPctSfee = 23;
+    int64 dueDate = 24;
+    string discType = 25;
+    double discAmount = 26;
+    int64 discPct = 27;
+    int64 gracePeriodDate = 28;
+    string username = 29;
+    bool isExtendMember = 30;  // Using bool as equivalent of bool in Go.
+    string createdAt = 31;
+    string createdBy = 32;
+    string updatedAt = 33;
+    string updatedBy = 34;
+}
+
+
+message ResponseInquiryPayment {
+    string statusCode = 1;
+    bool success = 2;
+    google.protobuf.Timestamp responseDatetime = 3; // Timestamp type might be better here, but requires an import.
+    Results result = 4;
+    string message = 5;
+}
+
+message Results {
+    string qrCode = 1;
+    string type = 2;
+    string paymentRefDocNo = 3;
+}
+
 
 service TrxService {
   rpc AddTrxWithCard(RequestTrxCheckin) returns (Response) {}
@@ -930,6 +1001,8 @@ service TrxService {
   rpc UpdateProductPrice(RequestUpdateProductPrice) returns (Response) {}
   rpc RegisterMember(RequestRegistrationMemberLocal) returns (Response) {}
   rpc DecryptMKey(Decrypt) returns (Response) {}
+  rpc UpdateAutoClearTrx(Param) returns (Response) {}
+  rpc ConfirmTrxP3(RequestConfirmTrx) returns(Response) {}
 }
 
 option go_package = "/;trx";

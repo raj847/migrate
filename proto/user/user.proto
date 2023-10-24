@@ -1,0 +1,59 @@
+syntax = "proto3";
+package user;
+
+message UserLoginLocal {
+    UserSync user = 1;
+    repeated OuSync ouList = 2;
+    string merchantKeyParking = 3;
+    string taskList = 4;
+    repeated DeviceSync deviceList = 5;
+}
+
+message OuSync {
+    int64 id = 1;
+    string ouCode = 2;
+    string ouName = 3;
+    string ouType = 4; 
+    int64 ouParentId = 5; 
+}
+
+message DeviceSync {
+    string deviceId = 1;
+    string flgProgressive = 2;
+    string merchantKey = 3;
+}
+
+message UserSync {
+    int64 id = 1;
+    string name = 2;
+    string username = 3;
+    string password = 4;
+    string typeUser = 5;
+    string email = 6;
+    int64 rolesId = 7;
+    string rolesName = 8;
+    string isAdmin = 9;
+    string isInternal = 10;
+    string active = 11;
+    repeated Ou ouList = 12;
+    string taskList = 13;
+    int64 ouDefaultId = 14;
+    int64 policyDefaultId = 15;
+    string ouCode = 16;
+    string ouName = 17;
+    int64 pinUser = 18;
+}
+
+message Ou {
+    int64 id = 1;
+    int64 ouId = 2;
+    string ouName = 3;
+    string ouCode = 4;
+    int64 ouSubBranchId = 5;
+    string ouSubBranchName = 6;
+    string ouSubBranchCode = 7;
+    int64 mainOuId = 8;
+    string mainOuCode = 9;
+    string mainOuName = 10;
+}
+option go_package = "/;user";
