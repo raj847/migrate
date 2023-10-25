@@ -1,10 +1,13 @@
 package trxService
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/labstack/echo"
 	"log"
 	"net/http"
+
 	"strings"
 	"time"
 	"togrpc/config"
@@ -25,7 +28,6 @@ import (
 	"google.golang.org/protobuf/types/known/wrapperspb"
 	"gopkg.in/mgo.v2/bson"
 
-	"github.com/labstack/echo"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -39,7 +41,9 @@ func NewTrxService(service *services.UsecaseService) *trxService {
 	}
 }
 
-func (svc trxService) AddTrxWithCard(ctx echo.Context, input *trx.RequestTrxCheckin) (*trx.Response, error) {
+var ctx = echo.Context()
+
+func (svc trxService) AddTrxWithCard(ctxRpc context.Context, input *trx.RequestTrxCheckin) (*trx.Response, error) {
 	var result *trx.Response
 	var resultProduct *prod.PolicyOuProductWithRules
 	resultProduct = nil
@@ -644,7 +648,7 @@ func (svc trxService) AddTrxWithCard(ctx echo.Context, input *trx.RequestTrxChec
 	return nil, ctx.JSON(http.StatusOK, result)
 }
 
-func (svc trxService) AddTrxWithoutCard(ctx echo.Context, input *trx.RequestTrxCheckInWithoutCard) (*trx.Response, error) {
+func (svc trxService) AddTrxWithoutCard(ctxRpc context.Context, input *trx.RequestTrxCheckInWithoutCard) (*trx.Response, error) {
 	var result *trx.Response
 	var resultProduct *prod.PolicyOuProductWithRules
 	resultProduct = nil
@@ -918,7 +922,7 @@ func (svc trxService) AddTrxWithoutCard(ctx echo.Context, input *trx.RequestTrxC
 	return nil, ctx.JSON(http.StatusOK, result)
 }
 
-func (svc trxService) InquiryTrxWithoutCard(ctx echo.Context, input *trx.RequestInquiryWithoutCard) (*trx.Response, error) {
+func (svc trxService) InquiryTrxWithoutCard(ctxRpc context.Context, input *trx.RequestInquiryWithoutCard) (*trx.Response, error) {
 	var result *trx.Response
 	var responseTrx *trx.ResultInquiryTrx
 	var ID string
@@ -1566,7 +1570,7 @@ func (svc trxService) InquiryTrxWithoutCard(ctx echo.Context, input *trx.Request
 	return nil, ctx.JSON(http.StatusOK, result)
 }
 
-func (svc trxService) InquiryTrxWithCard(ctx echo.Context, input *trx.RequestInquiryWithCard) (*trx.Response, error) {
+func (svc trxService) InquiryTrxWithCard(ctxRpc context.Context, input *trx.RequestInquiryWithCard) (*trx.Response, error) {
 	var result *trx.Response
 	resultInquiryTrxWithCard := make(map[string]interface{})
 	resultInquiryTrxWithCard["memberCode"] = constans.EMPTY_VALUE
@@ -2143,7 +2147,7 @@ func (svc trxService) InquiryTrxWithCard(ctx echo.Context, input *trx.RequestInq
 	return nil, ctx.JSON(http.StatusOK, result)
 }
 
-func (svc trxService) ConfirmTrx(ctx echo.Context, input *trx.RequestConfirmTrx) (*trx.Response, error) {
+func (svc trxService) ConfirmTrx(ctxRpc context.Context, input *trx.RequestConfirmTrx) (*trx.Response, error) {
 	var result *trx.Response
 	var resultTrx *trx.Trx
 	var resultTrxs models.Trx
@@ -2236,7 +2240,7 @@ func (svc trxService) ConfirmTrx(ctx echo.Context, input *trx.RequestConfirmTrx)
 	return nil, ctx.JSON(http.StatusOK, result)
 }
 
-func (svc trxService) ConfirmTrxByPass(ctx echo.Context, input *trx.ConfirmTrxByPass) (*trx.Response, error) {
+func (svc trxService) ConfirmTrxByPass(ctxRpc context.Context, input *trx.ConfirmTrxByPassMessage) (*trx.Response, error) {
 	var result *trx.Response
 	var trxs *trx.Trx
 
@@ -2668,7 +2672,7 @@ func (svc trxService) ConfirmTrxByPass(ctx echo.Context, input *trx.ConfirmTrxBy
 	return nil, ctx.JSON(http.StatusOK, result)
 }
 
-func (svc trxService) ConfirmSyncTrxToCloud(ctx echo.Context, input *trx.Empty) (*trx.Response, error) {
+func (svc trxService) ConfirmSyncTrxToCloud(ctxRpc context.Context, input *trx.Empty) (*trx.Response, error) {
 	var result *trx.Response
 	var trxLists []*trx.Trx
 
@@ -2855,7 +2859,7 @@ func (svc trxService) ConfirmSyncTrxToCloud(ctx echo.Context, input *trx.Empty) 
 	return nil, ctx.JSON(http.StatusOK, result)
 }
 
-func (svc trxService) InquiryPayment(ctx echo.Context, input *trx.RequestInquiryPayment) (*trx.Response, error) {
+func (svc trxService) InquiryPayment(ctxRpc context.Context, input *trx.RequestInquiryPayment) (*trx.Response, error) {
 	var result *trx.Response
 
 	if err := helpers.BindValidateStruct(ctx, input); err != nil {
@@ -3053,7 +3057,7 @@ func (svc trxService) InquiryPayment(ctx echo.Context, input *trx.RequestInquiry
 	return nil, ctx.JSON(http.StatusOK, result)
 }
 
-func (svc trxService) InquiryWithCardP3(ctx echo.Context, input *trx.RequestInquiryWithCardP3) (*trx.Response, error) {
+func (svc trxService) InquiryWithCardP3(ctxRpc context.Context, input *trx.RequestInquiryWithCardP3) (*trx.Response, error) {
 	var result *trx.Response
 	var resultProducts *prod.PolicyOuProductWithRules
 	var resultProduct models.PolicyOuProductWithRules
@@ -3548,7 +3552,7 @@ func (svc trxService) InquiryWithCardP3(ctx echo.Context, input *trx.RequestInqu
 	return nil, ctx.JSON(http.StatusOK, result)
 }
 
-func (svc trxService) InquiryPaymentP3(ctx echo.Context, input *trx.RequestInquiryPaymentP3) (*trx.Response, error) {
+func (svc trxService) InquiryPaymentP3(ctxRpc context.Context, input *trx.RequestInquiryPaymentP3) (*trx.Response, error) {
 	var result *trx.Response
 	//var responseTrx models.ResultInquiryTrx
 	requestInquiry := make(map[string]interface{})
@@ -4105,7 +4109,7 @@ func (svc trxService) InquiryPaymentP3(ctx echo.Context, input *trx.RequestInqui
 	return nil, ctx.JSON(http.StatusOK, result)
 }
 
-func (svc trxService) ConfirmTrxP3(ctx echo.Context, input *trx.RequestConfirmTrx) (*trx.Response, error) { //ppp
+func (svc trxService) ConfirmTrxP3(ctxRpc context.Context, input *trx.RequestConfirmTrx) (*trx.Response, error) { //ppp
 	var result *trx.Response
 	var resultTrx models.Trx
 
@@ -4187,7 +4191,7 @@ func (svc trxService) ConfirmTrxP3(ctx echo.Context, input *trx.RequestConfirmTr
 	return nil, ctx.JSON(http.StatusOK, result)
 }
 
-func (svc trxService) GetTrxListForDocDate(ctx echo.Context, docDate *trx.Param) (*trx.Response, error) {
+func (svc trxService) GetTrxListForDocDate(ctxRpc context.Context, docDate *trx.Param) (*trx.Response, error) {
 	var result *trx.Response
 	var tempTrxOutstanding *trx.Trx
 	var tempTrxOutstandings []*trx.Trx
@@ -4368,7 +4372,7 @@ func (svc trxService) GetTrxListForDocDate(ctx echo.Context, docDate *trx.Param)
 	return nil, ctx.JSON(http.StatusOK, result)
 }
 
-func (svc trxService) UpdateStatusManualTrx(ctx echo.Context, status *trx.Param) (*trx.Response, error) {
+func (svc trxService) UpdateStatusManualTrx(ctxRpc context.Context, status *trx.Param) (*trx.Response, error) {
 	var result *trx.Response
 
 	status.Param = ctx.Param("status")
@@ -4383,7 +4387,7 @@ func (svc trxService) UpdateStatusManualTrx(ctx echo.Context, status *trx.Param)
 	return nil, ctx.JSON(http.StatusOK, result)
 }
 
-func (svc trxService) UpdateAutoClearTrx(ctx echo.Context, status *trx.Param) (*trx.Response, error) {
+func (svc trxService) UpdateAutoClearTrx(ctxRpc context.Context, status *trx.Param) (*trx.Response, error) {
 	var result *trx.Response
 
 	status.Param = ctx.Param("status")
@@ -4398,7 +4402,7 @@ func (svc trxService) UpdateAutoClearTrx(ctx echo.Context, status *trx.Param) (*
 	return nil, ctx.JSON(http.StatusOK, result)
 }
 
-func (svc trxService) FindTrxOutstandingByIndex(ctx echo.Context, param *trx.Param) (*trx.Response, error) {
+func (svc trxService) FindTrxOutstandingByIndex(ctxRpc context.Context, param *trx.Param) (*trx.Response, error) {
 	var result *trx.Response
 	param.Param = ctx.Param("index")
 	var trxOutstanding *models.ResultFindTrxOutstanding
@@ -4516,7 +4520,7 @@ func (svc trxService) FindTrxOutstandingByIndex(ctx echo.Context, param *trx.Par
 	return nil, ctx.JSON(http.StatusOK, result)
 }
 
-func (svc trxService) UpdateProductPrice(ctx echo.Context, input *trx.RequestUpdateProductPrice) (*trx.Response, error) {
+func (svc trxService) UpdateProductPrice(ctxRpc context.Context, input *trx.RequestUpdateProductPrice) (*trx.Response, error) {
 	var result *trx.Response
 	ouId := utils.GetOuDefaultIdForToken(ctx)
 	var keyword string
@@ -4664,7 +4668,7 @@ func (svc trxService) UpdateProductPrice(ctx echo.Context, input *trx.RequestUpd
 	return nil, ctx.JSON(http.StatusOK, result)
 }
 
-func (svc trxService) RegisterMember(ctx echo.Context, input *trx.RequestRegistrationMemberLocal) (*trx.Response, error) {
+func (svc trxService) RegisterMember(ctxRpc context.Context, input *trx.RequestRegistrationMemberLocal) (*trx.Response, error) {
 	var result *trx.Response
 	username := utils.GetUsernameForToken(ctx)
 	ouId := utils.GetOuDefaultIdForToken(ctx)
@@ -4805,7 +4809,7 @@ func (svc trxService) RegisterMember(ctx echo.Context, input *trx.RequestRegistr
 	return nil, ctx.JSON(http.StatusOK, result)
 }
 
-func (svc trxService) DecryptMKey(ctx echo.Context, input *trx.Decrypt) (*trx.Response, error) {
+func (svc trxService) DecryptMKey(ctxRpc context.Context, input *trx.Decrypt) (*trx.Response, error) {
 	var result *trx.Response
 
 	if err := helpers.BindValidateStruct(ctx, input); err != nil {

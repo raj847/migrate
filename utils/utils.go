@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"google.golang.org/protobuf/reflect/protoreflect"
 	"log"
 	"math/rand"
 	"net/http"
@@ -143,6 +144,10 @@ type ConvTime struct {
 	Hours   int
 	Minutes int
 	Second  int
+}
+
+func (c ConvTime) ProtoReflect() protoreflect.Message {
+	panic("implement me")
 }
 
 var (
