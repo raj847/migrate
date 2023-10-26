@@ -1,4 +1,4 @@
-module togrpc
+module github.com/raj847/togrpc
 
 go 1.20
 
