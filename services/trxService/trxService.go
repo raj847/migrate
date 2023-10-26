@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/labstack/echo"
 	"log"
 	"net/http"
 
@@ -41,24 +40,26 @@ func NewTrxService(service *services.UsecaseService) *trxService {
 	}
 }
 
-var ctx = echo.Context()
-
-func (svc trxService) AddTrxWithCard(ctxRpc context.Context, input *trx.RequestTrxCheckin) (*trx.Response, error) {
+func (svc trxService) AddTrxWithCard(ctx context.Context, input *trx.RequestTrxCheckin) (*trx.MyResponse, error) {
 	var result *trx.Response
 	var resultProduct *prod.PolicyOuProductWithRules
 	resultProduct = nil
 	productName := constans.EMPTY_VALUE
 	productCode := constans.EMPTY_VALUE
 
-	if err := helpers.BindValidateStruct(ctx, input); err != nil {
+	if err := helpers.BindValidateStruct(input); err != nil {
 		result = helpers.ResponseJSON(false, constans.VALIDATE_ERROR_CODE, err.Error(), nil)
-		return nil, ctx.JSON(http.StatusBadRequest, &result)
+		return &trx.MyResponse{
+			Response: result,
+		}, nil
 	}
 
 	merchantKey, err := utils.DecryptMerchantKey(config.MERCHANT_KEY)
 	if err != nil {
 		result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, err.Error(), nil)
-		return nil, ctx.JSON(http.StatusBadRequest, result)
+		return &trx.MyResponse{
+			Response: result,
+		}, err
 	}
 
 	tempMerchantKey := &trx.MerchantKey{
@@ -78,7 +79,9 @@ func (svc trxService) AddTrxWithCard(ctxRpc context.Context, input *trx.RequestT
 		outputProduct, err := svc.Service.ProductRepo.FindProductByProductCode(input.ProductCode, tempMerchantKey.OuId)
 		if err != nil {
 			result = helpers.ResponseJSON(false, constans.DATA_ERROR_CODE, err.Error(), nil)
-			return nil, ctx.JSON(http.StatusBadRequest, result)
+			return &trx.MyResponse{
+				Response: result,
+			}, err
 		}
 		tempProd := &prod.ProductOuWithRules{
 			OuId:             outputProduct.ProductOuWithRules.OuId,
@@ -272,7 +275,9 @@ func (svc trxService) AddTrxWithCard(ctxRpc context.Context, input *trx.RequestT
 		resultMember, exists, err := svc.Service.MemberRepo.IsMemberByAdvanceIndex(input.UuidCard, constans.EMPTY_VALUE, checkInDate, config.MEMBER_BY, false)
 		if err != nil {
 			result = helpers.ResponseJSON(false, constans.VALIDATE_ERROR_CODE, err.Error(), nil)
-			return nil, ctx.JSON(http.StatusBadRequest, result)
+			return &trx.MyResponse{
+				Response: result,
+			}, err
 		}
 
 		if exists {
@@ -280,7 +285,9 @@ func (svc trxService) AddTrxWithCard(ctxRpc context.Context, input *trx.RequestT
 				resultTrx, err := svc.Service.TrxMongoRepo.FindIDTrxOutstandingByCard(input.UuidCard)
 				if err != nil {
 					result = helpers.ResponseJSON(false, constans.VALIDATE_ERROR_CODE, err.Error(), nil)
-					return nil, ctx.JSON(http.StatusBadRequest, result)
+					return &trx.MyResponse{
+						Response: result,
+					}, err
 				}
 				tempId := &trx.TrxWithId{
 					Id: resultTrx.ID,
@@ -302,8 +309,9 @@ func (svc trxService) AddTrxWithCard(ctxRpc context.Context, input *trx.RequestT
 				anyResponseTrx, _ := anypb.New(responseTrx)
 
 				result = helpers.ResponseJSON(true, constans.SUCCESS_CODE, constans.EMPTY_VALUE, anyResponseTrx)
-				return nil, ctx.JSON(http.StatusOK, result)
-
+				return &trx.MyResponse{
+					Response: result,
+				}, nil
 			}
 		}
 
@@ -312,7 +320,9 @@ func (svc trxService) AddTrxWithCard(ctxRpc context.Context, input *trx.RequestT
 		if resultRedis.Err() != nil || resultRedis.Val() == constans.EMPTY_VALUE || resultRedis.Val() == "0" {
 			log.Println("Skip auto clear transaction")
 			result = helpers.ResponseJSON(false, errCode, "Sesi Kartu Masih Digunakan", nil)
-			return nil, ctx.JSON(http.StatusBadRequest, result)
+			return &trx.MyResponse{
+				Response: result,
+			}, err
 		}
 
 		checkInDatetime, _ := time.Parse("2006-01-02 15:04", tempTrxOutstanding.CheckinDateTime[:len(tempTrxOutstanding.CheckinDateTime)-3])
@@ -346,13 +356,17 @@ func (svc trxService) AddTrxWithCard(ctxRpc context.Context, input *trx.RequestT
 		_, err = svc.Service.TrxMongoRepo.AddTrxOutstandingForClearSession(trxOutstandingForClearSession)
 		if err != nil {
 			result = helpers.ResponseJSON(false, constans.DATA_ERROR_CODE, err.Error(), nil)
-			return nil, ctx.JSON(http.StatusBadRequest, result)
+			return &trx.MyResponse{
+				Response: result,
+			}, err
 		}
 
 		err = svc.Service.TrxMongoRepo.RemoveTrxByDocNo(tempTrxOutstanding.DocNo)
 		if err != nil {
 			result = helpers.ResponseJSON(false, constans.DATA_ERROR_CODE, err.Error(), nil)
-			return nil, ctx.JSON(http.StatusBadRequest, result)
+			return &trx.MyResponse{
+				Response: result,
+			}, err
 		}
 
 		//}
@@ -360,7 +374,9 @@ func (svc trxService) AddTrxWithCard(ctxRpc context.Context, input *trx.RequestT
 		err = svc.Service.TrxMongoRepo.RemoveTrxByDocNo(tempTrxOutstanding.DocNo)
 		if err != nil {
 			result = helpers.ResponseJSON(false, constans.DATA_ERROR_CODE, err.Error(), nil)
-			return nil, ctx.JSON(http.StatusBadRequest, result)
+			return &trx.MyResponse{
+				Response: result,
+			}, err
 		}
 		//}
 
@@ -626,7 +642,9 @@ func (svc trxService) AddTrxWithCard(ctxRpc context.Context, input *trx.RequestT
 	err = <-errDocument
 	if err != nil {
 		result = helpers.ResponseJSON(false, constans.VALIDATE_ERROR_CODE, err.Error(), nil)
-		return nil, ctx.JSON(http.StatusBadRequest, result)
+		return &trx.MyResponse{
+			Response: result,
+		}, err
 	}
 
 	documentTrx := <-document
@@ -645,25 +663,31 @@ func (svc trxService) AddTrxWithCard(ctxRpc context.Context, input *trx.RequestT
 	anyResponseTrx, _ := anypb.New(&responseTrx)
 
 	result = helpers.ResponseJSON(true, constans.SUCCESS_CODE, constans.EMPTY_VALUE, anyResponseTrx)
-	return nil, ctx.JSON(http.StatusOK, result)
+	return &trx.MyResponse{
+		Response: result,
+	}, nil
 }
 
-func (svc trxService) AddTrxWithoutCard(ctxRpc context.Context, input *trx.RequestTrxCheckInWithoutCard) (*trx.Response, error) {
+func (svc trxService) AddTrxWithoutCard(ctx context.Context, input *trx.RequestTrxCheckInWithoutCard) (*trx.MyResponse, error) {
 	var result *trx.Response
 	var resultProduct *prod.PolicyOuProductWithRules
 	resultProduct = nil
 	productName := constans.EMPTY_VALUE
 	productCode := constans.EMPTY_VALUE
 
-	if err := helpers.BindValidateStruct(ctx, input); err != nil {
+	if err := helpers.BindValidateStruct(input); err != nil {
 		result = helpers.ResponseJSON(false, constans.VALIDATE_ERROR_CODE, err.Error(), nil)
-		return nil, ctx.JSON(http.StatusBadRequest, result)
+		return &trx.MyResponse{
+			Response: result,
+		}, err
 	}
 
 	merchantKey, err := utils.DecryptMerchantKey(config.MERCHANT_KEY)
 	if err != nil {
 		result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, err.Error(), nil)
-		return nil, ctx.JSON(http.StatusBadRequest, result)
+		return &trx.MyResponse{
+			Response: result,
+		}, err
 	}
 
 	tempMerchantKey := &trx.MerchantKey{
@@ -683,7 +707,9 @@ func (svc trxService) AddTrxWithoutCard(ctxRpc context.Context, input *trx.Reque
 		outputProduct, err := svc.Service.ProductRepo.FindProductByProductCode(input.ProductCode, tempMerchantKey.OuId)
 		if err != nil {
 			result = helpers.ResponseJSON(false, constans.DATA_ERROR_CODE, err.Error(), nil)
-			return nil, ctx.JSON(http.StatusBadRequest, result)
+			return &trx.MyResponse{
+				Response: result,
+			}, err
 		}
 		tempProd := &prod.ProductOuWithRules{
 			OuId:             outputProduct.ProductOuWithRules.OuId,
@@ -901,7 +927,9 @@ func (svc trxService) AddTrxWithoutCard(ctxRpc context.Context, input *trx.Reque
 	err = <-errDocument
 	if err != nil {
 		result = helpers.ResponseJSON(false, constans.DATA_ERROR_CODE, err.Error(), nil)
-		return nil, ctx.JSON(http.StatusBadRequest, result)
+		return &trx.MyResponse{
+			Response: result,
+		}, err
 	}
 
 	documentTrx := <-document
@@ -919,17 +947,21 @@ func (svc trxService) AddTrxWithoutCard(ctxRpc context.Context, input *trx.Reque
 	anyResponseTrx, _ := anypb.New(&responseTrx)
 
 	result = helpers.ResponseJSON(true, constans.SUCCESS_CODE, constans.EMPTY_VALUE, anyResponseTrx)
-	return nil, ctx.JSON(http.StatusOK, result)
+	return &trx.MyResponse{
+		Response: result,
+	}, nil
 }
 
-func (svc trxService) InquiryTrxWithoutCard(ctxRpc context.Context, input *trx.RequestInquiryWithoutCard) (*trx.Response, error) {
+func (svc trxService) InquiryTrxWithoutCard(ctx context.Context, input *trx.RequestInquiryWithoutCard) (*trx.MyResponse, error) {
 	var result *trx.Response
 	var responseTrx *trx.ResultInquiryTrx
 	var ID string
 
-	if err := helpers.BindValidateStruct(ctx, input); err != nil {
+	if err := helpers.BindValidateStruct(input); err != nil {
 		result = helpers.ResponseJSON(constans.FALSE_VALUE, constans.VALIDATE_ERROR_CODE, err.Error(), nil)
-		return nil, ctx.JSON(http.StatusOK, result)
+		return &trx.MyResponse{
+			Response: result,
+		}, err
 	}
 
 	if strings.ToUpper(input.QrCode) == "P3" {
@@ -937,13 +969,17 @@ func (svc trxService) InquiryTrxWithoutCard(ctxRpc context.Context, input *trx.R
 		resultRedis := svc.Service.RedisClientLocal.Get("P3")
 		if resultRedis.Err() != nil || resultRedis.Val() == constans.EMPTY_VALUE || resultRedis.Val() == "0" {
 			result = helpers.ResponseJSON(false, constans.DATA_ERROR_CODE, "Maaf untuk saat ini sistem P3 sudah tidak aktif,Keterangan lebih lanjut silahkan untuk menghubungi administrator", nil)
-			return nil, ctx.JSON(http.StatusBadRequest, result)
+			return &trx.MyResponse{
+				Response: result,
+			}, resultRedis.Err()
 		}
 
 		merchantKey, err := utils.DecryptMerchantKey(config.MERCHANT_KEY)
 		if err != nil {
 			result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, err.Error(), nil)
-			return nil, ctx.JSON(http.StatusBadRequest, result)
+			return &trx.MyResponse{
+				Response: result,
+			}, err
 		}
 
 		tempMerchantKey := &trx.MerchantKey{
@@ -962,7 +998,9 @@ func (svc trxService) InquiryTrxWithoutCard(ctxRpc context.Context, input *trx.R
 		resultProduct, err := svc.Service.ProductRepo.FindProductByProductCode(input.ProductCode, merchantKey.OuId)
 		if err != nil {
 			result = helpers.ResponseJSON(false, constans.DATA_ERROR_CODE, err.Error(), nil)
-			return nil, ctx.JSON(http.StatusBadRequest, result)
+			return &trx.MyResponse{
+				Response: result,
+			}, err
 		}
 
 		tempProd := &prod.ProductOuWithRules{
@@ -1008,7 +1046,9 @@ func (svc trxService) InquiryTrxWithoutCard(ctxRpc context.Context, input *trx.R
 		autoNumber, err := svc.Service.GenAutoNumRepo.AutonumberValueWithDatatype(constans.DATATYPE_TRX_LOCAL, prefix, 4)
 		if err != nil {
 			result = helpers.ResponseJSON(false, constans.DATA_ERROR_CODE, err.Error(), nil)
-			return nil, ctx.JSON(http.StatusBadRequest, result)
+			return &trx.MyResponse{
+				Response: result,
+			}, err
 		}
 
 		docNo := fmt.Sprintf("%s%s%d", prefixDocNo, autoNumber, tempMerchantKey.OuId)
@@ -1042,7 +1082,7 @@ func (svc trxService) InquiryTrxWithoutCard(ctxRpc context.Context, input *trx.R
 		}
 		trxInvoiceItemList = append(trxInvoiceItemList, trxInvoiceItem)
 
-		trx := &trx.Trx{
+		trxs := &trx.Trx{
 			DocNo:            docNo,
 			DocDate:          constans.EMPTY_VALUE,
 			CheckinDateTime:  input.InquiryDateTime,
@@ -1090,10 +1130,12 @@ func (svc trxService) InquiryTrxWithoutCard(ctxRpc context.Context, input *trx.R
 			TrxAddInfo:       nil,
 		}
 
-		redisStatus := svc.Service.RedisClientLocal.Set(fmt.Sprintf("%s#%s", "P3", docNo), utils.ToString(trx), 1*time.Minute)
+		redisStatus := svc.Service.RedisClientLocal.Set(fmt.Sprintf("%s#%s", "P3", docNo), utils.ToString(trxs), 1*time.Minute)
 		if redisStatus.Err() != nil {
 			result = helpers.ResponseJSON(false, constans.DATA_ERROR_CODE, redisStatus.Err().Error(), nil)
-			return nil, ctx.JSON(http.StatusBadRequest, result)
+			return &trx.MyResponse{
+				Response: result,
+			}, err
 		}
 
 		duration := utils.ConvDiffTime(checkinDatetimeParse, checkoutDatetimeParse)
@@ -1101,7 +1143,7 @@ func (svc trxService) InquiryTrxWithoutCard(ctxRpc context.Context, input *trx.R
 
 		responseTrx.Id = fmt.Sprintf("%s#%s", "P3", docNo)
 		responseTrx.DocNo = docNo
-		responseTrx.Nominal = trx.GrandTotal
+		responseTrx.Nominal = trxs.GrandTotal
 		responseTrx.ProductCode = outputProduct.ProductCode
 		responseTrx.ProductName = outputProduct.ProductName
 		responseTrx.VehicleNumberIn = constans.EMPTY_VALUE
@@ -1122,14 +1164,18 @@ func (svc trxService) InquiryTrxWithoutCard(ctxRpc context.Context, input *trx.R
 		docNo, err := utils.Decrypt(keyword, saltKey)
 		if err != nil {
 			result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, err.Error(), nil)
-			return nil, ctx.JSON(http.StatusBadRequest, result)
+			return &trx.MyResponse{
+				Response: result,
+			}, err
 		}
 
 		if input.ProductCode == constans.EMPTY_VALUE {
 			resultTrxOutstanding, exists, err := svc.Service.TrxMongoRepo.IsTrxOutstandingByDocNoForCustom(docNo)
 			if err != nil {
 				result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, err.Error(), nil)
-				return nil, ctx.JSON(http.StatusBadRequest, result)
+				return &trx.MyResponse{
+					Response: result,
+				}, err
 			}
 
 			var tempTrxInvoiceItems []*trx.TrxInvoiceItem
@@ -1267,7 +1313,9 @@ func (svc trxService) InquiryTrxWithoutCard(ctxRpc context.Context, input *trx.R
 
 			if !exists {
 				result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, "Trx outstanding not found", nil)
-				return nil, ctx.JSON(http.StatusBadRequest, result)
+				return &trx.MyResponse{
+					Response: result,
+				}, err
 			}
 
 			input.ProductCode = tempTrxOutstanding.ProductCode
@@ -1287,7 +1335,9 @@ func (svc trxService) InquiryTrxWithoutCard(ctxRpc context.Context, input *trx.R
 		resultTrx, exists, err := svc.Service.TrxMongoRepo.IsTrxOutstandingByDocNo(docNo, input.ProductCode)
 		if err != nil {
 			result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, err.Error(), nil)
-			return nil, ctx.JSON(http.StatusBadRequest, result)
+			return &trx.MyResponse{
+				Response: result,
+			}, err
 		}
 
 		tempTrxInvoiceItems := []*trx.TrxInvoiceItem{}
@@ -1339,7 +1389,9 @@ func (svc trxService) InquiryTrxWithoutCard(ctxRpc context.Context, input *trx.R
 				responseTrxCloud, err := helperService.CheckTrxCloudServer(docNo)
 				if err != nil {
 					result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, "Sesi Tidak Ditemukan", nil)
-					return nil, ctx.JSON(http.StatusBadRequest, result)
+					return &trx.MyResponse{
+						Response: result,
+					}, err
 				}
 				var tempTrxInvoiceItems []*trx.TrxInvoiceItem
 				for _, v := range responseTrxCloud.Result.Trx.TrxInvoiceItem {
@@ -1525,7 +1577,9 @@ func (svc trxService) InquiryTrxWithoutCard(ctxRpc context.Context, input *trx.R
 
 				if !tempResponseTrxCloud.Success {
 					result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, "Sesi Tidak Ditemukan", nil)
-					return nil, ctx.JSON(http.StatusBadRequest, result)
+					return &trx.MyResponse{
+						Response: result,
+					}, err
 				}
 
 				dataTrx := utils.ToString(tempResponseTrxCloud.Result.Trx)
@@ -1533,7 +1587,9 @@ func (svc trxService) InquiryTrxWithoutCard(ctxRpc context.Context, input *trx.R
 				redisStatus := svc.Service.RedisClientLocal.Set(ID, dataTrx, 5*time.Minute)
 				if redisStatus.Err() != nil {
 					result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, redisStatus.Err().Error(), nil)
-					return nil, ctx.JSON(http.StatusBadRequest, result)
+					return &trx.MyResponse{
+						Response: result,
+					}, err
 				}
 
 				tempResultTrx = tempResponseTrxCloud.Result.TrxInvoiceItem
@@ -1567,26 +1623,32 @@ func (svc trxService) InquiryTrxWithoutCard(ctxRpc context.Context, input *trx.R
 	anyResponseTrx, _ := anypb.New(responseTrx)
 
 	result = helpers.ResponseJSON(true, constans.SUCCESS_CODE, constans.EMPTY_VALUE, anyResponseTrx)
-	return nil, ctx.JSON(http.StatusOK, result)
+	return &trx.MyResponse{
+		Response: result,
+	}, nil
 }
 
-func (svc trxService) InquiryTrxWithCard(ctxRpc context.Context, input *trx.RequestInquiryWithCard) (*trx.Response, error) {
+func (svc trxService) InquiryTrxWithCard(ctx context.Context, input *trx.RequestInquiryWithCard) (*trx.MyResponse, error) {
 	var result *trx.Response
 	resultInquiryTrxWithCard := make(map[string]interface{})
 	resultInquiryTrxWithCard["memberCode"] = constans.EMPTY_VALUE
 	resultInquiryTrxWithCard["memberName"] = constans.EMPTY_VALUE
 	resultInquiryTrxWithCard["memberType"] = constans.EMPTY_VALUE
 
-	if err := helpers.BindValidateStruct(ctx, input); err != nil {
+	if err := helpers.BindValidateStruct(input); err != nil {
 		result = helpers.ResponseJSON(false, constans.VALIDATE_ERROR_CODE, err.Error(), nil)
-		return nil, ctx.JSON(http.StatusBadRequest, result)
+		return &trx.MyResponse{
+			Response: result,
+		}, err
 	}
 
 	inquiryDate := input.InquiryDateTime[:len(input.InquiryDateTime)-9]
 	resultMember, exists, err := svc.Service.MemberRepo.IsMemberByAdvanceIndex(input.UuidCard, constans.EMPTY_VALUE, inquiryDate, config.MEMBER_BY, false)
 	if err != nil {
 		result = helpers.ResponseJSON(false, constans.VALIDATE_ERROR_CODE, err.Error(), nil)
-		return nil, ctx.JSON(http.StatusBadRequest, result)
+		return &trx.MyResponse{
+			Response: result,
+		}, err
 	}
 
 	tempMemberData := &trx.Member{
@@ -1655,7 +1717,9 @@ func (svc trxService) InquiryTrxWithCard(ctxRpc context.Context, input *trx.Requ
 		resultTrx, err := svc.Service.TrxMongoRepo.FindTrxOutstandingByUUID(input.UuidCard, input.ProductCode)
 		if err != nil {
 			result = helpers.ResponseJSON(false, constans.VALIDATE_ERROR_CODE, "Sesi Tidak Ditemukan", nil)
-			return nil, ctx.JSON(http.StatusBadRequest, result)
+			return &trx.MyResponse{
+				Response: result,
+			}, err
 		}
 
 		if isSpecialMember {
@@ -1665,7 +1729,9 @@ func (svc trxService) InquiryTrxWithCard(ctxRpc context.Context, input *trx.Requ
 					resultTrx, err = svc.Service.TrxMongoRepo.FindTrxOutstandingByUUID(input.UuidCard, input.ProductCode)
 					if err != nil {
 						result = helpers.ResponseJSON(false, constans.VALIDATE_ERROR_CODE, "Sesi Tidak Ditemukan", nil)
-						return nil, ctx.JSON(http.StatusBadRequest, result)
+						return &trx.MyResponse{
+							Response: result,
+						}, err
 					}
 				}
 			} else {
@@ -1674,7 +1740,9 @@ func (svc trxService) InquiryTrxWithCard(ctxRpc context.Context, input *trx.Requ
 					resultTrx, err = svc.Service.TrxMongoRepo.FindTrxOutstandingByUUID(input.UuidCard, input.ProductCode)
 					if err != nil {
 						result = helpers.ResponseJSON(false, constans.VALIDATE_ERROR_CODE, "Sesi Tidak Ditemukan", nil)
-						return nil, ctx.JSON(http.StatusBadRequest, result)
+						return &trx.MyResponse{
+							Response: result,
+						}, err
 					}
 				}
 			}
@@ -1732,7 +1800,9 @@ func (svc trxService) InquiryTrxWithCard(ctxRpc context.Context, input *trx.Requ
 			resultActiveMemberList, err := svc.Service.MemberRepo.GetMemberActiveListByPeriod(input.UuidCard, constans.EMPTY_VALUE, checkinDate, inquiryDate, config.MEMBER_BY, false)
 			if err != nil {
 				result = helpers.ResponseJSON(false, constans.VALIDATE_ERROR_CODE, "Sesi Tidak Ditemukan", nil)
-				return nil, ctx.JSON(http.StatusBadRequest, result)
+				return &trx.MyResponse{
+					Response: result,
+				}, err
 			}
 
 			for _, rows := range resultActiveMemberList {
@@ -1836,7 +1906,9 @@ func (svc trxService) InquiryTrxWithCard(ctxRpc context.Context, input *trx.Requ
 		merchantKey, err := utils.DecryptMerchantKey(config.MERCHANT_KEY)
 		if err != nil {
 			result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, err.Error(), nil)
-			return nil, ctx.JSON(http.StatusBadRequest, result)
+			return &trx.MyResponse{
+				Response: result,
+			}, err
 		}
 
 		tempMerchantKey := &trx.MerchantKey{
@@ -1855,7 +1927,9 @@ func (svc trxService) InquiryTrxWithCard(ctxRpc context.Context, input *trx.Requ
 		resultTrx, exists, err := svc.Service.TrxMongoRepo.IsTrxOutstandingByUUID(input.UuidCard)
 		if err != nil {
 			result = helpers.ResponseJSON(false, constans.VALIDATE_ERROR_CODE, err.Error(), nil)
-			return nil, ctx.JSON(http.StatusBadRequest, result)
+			return &trx.MyResponse{
+				Response: result,
+			}, err
 		}
 
 		var tempTrxInvoiceItems []*trx.TrxInvoiceItem
@@ -1995,7 +2069,9 @@ func (svc trxService) InquiryTrxWithCard(ctxRpc context.Context, input *trx.Requ
 		resultProduct, err := svc.Service.ProductRepo.FindProductByProductCode(input.ProductCode, tempMerchantKey.OuId)
 		if err != nil {
 			result = helpers.ResponseJSON(false, constans.DATA_ERROR_CODE, err.Error(), nil)
-			return nil, ctx.JSON(http.StatusBadRequest, result)
+			return &trx.MyResponse{
+				Response: result,
+			}, err
 		}
 
 		checkinDatetimeParse, _ := time.Parse("2006-01-02 15:04:05", input.InquiryDateTime)
@@ -2006,7 +2082,9 @@ func (svc trxService) InquiryTrxWithCard(ctxRpc context.Context, input *trx.Requ
 		autoNumber, err := svc.Service.GenAutoNumRepo.AutonumberValueWithDatatype(constans.DATATYPE_TRX_LOCAL, prefix, 4)
 		if err != nil {
 			result = helpers.ResponseJSON(false, constans.DATA_ERROR_CODE, err.Error(), nil)
-			return nil, ctx.JSON(http.StatusBadRequest, result)
+			return &trx.MyResponse{
+				Response: result,
+			}, err
 		}
 
 		docNo := fmt.Sprintf("%s%s%d", prefixDocNo, autoNumber, tempMerchantKey.OuId)
@@ -2112,7 +2190,9 @@ func (svc trxService) InquiryTrxWithCard(ctxRpc context.Context, input *trx.Requ
 		redisStatus := svc.Service.RedisClientLocal.Set(input.UuidCard, utils.ToString(trxo), 30*time.Second)
 		if redisStatus.Err() != nil {
 			result = helpers.ResponseJSON(false, constans.DATA_ERROR_CODE, redisStatus.Err().Error(), nil)
-			return nil, ctx.JSON(http.StatusBadRequest, result)
+			return &trx.MyResponse{
+				Response: result,
+			}, err
 		}
 
 	}
@@ -2144,39 +2224,51 @@ func (svc trxService) InquiryTrxWithCard(ctxRpc context.Context, input *trx.Requ
 	anyResponseTrx, _ := anypb.New(responseTrx)
 
 	result = helpers.ResponseJSON(true, constans.SUCCESS_CODE, constans.EMPTY_VALUE, anyResponseTrx)
-	return nil, ctx.JSON(http.StatusOK, result)
+	return &trx.MyResponse{
+		Response: result,
+	}, nil
 }
 
-func (svc trxService) ConfirmTrx(ctxRpc context.Context, input *trx.RequestConfirmTrx) (*trx.Response, error) {
+func (svc trxService) ConfirmTrx(ctx context.Context, input *trx.RequestConfirmTrx) (*trx.MyResponse, error) {
 	var result *trx.Response
 	var resultTrx *trx.Trx
 	var resultTrxs models.Trx
 
 	request := new(models.RequestConfirmTrx)
-	if err := helpers.BindValidateStruct(ctx, request); err != nil {
+	if err := helpers.BindValidateStruct(request); err != nil {
 		result = helpers.ResponseJSON(false, constans.VALIDATE_ERROR_CODE, err.Error(), nil)
-		return nil, ctx.JSON(http.StatusBadRequest, result)
+		return &trx.MyResponse{
+			Response: result,
+		}, err
 	}
-	if err := helpers.BindValidateStruct(ctx, input); err != nil {
+	if err := helpers.BindValidateStruct(input); err != nil {
 		result = helpers.ResponseJSON(false, constans.VALIDATE_ERROR_CODE, err.Error(), nil)
-		return nil, ctx.JSON(http.StatusBadRequest, result)
+		return &trx.MyResponse{
+			Response: result,
+		}, err
 	}
 
 	if input.Id == constans.TYPE_PARTNER_FREE_PASS {
 		redisStatus := svc.Service.RedisClientLocal.Get(input.UuidCard)
 		if redisStatus.Err() != nil {
 			result = helpers.ResponseJSON(false, constans.DATA_ERROR_CODE, redisStatus.Err().Error(), nil)
-			return nil, ctx.JSON(http.StatusBadRequest, result)
+			return &trx.MyResponse{
+				Response: result,
+			}, redisStatus.Err()
 		}
 
 		if err := json.Unmarshal([]byte(redisStatus.Val()), &resultTrx); err != nil {
 			result = helpers.ResponseJSON(false, constans.DATA_ERROR_CODE, err.Error(), nil)
-			return nil, ctx.JSON(http.StatusBadRequest, result)
+			return &trx.MyResponse{
+				Response: result,
+			}, err
 		}
 
 		if err := json.Unmarshal([]byte(redisStatus.Val()), &resultTrxs); err != nil {
 			result = helpers.ResponseJSON(false, constans.DATA_ERROR_CODE, err.Error(), nil)
-			return nil, ctx.JSON(http.StatusBadRequest, result)
+			return &trx.MyResponse{
+				Response: result,
+			}, err
 		}
 
 		go helperService.CallSyncConfirmTrxForMemberFreePass(*request, resultTrxs, *svc.Service)
@@ -2184,17 +2276,23 @@ func (svc trxService) ConfirmTrx(ctxRpc context.Context, input *trx.RequestConfi
 		redisStatus := svc.Service.RedisClientLocal.Get(input.Id)
 		if redisStatus.Err() != nil {
 			result = helpers.ResponseJSON(false, constans.DATA_ERROR_CODE, redisStatus.Err().Error(), nil)
-			return nil, ctx.JSON(http.StatusBadRequest, result)
+			return &trx.MyResponse{
+				Response: result,
+			}, redisStatus.Err()
 		}
 
 		if err := json.Unmarshal([]byte(redisStatus.Val()), &resultTrx); err != nil {
 			result = helpers.ResponseJSON(false, constans.DATA_ERROR_CODE, err.Error(), nil)
-			return nil, ctx.JSON(http.StatusBadRequest, result)
+			return &trx.MyResponse{
+				Response: result,
+			}, err
 		}
 
 		if err := json.Unmarshal([]byte(redisStatus.Val()), &resultTrxs); err != nil {
 			result = helpers.ResponseJSON(false, constans.DATA_ERROR_CODE, err.Error(), nil)
-			return nil, ctx.JSON(http.StatusBadRequest, result)
+			return &trx.MyResponse{
+				Response: result,
+			}, err
 		}
 
 		go helperService.CallSyncConfirmTrxToCloud(nil, *request, resultTrxs, *svc.Service)
@@ -2204,7 +2302,9 @@ func (svc trxService) ConfirmTrx(ctxRpc context.Context, input *trx.RequestConfi
 		resultDataTrx, err := svc.Service.TrxMongoRepo.FindTrxOutstandingByID(ID)
 		if err != nil {
 			result = helpers.ResponseJSON(false, constans.VALIDATE_ERROR_CODE, "Sesi Tidak Ditemukan", nil)
-			return nil, ctx.JSON(http.StatusBadRequest, result)
+			return &trx.MyResponse{
+				Response: result,
+			}, err
 		}
 
 		resultTrxs = resultDataTrx
@@ -2237,22 +2337,28 @@ func (svc trxService) ConfirmTrx(ctxRpc context.Context, input *trx.RequestConfi
 	anyResponseTrx, _ := anypb.New(responseConfirm)
 
 	result = helpers.ResponseJSON(true, constans.SUCCESS_CODE, constans.EMPTY_VALUE, anyResponseTrx)
-	return nil, ctx.JSON(http.StatusOK, result)
+	return &trx.MyResponse{
+		Response: result,
+	}, nil
 }
 
-func (svc trxService) ConfirmTrxByPass(ctxRpc context.Context, input *trx.ConfirmTrxByPassMessage) (*trx.Response, error) {
+func (svc trxService) ConfirmTrxByPass(ctx context.Context, input *trx.ConfirmTrxByPassMessage) (*trx.MyResponse, error) {
 	var result *trx.Response
 	var trxs *trx.Trx
 
-	if err := helpers.BindValidateStruct(ctx, input); err != nil {
+	if err := helpers.BindValidateStruct(input); err != nil {
 		result = helpers.ResponseJSON(false, constans.VALIDATE_ERROR_CODE, err.Error(), nil)
-		return nil, ctx.JSON(http.StatusBadRequest, result)
+		return &trx.MyResponse{
+			Response: result,
+		}, err
 	}
 
 	merchantKey, err := utils.DecryptMerchantKey(config.MERCHANT_KEY)
 	if err != nil {
 		result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, err.Error(), nil)
-		return nil, ctx.JSON(http.StatusBadRequest, result)
+		return &trx.MyResponse{
+			Response: result,
+		}, err
 	}
 
 	tempMerchantKey := &trx.MerchantKey{
@@ -2271,13 +2377,17 @@ func (svc trxService) ConfirmTrxByPass(ctxRpc context.Context, input *trx.Confir
 	resultProduct, err := svc.Service.ProductRepo.FindProductByProductCode(input.ProductCode, tempMerchantKey.OuId)
 	if err != nil {
 		result = helpers.ResponseJSON(false, constans.DATA_ERROR_CODE, err.Error(), nil)
-		return nil, ctx.JSON(http.StatusBadRequest, result)
+		return &trx.MyResponse{
+			Response: result,
+		}, err
 	}
 
 	resultTrx, exists, err := svc.Service.TrxMongoRepo.IsTrxOutstandingByCardNumber(input.CardNumber)
 	if err != nil {
 		result = helpers.ResponseJSON(false, constans.VALIDATE_ERROR_CODE, err.Error(), nil)
-		return nil, ctx.JSON(http.StatusBadRequest, result)
+		return &trx.MyResponse{
+			Response: result,
+		}, err
 	}
 
 	var tempTrxInvoiceItems []*trx.TrxInvoiceItem
@@ -2430,7 +2540,9 @@ func (svc trxService) ConfirmTrxByPass(ctxRpc context.Context, input *trx.Confir
 		autoNumber, err := svc.Service.GenAutoNumRepo.AutonumberValueWithDatatype(constans.DATATYPE_TRX_LOCAL, prefix, 4)
 		if err != nil {
 			result = helpers.ResponseJSON(false, constans.DATA_ERROR_CODE, err.Error(), nil)
-			return nil, ctx.JSON(http.StatusBadRequest, result)
+			return &trx.MyResponse{
+				Response: result,
+			}, err
 		}
 
 		docNo := fmt.Sprintf("%s%d", autoNumber, merchantKey.OuId)
@@ -2659,26 +2771,34 @@ func (svc trxService) ConfirmTrxByPass(ctxRpc context.Context, input *trx.Confir
 	_, err = svc.Service.TrxMongoRepo.AddTrx(trxm)
 	if err != nil {
 		log.Println("ERROR AddTrx : ", err.Error())
-		return nil, err
+		return &trx.MyResponse{
+			Response: result,
+		}, err
 	}
 
 	err = svc.Service.TrxMongoRepo.RemoveTrxByDocNo(trxm.DocNo)
 	if err != nil {
 		log.Println("ERROR RemoveTrxByDocNo : ", err.Error())
-		return nil, err
+		return &trx.MyResponse{
+			Response: result,
+		}, err
 	}
 
 	result = helpers.ResponseJSON(true, constans.SUCCESS_CODE, constans.EMPTY_VALUE, nil)
-	return nil, ctx.JSON(http.StatusOK, result)
+	return &trx.MyResponse{
+		Response: result,
+	}, nil
 }
 
-func (svc trxService) ConfirmSyncTrxToCloud(ctxRpc context.Context, input *trx.Empty) (*trx.Response, error) {
+func (svc trxService) ConfirmSyncTrxToCloud(ctx context.Context, input *trx.Empty) (*trx.MyResponse, error) {
 	var result *trx.Response
 	var trxLists []*trx.Trx
 
 	trxList, err := svc.Service.TrxMongoRepo.GetTrxListForSyncDataFailed()
 	if err != nil {
-		return nil, err
+		return &trx.MyResponse{
+			Response: result,
+		}, err
 	}
 
 	for _, x := range trxList {
@@ -2848,7 +2968,9 @@ func (svc trxService) ConfirmSyncTrxToCloud(ctxRpc context.Context, input *trx.E
 			err = svc.Service.TrxMongoRepo.UpdateTrxByInterface(filter, updateSet)
 			if err != nil {
 				result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, err.Error(), nil)
-				return nil, ctx.JSON(http.StatusBadRequest, result)
+				return &trx.MyResponse{
+					Response: result,
+				}, err
 			}
 
 		}
@@ -2856,21 +2978,27 @@ func (svc trxService) ConfirmSyncTrxToCloud(ctxRpc context.Context, input *trx.E
 	}
 
 	result = helpers.ResponseJSON(true, constans.SUCCESS_CODE, constans.EMPTY_VALUE, nil)
-	return nil, ctx.JSON(http.StatusOK, result)
+	return &trx.MyResponse{
+		Response: result,
+	}, nil
 }
 
-func (svc trxService) InquiryPayment(ctxRpc context.Context, input *trx.RequestInquiryPayment) (*trx.Response, error) {
+func (svc trxService) InquiryPayment(ctx context.Context, input *trx.RequestInquiryPayment) (*trx.MyResponse, error) {
 	var result *trx.Response
 
-	if err := helpers.BindValidateStruct(ctx, input); err != nil {
+	if err := helpers.BindValidateStruct(input); err != nil {
 		result = helpers.ResponseJSON(false, constans.VALIDATE_ERROR_CODE, err.Error(), nil)
-		return nil, ctx.JSON(http.StatusBadRequest, result)
+		return &trx.MyResponse{
+			Response: result,
+		}, err
 	}
 
 	resultTrx, exists, err := svc.Service.TrxMongoRepo.IsTrxOutstandingByDocNoForCustom(input.DocNo)
 	if err != nil {
 		result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, err.Error(), nil)
-		return nil, ctx.JSON(http.StatusBadRequest, result)
+		return &trx.MyResponse{
+			Response: result,
+		}, err
 	}
 	var tempTrxInvoiceItems []*trx.TrxInvoiceItem
 	for _, v := range resultTrx.TrxInvoiceItem {
@@ -3008,7 +3136,9 @@ func (svc trxService) InquiryPayment(ctxRpc context.Context, input *trx.RequestI
 
 	if !exists {
 		result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, "Sesi Tidak Ditemukan", nil)
-		return nil, ctx.JSON(http.StatusBadRequest, result)
+		return &trx.MyResponse{
+			Response: result,
+		}, err
 	}
 
 	requestInquiryQRIS := make(map[string]interface{})
@@ -3022,25 +3152,33 @@ func (svc trxService) InquiryPayment(ctxRpc context.Context, input *trx.RequestI
 	body, err := json.Marshal(requestInquiryQRIS)
 	if err != nil {
 		result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, err.Error(), nil)
-		return nil, ctx.JSON(http.StatusBadRequest, result)
+		return &trx.MyResponse{
+			Response: result,
+		}, err
 	}
 
 	responseInquiryPaymentStr, err := helpers.CallHttpCloudServerParking("POST", body, "/mpos/local/inquiry-payment")
 	if err != nil {
 		result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, err.Error(), nil)
-		return nil, ctx.JSON(http.StatusBadRequest, result)
+		return &trx.MyResponse{
+			Response: result,
+		}, err
 	}
 
 	var responseInquiryPayment *trx.ResponseInquiryPayment
 	err = json.Unmarshal([]byte(*responseInquiryPaymentStr), &responseInquiryPayment)
 	if err != nil {
 		result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, err.Error(), nil)
-		return nil, ctx.JSON(http.StatusBadRequest, result)
+		return &trx.MyResponse{
+			Response: result,
+		}, err
 	}
 
 	if !responseInquiryPayment.Success {
 		result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, responseInquiryPayment.Message, nil)
-		return nil, ctx.JSON(http.StatusBadRequest, result)
+		return &trx.MyResponse{
+			Response: result,
+		}, err
 	}
 
 	response := make(map[string]interface{})
@@ -3054,10 +3192,12 @@ func (svc trxService) InquiryPayment(ctxRpc context.Context, input *trx.RequestI
 	anyResponseTrx, _ := anypb.New(s)
 
 	result = helpers.ResponseJSON(true, constans.SUCCESS_CODE, constans.EMPTY_VALUE, anyResponseTrx)
-	return nil, ctx.JSON(http.StatusOK, result)
+	return &trx.MyResponse{
+		Response: result,
+	}, nil
 }
 
-func (svc trxService) InquiryWithCardP3(ctxRpc context.Context, input *trx.RequestInquiryWithCardP3) (*trx.Response, error) {
+func (svc trxService) InquiryWithCardP3(ctx context.Context, input *trx.RequestInquiryWithCardP3) (*trx.MyResponse, error) {
 	var result *trx.Response
 	var resultProducts *prod.PolicyOuProductWithRules
 	var resultProduct models.PolicyOuProductWithRules
@@ -3066,21 +3206,27 @@ func (svc trxService) InquiryWithCardP3(ctxRpc context.Context, input *trx.Reque
 	resultInquiryTrxWithCard["memberName"] = constans.EMPTY_VALUE
 	resultInquiryTrxWithCard["memberType"] = constans.EMPTY_VALUE
 
-	if err := helpers.BindValidateStruct(ctx, input); err != nil {
+	if err := helpers.BindValidateStruct(input); err != nil {
 		result = helpers.ResponseJSON(false, constans.VALIDATE_ERROR_CODE, err.Error(), nil)
-		return nil, ctx.JSON(http.StatusBadRequest, result)
+		return &trx.MyResponse{
+			Response: result,
+		}, err
 	}
 
 	resultRedis := svc.Service.RedisClientLocal.Get("P3")
 	if resultRedis.Err() != nil || resultRedis.Val() == constans.EMPTY_VALUE || resultRedis.Val() == "0" {
 		result = helpers.ResponseJSON(false, constans.DATA_ERROR_CODE, "Maaf untuk saat ini sistem P3 sudah tidak aktif,Keterangan lebih lanjut silahkan untuk menghubungi administrator", nil)
-		return nil, ctx.JSON(http.StatusBadRequest, result)
+		return &trx.MyResponse{
+			Response: result,
+		}, resultRedis.Err()
 	}
 
 	merchantKey, err := utils.DecryptMerchantKey(config.MERCHANT_KEY)
 	if err != nil {
 		result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, err.Error(), nil)
-		return nil, ctx.JSON(http.StatusBadRequest, result)
+		return &trx.MyResponse{
+			Response: result,
+		}, err
 	}
 	tempMerchantKey := &trx.MerchantKey{
 		ID:              merchantKey.ID,
@@ -3098,7 +3244,9 @@ func (svc trxService) InquiryWithCardP3(ctxRpc context.Context, input *trx.Reque
 	resultProduct, err = svc.Service.ProductRepo.FindProductByProductCode(input.ProductCode, tempMerchantKey.OuId)
 	if err != nil {
 		result = helpers.ResponseJSON(false, constans.DATA_ERROR_CODE, err.Error(), nil)
-		return nil, ctx.JSON(http.StatusBadRequest, result)
+		return &trx.MyResponse{
+			Response: result,
+		}, err
 	}
 	tempProd := &prod.ProductOuWithRules{
 		OuId:             resultProduct.ProductOuWithRules.OuId,
@@ -3140,7 +3288,9 @@ func (svc trxService) InquiryWithCardP3(ctxRpc context.Context, input *trx.Reque
 	autoNumber, err := svc.Service.GenAutoNumRepo.AutonumberValueWithDatatype(constans.DATATYPE_TRX_LOCAL, prefix, 4)
 	if err != nil {
 		result = helpers.ResponseJSON(false, constans.DATA_ERROR_CODE, err.Error(), nil)
-		return nil, ctx.JSON(http.StatusBadRequest, result)
+		return &trx.MyResponse{
+			Response: result,
+		}, err
 	}
 
 	docNo := fmt.Sprintf("%s%s%d", prefixDocNo, autoNumber, tempMerchantKey.OuId)
@@ -3193,7 +3343,9 @@ func (svc trxService) InquiryWithCardP3(ctxRpc context.Context, input *trx.Reque
 	}
 	if err != nil {
 		result = helpers.ResponseJSON(false, constans.VALIDATE_ERROR_CODE, err.Error(), nil)
-		return nil, ctx.JSON(http.StatusBadRequest, result)
+		return &trx.MyResponse{
+			Response: result,
+		}, err
 	}
 
 	log.Println(tempMemberData)
@@ -3223,7 +3375,9 @@ func (svc trxService) InquiryWithCardP3(ctxRpc context.Context, input *trx.Reque
 		resultProduct, err = svc.Service.ProductRepo.FindProductByProductCode(input.ProductCode, tempMerchantKey.OuId)
 		if err != nil {
 			result = helpers.ResponseJSON(false, constans.DATA_ERROR_CODE, err.Error(), nil)
-			return nil, ctx.JSON(http.StatusBadRequest, result)
+			return &trx.MyResponse{
+				Response: result,
+			}, err
 		}
 
 		tempProd = &prod.ProductOuWithRules{
@@ -3263,7 +3417,9 @@ func (svc trxService) InquiryWithCardP3(ctxRpc context.Context, input *trx.Reque
 					resultProduct, err = svc.Service.ProductRepo.FindProductByProductCode(input.ProductCode, tempMerchantKey.OuId)
 					if err != nil {
 						result = helpers.ResponseJSON(false, constans.DATA_ERROR_CODE, err.Error(), nil)
-						return nil, ctx.JSON(http.StatusBadRequest, result)
+						return &trx.MyResponse{
+							Response: result,
+						}, err
 					}
 					tempProd = &prod.ProductOuWithRules{
 						OuId:             resultProduct.ProductOuWithRules.OuId,
@@ -3302,7 +3458,9 @@ func (svc trxService) InquiryWithCardP3(ctxRpc context.Context, input *trx.Reque
 					resultProduct, err = svc.Service.ProductRepo.FindProductByProductCode(input.ProductCode, tempMerchantKey.OuId)
 					if err != nil {
 						result = helpers.ResponseJSON(false, constans.DATA_ERROR_CODE, err.Error(), nil)
-						return nil, ctx.JSON(http.StatusBadRequest, result)
+						return &trx.MyResponse{
+							Response: result,
+						}, err
 					}
 					tempProd = &prod.ProductOuWithRules{
 						OuId:             resultProduct.ProductOuWithRules.OuId,
@@ -3348,7 +3506,9 @@ func (svc trxService) InquiryWithCardP3(ctxRpc context.Context, input *trx.Reque
 			resultActiveMemberList, err := svc.Service.MemberRepo.GetMemberActiveListByPeriod(input.UuidCard, constans.EMPTY_VALUE, checkinDate, inquiryDate, config.MEMBER_BY, false)
 			if err != nil {
 				result = helpers.ResponseJSON(false, constans.VALIDATE_ERROR_CODE, "Sesi Tidak Ditemukan", nil)
-				return nil, ctx.JSON(http.StatusBadRequest, result)
+				return &trx.MyResponse{
+					Response: result,
+				}, err
 			}
 
 			for _, rows := range resultActiveMemberList {
@@ -3524,7 +3684,9 @@ func (svc trxService) InquiryWithCardP3(ctxRpc context.Context, input *trx.Reque
 	if err != nil {
 		log.Println("ERROR AddTrxCheckIn :  ", err)
 		result = helpers.ResponseJSON(false, constans.VALIDATE_ERROR_CODE, err.Error(), nil)
-		return nil, ctx.JSON(http.StatusBadRequest, result)
+		return &trx.MyResponse{
+			Response: result,
+		}, err
 	}
 
 	duration := utils.ConvDiffTime(checkinDatetimeParse, checkoutDatetimeParse)
@@ -3549,24 +3711,30 @@ func (svc trxService) InquiryWithCardP3(ctxRpc context.Context, input *trx.Reque
 	anyResponseTrx, _ := anypb.New(responseTrx)
 
 	result = helpers.ResponseJSON(true, constans.SUCCESS_CODE, constans.EMPTY_VALUE, anyResponseTrx)
-	return nil, ctx.JSON(http.StatusOK, result)
+	return &trx.MyResponse{
+		Response: result,
+	}, nil
 }
 
-func (svc trxService) InquiryPaymentP3(ctxRpc context.Context, input *trx.RequestInquiryPaymentP3) (*trx.Response, error) {
+func (svc trxService) InquiryPaymentP3(ctx context.Context, input *trx.RequestInquiryPaymentP3) (*trx.MyResponse, error) {
 	var result *trx.Response
 	//var responseTrx models.ResultInquiryTrx
 	requestInquiry := make(map[string]interface{})
 	channelCallback := make(map[string]interface{})
 
-	if err := helpers.BindValidateStruct(ctx, input); err != nil {
+	if err := helpers.BindValidateStruct(input); err != nil {
 		result = helpers.ResponseJSON(false, constans.VALIDATE_ERROR_CODE, err.Error(), nil)
-		return nil, ctx.JSON(http.StatusBadRequest, result)
+		return &trx.MyResponse{
+			Response: result,
+		}, err
 	}
 
 	merchantKey, err := utils.DecryptMerchantKey(config.MERCHANT_KEY)
 	if err != nil {
 		result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, err.Error(), nil)
-		return nil, ctx.JSON(http.StatusBadRequest, result)
+		return &trx.MyResponse{
+			Response: result,
+		}, err
 	}
 
 	tempMerchantKey := &trx.MerchantKey{
@@ -3585,7 +3753,9 @@ func (svc trxService) InquiryPaymentP3(ctxRpc context.Context, input *trx.Reques
 	resultProduct, err := svc.Service.ProductRepo.FindProductByProductCode(input.ProductCode, tempMerchantKey.OuId)
 	if err != nil {
 		result = helpers.ResponseJSON(false, constans.DATA_ERROR_CODE, err.Error(), nil)
-		return nil, ctx.JSON(http.StatusBadRequest, result)
+		return &trx.MyResponse{
+			Response: result,
+		}, err
 	}
 	tempProd := &prod.ProductOuWithRules{
 		OuId:             resultProduct.ProductOuWithRules.OuId,
@@ -3627,7 +3797,9 @@ func (svc trxService) InquiryPaymentP3(ctxRpc context.Context, input *trx.Reques
 	autoNumber, err := svc.Service.GenAutoNumRepo.AutonumberValueWithDatatype(constans.DATATYPE_TRX_LOCAL, prefix, 4)
 	if err != nil {
 		result = helpers.ResponseJSON(false, constans.DATA_ERROR_CODE, err.Error(), nil)
-		return nil, ctx.JSON(http.StatusBadRequest, result)
+		return &trx.MyResponse{
+			Response: result,
+		}, err
 	}
 
 	docNo := fmt.Sprintf("%s%s%d", prefixDocNo, autoNumber, tempMerchantKey.OuId)
@@ -3783,7 +3955,9 @@ func (svc trxService) InquiryPaymentP3(ctxRpc context.Context, input *trx.Reques
 			resultOutstanding, err := svc.Service.TrxMongoRepo.FindTrxOutstandingByDocNoCustom(tempTrxOutstanding.DocNo)
 			if err != nil {
 				result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, err.Error(), nil)
-				return nil, ctx.JSON(http.StatusBadRequest, result)
+				return &trx.MyResponse{
+					Response: result,
+				}, err
 			}
 
 			tempTrxInvoiceItems := []*trx.TrxInvoiceItem{}
@@ -3837,7 +4011,9 @@ func (svc trxService) InquiryPaymentP3(ctxRpc context.Context, input *trx.Reques
 			resultConfirmA2P, err := helperService.WorkerExtCloudPayment(requestA2PConfirm, fmt.Sprintf("%s%s", config.UrlPaymentA2P, "/public/payment/confirmation"), "bWtwbW9iaWxlOm1rcG1vYmlsZTEyMw==", constans.EMPTY_VALUE)
 			if err != nil {
 				result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, err.Error(), nil)
-				return nil, ctx.JSON(http.StatusBadRequest, result)
+				return &trx.MyResponse{
+					Response: result,
+				}, err
 			}
 
 			var responseA2PConfirm models.ResponseA2PConfirmation
@@ -3859,7 +4035,9 @@ func (svc trxService) InquiryPaymentP3(ctxRpc context.Context, input *trx.Reques
 				anyResponseTrx, _ := anypb.New(s)
 
 				result = helpers.ResponseJSON(true, constans.SUCCESS_CODE, constans.EMPTY_VALUE, anyResponseTrx)
-				return nil, ctx.JSON(http.StatusOK, result)
+				return &trx.MyResponse{
+					Response: result,
+				}, err
 			} else {
 
 				if config.QRISPayment == constans.YES && tempTrxOutstanding.GrandTotal > 0 {
@@ -3888,7 +4066,9 @@ func (svc trxService) InquiryPaymentP3(ctxRpc context.Context, input *trx.Reques
 						anyResponseTrx, _ := anypb.New(s)
 
 						result = helpers.ResponseJSON(true, constans.SUCCESS_CODE, constans.EMPTY_VALUE, anyResponseTrx)
-						return nil, ctx.JSON(http.StatusOK, result)
+						return &trx.MyResponse{
+							Response: result,
+						}, err
 
 					}
 				}
@@ -3896,7 +4076,9 @@ func (svc trxService) InquiryPaymentP3(ctxRpc context.Context, input *trx.Reques
 			}
 		} else {
 			result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, "Transaction Already Success!", nil)
-			return nil, ctx.JSON(http.StatusOK, result)
+			return &trx.MyResponse{
+				Response: result,
+			}, err
 		}
 	}
 
@@ -3981,11 +4163,15 @@ func (svc trxService) InquiryPaymentP3(ctxRpc context.Context, input *trx.Reques
 			qrCodePayment, paymentRefDocNo, err = helperService.CallQRPaymentP3(trxm, duration, *svc.Service)
 			if err != nil {
 				result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, err.Error(), nil)
-				return nil, ctx.JSON(http.StatusBadRequest, result)
+				return &trx.MyResponse{
+					Response: result,
+				}, err
 			}
 		} else {
 			result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, "Theres No Internet Connection!", nil)
-			return nil, ctx.JSON(http.StatusBadRequest, result)
+			return &trx.MyResponse{
+				Response: result,
+			}, err
 		}
 
 	}
@@ -4069,7 +4255,9 @@ func (svc trxService) InquiryPaymentP3(ctxRpc context.Context, input *trx.Reques
 	if err != nil {
 		log.Println("ERROR AddTrxCheckIn :  ", err)
 		result = helpers.ResponseJSON(false, constans.VALIDATE_ERROR_CODE, err.Error(), nil)
-		return nil, ctx.JSON(http.StatusBadRequest, result)
+		return &trx.MyResponse{
+			Response: result,
+		}, err
 	}
 
 	if qrCodePayment != constans.EMPTY_VALUE {
@@ -4087,7 +4275,9 @@ func (svc trxService) InquiryPaymentP3(ctxRpc context.Context, input *trx.Reques
 		statusRedis := svc.Service.RedisClientLocal.Set(keyInquiryPayment, fmt.Sprintf("%s#%s#%s", trxm.DocNo, paymentRefDocNo, qrCodePayment), constans.EMPTY_VALUE_INT)
 		if statusRedis.Err() != nil {
 			result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, "Error Set Redis Local!", nil)
-			return nil, ctx.JSON(http.StatusBadRequest, result)
+			return &trx.MyResponse{
+				Response: result,
+			}, err
 		}
 
 	}
@@ -4106,29 +4296,37 @@ func (svc trxService) InquiryPaymentP3(ctxRpc context.Context, input *trx.Reques
 	anyResponseTrx, _ := anypb.New(s)
 
 	result = helpers.ResponseJSON(true, constans.SUCCESS_CODE, constans.EMPTY_VALUE, anyResponseTrx)
-	return nil, ctx.JSON(http.StatusOK, result)
+	return &trx.MyResponse{
+		Response: result,
+	}, nil
 }
 
-func (svc trxService) ConfirmTrxP3(ctxRpc context.Context, input *trx.RequestConfirmTrx) (*trx.Response, error) { //ppp
+func (svc trxService) ConfirmTrxP3(ctx context.Context, input *trx.RequestConfirmTrx) (*trx.MyResponse, error) { //ppp
 	var result *trx.Response
 	var resultTrx models.Trx
 
 	request := new(models.RequestConfirmTrx)
-	if err := helpers.BindValidateStruct(ctx, request); err != nil {
+	if err := helpers.BindValidateStruct(request); err != nil {
 		result = helpers.ResponseJSON(false, constans.VALIDATE_ERROR_CODE, err.Error(), nil)
-		return nil, ctx.JSON(http.StatusBadRequest, result)
+		return &trx.MyResponse{
+			Response: result,
+		}, err
 	}
 
 	if request.ID == constans.TYPE_PARTNER_FREE_PASS {
 		redisStatus := svc.Service.RedisClientLocal.Get(request.UUIDCard)
 		if redisStatus.Err() != nil {
 			result = helpers.ResponseJSON(false, constans.DATA_ERROR_CODE, redisStatus.Err().Error(), nil)
-			return nil, ctx.JSON(http.StatusBadRequest, result)
+			return &trx.MyResponse{
+				Response: result,
+			}, redisStatus.Err()
 		}
 
 		if err := json.Unmarshal([]byte(redisStatus.Val()), &resultTrx); err != nil {
 			result = helpers.ResponseJSON(false, constans.DATA_ERROR_CODE, err.Error(), nil)
-			return nil, ctx.JSON(http.StatusBadRequest, result)
+			return &trx.MyResponse{
+				Response: result,
+			}, err
 		}
 
 		go helperService.CallSyncConfirmTrxForMemberFreePass(*request, resultTrx, *svc.Service)
@@ -4136,12 +4334,16 @@ func (svc trxService) ConfirmTrxP3(ctxRpc context.Context, input *trx.RequestCon
 		redisStatus := svc.Service.RedisClientLocal.Get(request.ID)
 		if redisStatus.Err() != nil {
 			result = helpers.ResponseJSON(false, constans.DATA_ERROR_CODE, redisStatus.Err().Error(), nil)
-			return nil, ctx.JSON(http.StatusBadRequest, result)
+			return &trx.MyResponse{
+				Response: result,
+			}, redisStatus.Err()
 		}
 
 		if err := json.Unmarshal([]byte(redisStatus.Val()), &resultTrx); err != nil {
 			result = helpers.ResponseJSON(false, constans.DATA_ERROR_CODE, err.Error(), nil)
-			return nil, ctx.JSON(http.StatusBadRequest, result)
+			return &trx.MyResponse{
+				Response: result,
+			}, err
 		}
 
 		go helperService.CallSyncConfirmTrxToCloud(nil, *request, resultTrx, *svc.Service)
@@ -4151,7 +4353,9 @@ func (svc trxService) ConfirmTrxP3(ctxRpc context.Context, input *trx.RequestCon
 		resultDataTrx, err := svc.Service.TrxMongoRepo.FindTrxOutstandingByID(ID)
 		if err != nil {
 			result = helpers.ResponseJSON(false, constans.VALIDATE_ERROR_CODE, "Sesi Tidak Ditemukan", nil)
-			return nil, ctx.JSON(http.StatusBadRequest, result)
+			return &trx.MyResponse{
+				Response: result,
+			}, err
 		}
 
 		resultTrx = resultDataTrx
@@ -4188,20 +4392,25 @@ func (svc trxService) ConfirmTrxP3(ctxRpc context.Context, input *trx.RequestCon
 	anyResponseTrx, _ := anypb.New(responseConfirm)
 
 	result = helpers.ResponseJSON(true, constans.SUCCESS_CODE, constans.EMPTY_VALUE, anyResponseTrx)
-	return nil, ctx.JSON(http.StatusOK, result)
+	return &trx.MyResponse{
+		Response: result,
+	}, nil
 }
 
-func (svc trxService) GetTrxListForDocDate(ctxRpc context.Context, docDate *trx.Param) (*trx.Response, error) {
+func (svc trxService) GetTrxListForDocDate(ctx context.Context, docDate *trx.Param) (*trx.MyResponse, error) {
 	var result *trx.Response
 	var tempTrxOutstanding *trx.Trx
 	var tempTrxOutstandings []*trx.Trx
+	var r *http.Request
 
-	docDate.Param = ctx.Param("docDate")
+	docDate.Param = r.URL.Query().Get("docDate")
 
 	resultTrxList, err := svc.Service.TrxMongoRepo.GetTrxListByDocDate(docDate.Param)
 	if err != nil {
 		result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, err.Error(), nil)
-		return nil, ctx.JSON(http.StatusBadRequest, result)
+		return &trx.MyResponse{
+			Response: result,
+		}, err
 	}
 
 	var tempTrxInvoiceItems []*trx.TrxInvoiceItem
@@ -4369,42 +4578,58 @@ func (svc trxService) GetTrxListForDocDate(ctxRpc context.Context, docDate *trx.
 	}
 
 	result = helpers.ResponseJSON(true, constans.SUCCESS_CODE, constans.EMPTY_VALUE, nil)
-	return nil, ctx.JSON(http.StatusOK, result)
+	return &trx.MyResponse{
+		Response: result,
+	}, nil
 }
 
-func (svc trxService) UpdateStatusManualTrx(ctxRpc context.Context, status *trx.Param) (*trx.Response, error) {
+func (svc trxService) UpdateStatusManualTrx(ctx context.Context, status *trx.Param) (*trx.MyResponse, error) {
 	var result *trx.Response
 
-	status.Param = ctx.Param("status")
+	var r *http.Request
+
+	status.Param = r.URL.Query().Get("status")
 
 	redisStatus := svc.Service.RedisClientLocal.Set("P3", status, 0)
 	if redisStatus.Err() != nil {
 		result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, redisStatus.Err().Error(), nil)
-		return nil, ctx.JSON(http.StatusBadRequest, result)
+		return &trx.MyResponse{
+			Response: result,
+		}, redisStatus.Err()
 	}
 
 	result = helpers.ResponseJSON(true, constans.SUCCESS_CODE, constans.EMPTY_VALUE, nil)
-	return nil, ctx.JSON(http.StatusOK, result)
+	return &trx.MyResponse{
+		Response: result,
+	}, nil
 }
 
-func (svc trxService) UpdateAutoClearTrx(ctxRpc context.Context, status *trx.Param) (*trx.Response, error) {
+func (svc trxService) UpdateAutoClearTrx(ctx context.Context, status *trx.Param) (*trx.MyResponse, error) {
 	var result *trx.Response
 
-	status.Param = ctx.Param("status")
+	var r *http.Request
+
+	status.Param = r.URL.Query().Get("status")
 
 	redisStatus := svc.Service.RedisClientLocal.Set("AUTO_CLEAR", status, 0)
 	if redisStatus.Err() != nil {
 		result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, redisStatus.Err().Error(), nil)
-		return nil, ctx.JSON(http.StatusBadRequest, result)
+		return &trx.MyResponse{
+			Response: result,
+		}, redisStatus.Err()
 	}
 
 	result = helpers.ResponseJSON(true, constans.SUCCESS_CODE, constans.EMPTY_VALUE, nil)
-	return nil, ctx.JSON(http.StatusOK, result)
+	return &trx.MyResponse{
+		Response: result,
+	}, nil
 }
 
-func (svc trxService) FindTrxOutstandingByIndex(ctxRpc context.Context, param *trx.Param) (*trx.Response, error) {
+func (svc trxService) FindTrxOutstandingByIndex(ctx context.Context, param *trx.Param) (*trx.MyResponse, error) {
 	var result *trx.Response
-	param.Param = ctx.Param("index")
+	var r *http.Request
+
+	param.Param = r.URL.Query().Get("index")
 	var trxOutstanding *models.ResultFindTrxOutstanding
 	var err error
 	var tempResultTrx *trx.ResultFindTrxOutstanding
@@ -4416,13 +4641,18 @@ func (svc trxService) FindTrxOutstandingByIndex(ctxRpc context.Context, param *t
 		docNo, err := utils.Decrypt(keyword, saltKey)
 		if err != nil {
 			result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, err.Error(), nil)
-			return nil, ctx.JSON(http.StatusBadRequest, result)
+
+			return &trx.MyResponse{
+				Response: result,
+			}, err
 		}
 
 		trxOutstanding, err = svc.Service.TrxMongoRepo.FindTrxOutstandingByDocNoCustom(docNo)
 		if err != nil {
 			result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, err.Error(), nil)
-			return nil, ctx.JSON(http.StatusBadRequest, result)
+			return &trx.MyResponse{
+				Response: result,
+			}, err
 		}
 
 		tempTrxInvoiceItems := []*trx.TrxInvoiceItem{}
@@ -4470,7 +4700,9 @@ func (svc trxService) FindTrxOutstandingByIndex(ctxRpc context.Context, param *t
 		trxOutstanding, err = svc.Service.TrxMongoRepo.FindTrxOutstandingByUUIDCustom(param.Param)
 		if err != nil {
 			result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, err.Error(), nil)
-			return nil, ctx.JSON(http.StatusBadRequest, result)
+			return &trx.MyResponse{
+				Response: result,
+			}, err
 		}
 		tempTrxInvoiceItems := []*trx.TrxInvoiceItem{}
 		for _, v := range trxOutstanding.TrxInvoiceItem {
@@ -4517,23 +4749,30 @@ func (svc trxService) FindTrxOutstandingByIndex(ctxRpc context.Context, param *t
 	anyResponseTrx, _ := anypb.New(tempResultTrx)
 
 	result = helpers.ResponseJSON(true, constans.SUCCESS_CODE, constans.EMPTY_VALUE, anyResponseTrx)
-	return nil, ctx.JSON(http.StatusOK, result)
+	return &trx.MyResponse{
+		Response: result,
+	}, nil
 }
 
-func (svc trxService) UpdateProductPrice(ctxRpc context.Context, input *trx.RequestUpdateProductPrice) (*trx.Response, error) {
+func (svc trxService) UpdateProductPrice(ctx context.Context, input *trx.RequestUpdateProductPrice) (*trx.MyResponse, error) {
 	var result *trx.Response
-	ouId := utils.GetOuDefaultIdForToken(ctx)
+	var r *http.Request
+	ouId := r.Context().Value("id").(float64)
 	var keyword string
 
-	if err := helpers.BindValidateStruct(ctx, input); err != nil {
+	if err := helpers.BindValidateStruct(input); err != nil {
 		result = helpers.ResponseJSON(false, constans.VALIDATE_ERROR_CODE, err.Error(), nil)
-		return nil, ctx.JSON(http.StatusBadRequest, result)
+		return &trx.MyResponse{
+			Response: result,
+		}, err
 	}
 
 	dataUser, err := svc.Service.UserMongoRepo.FindUserByIndex(input.Username)
 	if err != nil {
 		result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, "user not found!", nil)
-		return nil, ctx.JSON(http.StatusBadRequest, result)
+		return &trx.MyResponse{
+			Response: result,
+		}, err
 	}
 	var ous []*user.Ou
 	for _, v := range dataUser.User.OuList {
@@ -4604,20 +4843,26 @@ func (svc trxService) UpdateProductPrice(ctxRpc context.Context, input *trx.Requ
 
 	if dataUsers.User.PinUser != input.Pin {
 		result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, "pin don't match!", nil)
-		return nil, ctx.JSON(http.StatusBadRequest, result)
+		return &trx.MyResponse{
+			Response: result,
+		}, err
 	}
 
 	idTrx, _ := primitive.ObjectIDFromHex(input.Id)
 	resultTrxOutstanding, err := svc.Service.TrxMongoRepo.FindTrxOutstandingByID(idTrx)
 	if err != nil {
 		result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, err.Error(), nil)
-		return nil, ctx.JSON(http.StatusBadRequest, result)
+		return &trx.MyResponse{
+			Response: result,
+		}, err
 	}
 
 	resultProduct, err := svc.Service.ProductRepo.FindPolicyOuProductByAdvance(int64(ouId), input.ProductId)
 	if err != nil {
 		result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, err.Error(), nil)
-		return nil, ctx.JSON(http.StatusBadRequest, result)
+		return &trx.MyResponse{
+			Response: result,
+		}, err
 	}
 	tempProd := &prod.ProductOuWithRules{
 		OuId:             resultProduct.ProductOuWithRules.OuId,
@@ -4657,41 +4902,52 @@ func (svc trxService) UpdateProductPrice(ctxRpc context.Context, input *trx.Requ
 	err = svc.Service.TrxMongoRepo.UpdateProductById(keyword, resultProducts.ProductCode, resultProducts.ProductName)
 	if err != nil {
 		result = helpers.ResponseJSON(false, constans.DATA_ERROR_CODE, err.Error(), nil)
-		return nil, ctx.JSON(http.StatusBadRequest, result)
+		return &trx.MyResponse{
+			Response: result,
+		}, err
 	}
 	boolValue := wrapperspb.Bool(constans.TRUE_VALUE)
 
 	// Convert the wrapper message to an anypb.Any message
-	anyValue, err := anypb.New(boolValue)
+	anyValue, _ := anypb.New(boolValue)
 
 	result = helpers.ResponseJSON(true, constans.SUCCESS_CODE, constans.EMPTY_VALUE, anyValue)
-	return nil, ctx.JSON(http.StatusOK, result)
+	return &trx.MyResponse{
+		Response: result,
+	}, nil
 }
 
-func (svc trxService) RegisterMember(ctxRpc context.Context, input *trx.RequestRegistrationMemberLocal) (*trx.Response, error) {
+func (svc trxService) RegisterMember(ctx context.Context, input *trx.RequestRegistrationMemberLocal) (*trx.MyResponse, error) {
 	var result *trx.Response
-	username := utils.GetUsernameForToken(ctx)
-	ouId := utils.GetOuDefaultIdForToken(ctx)
+	var r *http.Request
+	username := r.Context().Value("id").(string)
+	ouId := r.Context().Value("id").(float64)
 	var trxOutstanding *models.ResultFindTrxOutstanding
 	var trxOutstandings *trx.ResultFindTrxOutstanding
 	var err error
 
-	if err := helpers.BindValidateStruct(ctx, input); err != nil {
+	if err := helpers.BindValidateStruct(input); err != nil {
 		result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, err.Error(), nil)
-		return nil, ctx.JSON(http.StatusBadRequest, result)
+		return &trx.MyResponse{
+			Response: result,
+		}, err
 	}
 
 	if len(input.Keyword) == 14 {
 		trxOutstanding, err = svc.Service.TrxMongoRepo.FindTrxOutstandingByUUIDCustom(input.Keyword)
 		if err != nil {
 			result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, err.Error(), nil)
-			return nil, ctx.JSON(http.StatusBadRequest, result)
+			return &trx.MyResponse{
+				Response: result,
+			}, err
 		}
 	} else {
 		trxOutstanding, err = svc.Service.TrxMongoRepo.FindTrxOutstandingByDocNoCustom(input.Keyword)
 		if err != nil {
 			result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, err.Error(), nil)
-			return nil, ctx.JSON(http.StatusBadRequest, result)
+			return &trx.MyResponse{
+				Response: result,
+			}, err
 		}
 	}
 	tempTrxInvoiceItems := []*trx.TrxInvoiceItem{}
@@ -4744,13 +5000,17 @@ func (svc trxService) RegisterMember(ctxRpc context.Context, input *trx.RequestR
 	exists, errValidateMember := utils.ValidateBackdate(requestValidateRegistration)
 	if !exists {
 		result = helpers.ResponseJSON(false, constans.DATA_ERROR_CODE, errValidateMember, nil)
-		return nil, ctx.JSON(http.StatusBadRequest, result)
+		return &trx.MyResponse{
+			Response: result,
+		}, err
 	}
 
 	_, exists, err = svc.Service.MemberRepo.IsMemberExistsByPartnerCode(trxOutstandings.DocNo, input.StartDate, input.Keyword)
 	if err != nil {
 		result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, err.Error(), nil)
-		return nil, ctx.JSON(http.StatusBadRequest, result)
+		return &trx.MyResponse{
+			Response: result,
+		}, err
 	}
 
 	if exists {
@@ -4766,7 +5026,9 @@ func (svc trxService) RegisterMember(ctxRpc context.Context, input *trx.RequestR
 		err = svc.Service.MemberRepo.UpdateMemberByPartnerCode(updateMember, nil)
 		if err != nil {
 			result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, err.Error(), nil)
-			return nil, ctx.JSON(http.StatusBadRequest, result)
+			return &trx.MyResponse{
+				Response: result,
+			}, err
 		}
 	} else {
 		addMember := models.Member{
@@ -4797,7 +5059,9 @@ func (svc trxService) RegisterMember(ctxRpc context.Context, input *trx.RequestR
 		_, err = svc.Service.MemberRepo.AddMember(addMember, nil)
 		if err != nil {
 			result = helpers.ResponseJSON(false, constans.DATA_ERROR_CODE, err.Error(), nil)
-			return nil, ctx.JSON(http.StatusBadRequest, result)
+			return &trx.MyResponse{
+				Response: result,
+			}, err
 		}
 	}
 	boolValue := wrapperspb.Bool(constans.TRUE_VALUE)
@@ -4806,21 +5070,27 @@ func (svc trxService) RegisterMember(ctxRpc context.Context, input *trx.RequestR
 	anyValue, err := anypb.New(boolValue)
 
 	result = helpers.ResponseJSON(true, constans.SUCCESS_CODE, constans.EMPTY_VALUE, anyValue)
-	return nil, ctx.JSON(http.StatusOK, result)
+	return &trx.MyResponse{
+		Response: result,
+	}, nil
 }
 
-func (svc trxService) DecryptMKey(ctxRpc context.Context, input *trx.Decrypt) (*trx.Response, error) {
+func (svc trxService) DecryptMKey(ctx context.Context, input *trx.Decrypt) (*trx.MyResponse, error) {
 	var result *trx.Response
 
-	if err := helpers.BindValidateStruct(ctx, input); err != nil {
+	if err := helpers.BindValidateStruct(input); err != nil {
 		result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, err.Error(), nil)
-		return nil, ctx.JSON(http.StatusBadRequest, result)
+		return &trx.MyResponse{
+			Response: result,
+		}, err
 	}
 
 	merchantKey, err := utils.DecryptMerchantKey(input.Keyword)
 	if err != nil {
 		result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, err.Error(), nil)
-		return nil, ctx.JSON(http.StatusBadRequest, result)
+		return &trx.MyResponse{
+			Response: result,
+		}, err
 	}
 	tempMerchantKey := &trx.MerchantKey{
 		ID:              merchantKey.ID,
@@ -4838,5 +5108,7 @@ func (svc trxService) DecryptMKey(ctxRpc context.Context, input *trx.Decrypt) (*
 	anyResponseTrx, _ := anypb.New(tempMerchantKey)
 
 	result = helpers.ResponseJSON(true, constans.SUCCESS_CODE, constans.EMPTY_VALUE, anyResponseTrx)
-	return nil, ctx.JSON(http.StatusOK, result)
+	return &trx.MyResponse{
+		Response: result,
+	}, nil
 }

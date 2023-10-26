@@ -1,22 +1,24 @@
 package helpers
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"log"
 	"net"
+	"net/http"
 	"togrpc/constans"
 	"togrpc/models"
 	"togrpc/proto/trx"
 	"togrpc/services"
 	"togrpc/utils"
+	"togrpc/validate"
 
 	"reflect"
 	"strconv"
 	"strings"
 	"time"
 
-	"github.com/labstack/echo"
 	"google.golang.org/protobuf/types/known/anypb"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
@@ -38,14 +40,17 @@ func InArray(v interface{}, in interface{}) (ok bool, i int) {
 	return
 }
 
-func BindValidateStruct(ctx echo.Context, i interface{}) error {
-	if err := ctx.Bind(i); err != nil {
+func BindValidateStruct(i interface{}) error {
+	var r *http.Request
+	err := json.NewDecoder(r.Body).Decode(&i)
+	if err != nil {
 		return err
 	}
 
-	if err := ctx.Validate(i); err != nil {
+	if err := validate.Validate(i); err != nil {
 		return err
 	}
+
 	return nil
 }
 

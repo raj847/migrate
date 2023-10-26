@@ -1,11 +1,11 @@
 package utils
 
 import (
+	"context"
 	"database/sql"
 	"encoding/json"
 	"errors"
 	"fmt"
-	"google.golang.org/protobuf/reflect/protoreflect"
 	"log"
 	"math/rand"
 	"net/http"
@@ -15,6 +15,8 @@ import (
 	"time"
 	"togrpc/constans"
 	"togrpc/models"
+
+	"google.golang.org/protobuf/reflect/protoreflect"
 
 	"golang.org/x/crypto/bcrypt"
 
@@ -70,6 +72,66 @@ func GetOuDefaultIdForToken(ctx echo.Context) float64 {
 	claims := user.Claims.(jwt.MapClaims)
 
 	return claims["ouDefaultId"].(float64)
+}
+
+func Auth(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		authorizationHeader := r.Header.Get("Authorization")
+
+		fields := strings.Fields(authorizationHeader)
+		if len(fields) < 2 {
+			err := errors.New("invalid authorization header format")
+			w.WriteHeader(http.StatusUnauthorized)
+			json.NewEncoder(w).Encode(models.NewErrorResponse(err.Error()))
+			return
+		}
+
+		token := fields[1]
+		claims := &jwt.MapClaims{}
+
+		tkn, err := jwt.ParseWithClaims(token, claims, func(t *jwt.Token) (interface{}, error) {
+			return []byte("testjwt"), nil
+		})
+
+		if err != nil {
+			if err == jwt.ErrSignatureInvalid {
+				w.WriteHeader(http.StatusUnauthorized)
+				json.NewEncoder(w).Encode(models.NewErrorResponse(err.Error()))
+				return
+			}
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(models.NewErrorResponse(err.Error()))
+			return
+		}
+
+		if !tkn.Valid {
+			w.WriteHeader(http.StatusUnauthorized)
+			json.NewEncoder(w).Encode(models.NewErrorResponse("Token not valid"))
+			return
+		}
+
+		// Set claims ke context
+		ctxWithClaims := context.WithValue(r.Context(), "claims", claims)
+
+		// Jika Anda ingin mengambil 'isAdmin' dan menyimpannya di context
+		uName, ok := (*claims)["username"].(string)
+		if !ok {
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(models.NewErrorResponse("'username' claim not found or is not a string"))
+			return
+		}
+		isAdmin, ok := (*claims)["isAdmin"].(string)
+		if !ok {
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(models.NewErrorResponse("'isAdmin' claim not found or is not a string"))
+			return
+		}
+		ctxWithIsAdmin := context.WithValue(ctxWithClaims, "isAdmin", isAdmin)
+		ctxWithuname := context.WithValue(ctxWithClaims, "username", uName)
+
+		next.ServeHTTP(w, r.WithContext(ctxWithIsAdmin))
+		next.ServeHTTP(w, r.WithContext(ctxWithuname))
+	})
 }
 
 func DBTransaction(db *sql.DB, txFunc func(*sql.Tx) error) (err error) {
