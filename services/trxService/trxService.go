@@ -31,11 +31,11 @@ import (
 )
 
 type trxService struct {
-	Service *services.UsecaseService
+	Service services.UsecaseService
 }
 
-func NewTrxService(service *services.UsecaseService) *trxService {
-	return &trxService{
+func NewTrxService(service services.UsecaseService) trxService {
+	return trxService{
 		Service: service,
 	}
 }
@@ -263,7 +263,7 @@ func (svc trxService) AddTrxWithCard(ctx context.Context, input *trx.RequestTrxC
 	}
 	if exists {
 		isSessionAlreadyExists = exists
-		errCode, err = helperService.CallCheckTrxAlreadyExists(tempTrxOutstanding.DocNo, *svc.Service)
+		errCode, err = helperService.CallCheckTrxAlreadyExists(tempTrxOutstanding.DocNo, svc.Service)
 		if err != nil {
 			isSessionAlreadyExists = true
 		}
@@ -635,7 +635,7 @@ func (svc trxService) AddTrxWithCard(ctx context.Context, input *trx.RequestTrxC
 		// if there not connection internet data not send to cloud server
 		// but data will processed to local server
 		trxHeader, _ := json.Marshal(trx)
-		helperService.ConsumeTrxForScheduling(*svc.Service, string(trxHeader))
+		helperService.ConsumeTrxForScheduling(svc.Service, string(trxHeader))
 
 	}()
 
@@ -920,7 +920,7 @@ func (svc trxService) AddTrxWithoutCard(ctx context.Context, input *trx.RequestT
 		// if there not connection internet data not send to cloud server
 		// but data will processed to local server
 		trxHeader, _ := json.Marshal(trx)
-		helperService.ConsumeTrxForScheduling(*svc.Service, string(trxHeader))
+		helperService.ConsumeTrxForScheduling(svc.Service, string(trxHeader))
 
 	}()
 
@@ -1605,7 +1605,7 @@ func (svc trxService) InquiryTrxWithoutCard(ctx context.Context, input *trx.Requ
 
 		// Request QRIS to A2P
 		if config.QRISPayment == constans.YES && tempResultTrx.TrxInvoiceItem[0].TotalAmount > 0 {
-			go helperService.CallQRPayment(tempResultTrx, input, duration, *svc.Service)
+			go helperService.CallQRPayment(tempResultTrx, input, duration, svc.Service)
 		}
 		anyDuration, _ := anypb.New(duration)
 
@@ -2271,7 +2271,7 @@ func (svc trxService) ConfirmTrx(ctx context.Context, input *trx.RequestConfirmT
 			}, err
 		}
 
-		go helperService.CallSyncConfirmTrxForMemberFreePass(*request, resultTrxs, *svc.Service)
+		go helperService.CallSyncConfirmTrxForMemberFreePass(*request, resultTrxs, svc.Service)
 	} else if strings.Contains(input.Id, "SERVER") {
 		redisStatus := svc.Service.RedisClientLocal.Get(input.Id)
 		if redisStatus.Err() != nil {
@@ -2295,7 +2295,7 @@ func (svc trxService) ConfirmTrx(ctx context.Context, input *trx.RequestConfirmT
 			}, err
 		}
 
-		go helperService.CallSyncConfirmTrxToCloud(nil, *request, resultTrxs, *svc.Service)
+		go helperService.CallSyncConfirmTrxToCloud(nil, *request, resultTrxs, svc.Service)
 	} else {
 		ID, _ := primitive.ObjectIDFromHex(request.ID)
 
@@ -2309,7 +2309,7 @@ func (svc trxService) ConfirmTrx(ctx context.Context, input *trx.RequestConfirmT
 
 		resultTrxs = resultDataTrx
 
-		go helperService.CallSyncConfirmTrxToCloud(&ID, *request, resultTrxs, *svc.Service)
+		go helperService.CallSyncConfirmTrxToCloud(&ID, *request, resultTrxs, svc.Service)
 	}
 
 	ipAddr, _ := helpers.GetPrivateIPLocal()
@@ -4160,7 +4160,7 @@ func (svc trxService) InquiryPaymentP3(ctx context.Context, input *trx.RequestIn
 	paymentRefDocNo := constans.EMPTY_VALUE
 	if config.QRISPayment == constans.YES && trxm.GrandTotal > 0 {
 		if utils.IsConnected() {
-			qrCodePayment, paymentRefDocNo, err = helperService.CallQRPaymentP3(trxm, duration, *svc.Service)
+			qrCodePayment, paymentRefDocNo, err = helperService.CallQRPaymentP3(trxm, duration, svc.Service)
 			if err != nil {
 				result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, err.Error(), nil)
 				return &trx.MyResponse{
@@ -4262,7 +4262,7 @@ func (svc trxService) InquiryPaymentP3(ctx context.Context, input *trx.RequestIn
 
 	if qrCodePayment != constans.EMPTY_VALUE {
 		trxHeader, _ := json.Marshal(trxm)
-		helperService.ConsumeTrxForScheduling(*svc.Service, string(trxHeader))
+		helperService.ConsumeTrxForScheduling(svc.Service, string(trxHeader))
 		channelCallback["docNo"] = trxm.DocNo
 		channelCallback["qrCode"] = qrCodePayment
 		channelCallback["type"] = "INQUIRY"
@@ -4329,7 +4329,7 @@ func (svc trxService) ConfirmTrxP3(ctx context.Context, input *trx.RequestConfir
 			}, err
 		}
 
-		go helperService.CallSyncConfirmTrxForMemberFreePass(*request, resultTrx, *svc.Service)
+		go helperService.CallSyncConfirmTrxForMemberFreePass(*request, resultTrx, svc.Service)
 	} else if strings.Contains(request.ID, "SERVER") {
 		redisStatus := svc.Service.RedisClientLocal.Get(request.ID)
 		if redisStatus.Err() != nil {
@@ -4346,7 +4346,7 @@ func (svc trxService) ConfirmTrxP3(ctx context.Context, input *trx.RequestConfir
 			}, err
 		}
 
-		go helperService.CallSyncConfirmTrxToCloud(nil, *request, resultTrx, *svc.Service)
+		go helperService.CallSyncConfirmTrxToCloud(nil, *request, resultTrx, svc.Service)
 	} else {
 		ID, _ := primitive.ObjectIDFromHex(request.ID)
 
@@ -4361,10 +4361,10 @@ func (svc trxService) ConfirmTrxP3(ctx context.Context, input *trx.RequestConfir
 		resultTrx = resultDataTrx
 
 		if request.CardType == constans.SETTLEMENT_CODE_QRIS {
-			go helperService.CallSyncConfirmTrxToCloud(&ID, *request, resultTrx, *svc.Service)
+			go helperService.CallSyncConfirmTrxToCloud(&ID, *request, resultTrx, svc.Service)
 
 		} else {
-			go helperService.CallSyncConfirmTrxCustomCard(*request, resultTrx, *svc.Service)
+			go helperService.CallSyncConfirmTrxCustomCard(*request, resultTrx, svc.Service)
 		}
 	}
 

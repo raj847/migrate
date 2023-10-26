@@ -57,7 +57,7 @@ func main() {
 
 	grpcServer := grpc.NewServer()
 
-	trxSvc := trxService.NewTrxService(&services)
+	trxSvc := trxService.NewTrxService(services)
 	trx.RegisterTrxServiceServer(grpcServer, trxSvc)
 
 	boarding()
@@ -77,5 +77,5 @@ func boarding() {
 	fmt.Println(txt)
 
 	println()
-	println(fmt.Sprintf("%s%s%s", "http server started on ", color.Ize(color.Green, "[::]:"), color.Ize(color.Green, config.GetEnv("APP_PORT", "6000"))))
+	println(fmt.Sprintf("%s%s%s", "http server started on ", color.Green("[::]:", ""), color.Green(config.GetEnv("APP_PORT", "6000", ""))))
 }

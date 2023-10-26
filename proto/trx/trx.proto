@@ -9,8 +9,6 @@ message MyResponse {
   Response response = 1;
 }
 
-
-
 message TrxMember {
   string DocNo = 1;
   string PartnerCode = 2;
