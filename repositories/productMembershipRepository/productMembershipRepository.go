@@ -1,8 +1,8 @@
 package productMembershipRepository
 
 import (
-	"togrpc/models"
-	"togrpc/repositories"
+	"github.com/raj847/togrpc/models"
+	"github.com/raj847/togrpc/repositories"
 )
 
 type productMembershipRepository struct {

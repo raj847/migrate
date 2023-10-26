@@ -7,8 +7,8 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"togrpc/config"
-	"togrpc/constans"
+	"github.com/raj847/togrpc/config"
+	"github.com/raj847/togrpc/constans"
 )
 
 func GetCallAPI(suffixUrl string) (*string, error) {

@@ -2,9 +2,9 @@ package trxRepository
 
 import (
 	"errors"
-	"togrpc/constans"
-	"togrpc/models"
-	"togrpc/repositories"
+	"github.com/raj847/togrpc/constans"
+	"github.com/raj847/togrpc/models"
+	"github.com/raj847/togrpc/repositories"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo/options"

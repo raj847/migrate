@@ -13,8 +13,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
-	"togrpc/constans"
-	"togrpc/models"
+	"github.com/raj847/togrpc/constans"
+	"github.com/raj847/togrpc/models"
 
 	"google.golang.org/protobuf/reflect/protoreflect"
 

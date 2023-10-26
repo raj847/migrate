@@ -3,7 +3,7 @@ package services
 import (
 	"database/sql"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
-	"togrpc/repositories"
+	"github.com/raj847/togrpc/repositories"
 
 	"github.com/go-redis/redis"
 	"github.com/mkpproduction/mkp-sdk-go/mkp/genautonum"

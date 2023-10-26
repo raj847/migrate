@@ -9,8 +9,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"togrpc/config"
-	"togrpc/models"
+	"github.com/raj847/togrpc/config"
+	"github.com/raj847/togrpc/models"
 )
 
 // Decrypt from base64 to decrypted string

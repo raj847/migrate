@@ -5,10 +5,10 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	"togrpc/constans"
-	"togrpc/models"
-	"togrpc/repositories"
-	"togrpc/utils"
+	"github.com/raj847/togrpc/constans"
+	"github.com/raj847/togrpc/models"
+	"github.com/raj847/togrpc/repositories"
+	"github.com/raj847/togrpc/utils"
 )
 
 type memberRepository struct {

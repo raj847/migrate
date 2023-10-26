@@ -2,7 +2,7 @@ package repositories
 
 import (
 	"database/sql"
-	"togrpc/models"
+	"github.com/raj847/togrpc/models"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
