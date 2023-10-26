@@ -1008,4 +1008,4 @@ service TrxService {
   rpc ConfirmTrxP3(RequestConfirmTrx) returns(MyResponse) {}
 }
 
-option go_package = "/;trx";
+option go_package = "/;trxLocal";

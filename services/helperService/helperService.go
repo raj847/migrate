@@ -17,7 +17,7 @@ import (
 	"github.com/raj847/togrpc/constans"
 	"github.com/raj847/togrpc/helpers"
 	"github.com/raj847/togrpc/models"
-	"github.com/raj847/togrpc/proto/trx"
+	"github.com/raj847/togrpc/proto/trxLocal"
 	"github.com/raj847/togrpc/services"
 	"github.com/raj847/togrpc/utils"
 
@@ -176,7 +176,7 @@ func WorkerExtCloudPayment(req interface{}, callbackURL, basicAuth, bearerToken 
 
 func CallCheckTrxAlreadyExists(docNo string, svc services.UsecaseService) (errCode string, err error) {
 	if utils.IsConnected() {
-		responseBodyStr, err := helpers.GetCallAPI(fmt.Sprintf("%s/%s", "/mpos/local/check-trx", docNo))
+		responseBodyStr, err := helpers.GetCallAPI(fmt.Sprintf("%s/%s", "/mpos/local/check-trxLocal", docNo))
 		if err != nil {
 			return constans.MALFUNCTION_SYSTEM_CODE, err
 		}
@@ -1059,7 +1059,7 @@ func CallSyncConfirmTrxToCloudCustom(ID *primitive.ObjectID, request models.Requ
 	return nil
 }
 
-func CallQRPayment(resultTrx *trx.ResultFindTrxOutstanding, request *trx.RequestInquiryWithoutCard, duration utils.ConvTime, svc services.UsecaseService) error {
+func CallQRPayment(resultTrx *trxLocal.ResultFindTrxOutstanding, request *trxLocal.RequestInquiryWithoutCard, duration utils.ConvTime, svc services.UsecaseService) error {
 	resultInquiryTrxWithCard := make(map[string]interface{})
 	resultInquiryTrxWithCard["duration"] = duration
 
@@ -1097,7 +1097,7 @@ func CallQRPayment(resultTrx *trx.ResultFindTrxOutstanding, request *trx.Request
 	return nil
 }
 
-func CallQRPaymentP3(resultTrx *trx.Trx, duration utils.ConvTime, svc services.UsecaseService) (string, string, error) {
+func CallQRPaymentP3(resultTrx *trxLocal.Trx, duration utils.ConvTime, svc services.UsecaseService) (string, string, error) {
 	resultInquiryTrxWithCard := make(map[string]interface{})
 	resultInquiryTrxWithCard["duration"] = duration
 
@@ -1213,7 +1213,7 @@ func CheckTrxCloudServer(docNo string) (response *models.ResponseTrxCloud, err e
 func CheckTrxPaymentOnline(docNo string) (response *models.ResponseTrxPaymentOnline, err error) {
 	log.Println("Call CheckTrxCloudServer:", docNo)
 
-	data, err := helpers.GetCallAPITrxPaymentOnline(fmt.Sprintf("%s/%s", "/trx/local/check-status", docNo))
+	data, err := helpers.GetCallAPITrxPaymentOnline(fmt.Sprintf("%s/%s", "/trxLocal/local/check-status", docNo))
 	if err != nil {
 		return nil, err
 	}
@@ -1241,7 +1241,7 @@ func ConsumeTrxForScheduling(svc services.UsecaseService, trx string) error {
 	}
 
 	//} else {
-	//statusPublish := svc.RedisClientLocal.Publish(config.DEFAULTChannelRedisParking, trx)
+	//statusPublish := svc.RedisClientLocal.Publish(config.DEFAULTChannelRedisParking, trxLocal)
 	//log.Println("Publish Redis Local (No internet connection):", config.DEFAULTChannelRedisParking, "Status:", statusPublish.Val())
 	//}
 
@@ -1293,7 +1293,7 @@ func CheckInTrxDeposit(svc services.UsecaseService, request models.RequestTrxDep
 	}
 
 	//} else {
-	//statusPublish := svc.RedisClientLocal.Publish(config.DEFAULTChannelRedisParking, trx)
+	//statusPublish := svc.RedisClientLocal.Publish(config.DEFAULTChannelRedisParking, trxLocal)
 	//log.Println("Publish Redis Local (No internet connection):", config.DEFAULTChannelRedisParking, "Status:", statusPublish.Val())
 	//}
 

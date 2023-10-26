@@ -9,7 +9,7 @@ import (
 	"net/http"
 	"github.com/raj847/togrpc/constans"
 	"github.com/raj847/togrpc/models"
-	"github.com/raj847/togrpc/proto/trx"
+	"github.com/raj847/togrpc/proto/trxLocal"
 	"github.com/raj847/togrpc/services"
 	"github.com/raj847/togrpc/utils"
 	"github.com/raj847/togrpc/validate"
@@ -96,9 +96,9 @@ func ConvNextInvoiceForTime(checkinDatetimeStr, checkoutDatetimeStr string, curr
 	return millisecondTime
 }
 
-func ResponseJSON(success bool, code string, msg string, result *anypb.Any) *trx.Response {
+func ResponseJSON(success bool, code string, msg string, result *anypb.Any) *trxLocal.Response {
 	tm := timestamppb.New(time.Now())
-	response := &trx.Response{
+	response := &trxLocal.Response{
 		Success:          success,
 		StatusCode:       code,
 		Result:           result,

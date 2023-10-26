@@ -15,7 +15,7 @@ type ResponseTrxCloud struct {
 	Success          bool      `json:"success"`
 	ResponseDatetime time.Time `json:"responseDatetime"`
 	Result           struct {
-		Trx            Trx                      `json:"trx"`
+		Trx            Trx                      `json:"trxLocal"`
 		TrxInvoiceItem ResultFindTrxOutstanding `json:"trxInvoice"`
 	} `json:"result"`
 	Message string `json:"message"`

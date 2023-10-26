@@ -268,7 +268,7 @@ type RequestConfirmTrxDepositCounter struct {
 
 type TrxCheckOut struct {
 	TrxOutStanding Trx `json:"trxOutStanding" bson:"trxOutStanding"`
-	Trx            Trx `json:"trx" bson:"trx"`
+	Trx            Trx `json:"trxLocal" bson:"trxLocal"`
 }
 
 type LogActivityTrx struct {

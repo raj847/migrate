@@ -7,18 +7,18 @@ import (
 	"log"
 	"net/http"
 
-	"strings"
-	"time"
 	"github.com/raj847/togrpc/config"
 	"github.com/raj847/togrpc/constans"
 	"github.com/raj847/togrpc/helpers"
 	"github.com/raj847/togrpc/models"
 	prod "github.com/raj847/togrpc/proto/product"
-	trx "github.com/raj847/togrpc/proto/trx"
+	trx "github.com/raj847/togrpc/proto/trxLocal"
 	"github.com/raj847/togrpc/proto/user"
 	"github.com/raj847/togrpc/services"
 	"github.com/raj847/togrpc/services/helperService"
 	"github.com/raj847/togrpc/utils"
+	"strings"
+	"time"
 
 	goproto "google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
@@ -394,7 +394,7 @@ func (svc trxService) AddTrxWithCard(ctx context.Context, input *trx.RequestTrxC
 		var trxInvoiceItemLists []models.TrxInvoiceItem
 		var trxInvoiceItemList []*trx.TrxInvoiceItem
 		var productList []*prod.PolicyOuProductWithRules
-		// var trxMember *trx.TrxMember
+		// var trxMember *trxLocal.TrxMember
 		var trxMembers *models.TrxMember
 		var productData []byte
 
@@ -584,7 +584,7 @@ func (svc trxService) AddTrxWithCard(ctx context.Context, input *trx.RequestTrxC
 			MemberData:       trxMembers,
 		}
 
-		// trx := trx.Trx{
+		// trxLocal := trxLocal.Trx{
 		// 	DocNo:            docNo,
 		// 	DocDate:          constans.EMPTY_VALUE,
 		// 	CheckinDateTime:  input.CheckInDatetime,
@@ -1384,7 +1384,7 @@ func (svc trxService) InquiryTrxWithoutCard(ctx context.Context, input *trx.Requ
 
 		if !exists {
 
-			// If internet connected check trx to cloud server
+			// If internet connected check trxLocal to cloud server
 			if utils.IsConnected() {
 				responseTrxCloud, err := helperService.CheckTrxCloudServer(docNo)
 				if err != nil {

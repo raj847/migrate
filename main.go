@@ -7,7 +7,7 @@ import (
 	"github.com/mkpproduction/mkp-sdk-go/mkp/genautonum"
 	"github.com/raj847/togrpc/app"
 	"github.com/raj847/togrpc/config"
-	"github.com/raj847/togrpc/proto/trx"
+	"github.com/raj847/togrpc/proto/trxLocal"
 	"github.com/raj847/togrpc/repositories"
 	"github.com/raj847/togrpc/services/trxService"
 	"google.golang.org/grpc"
@@ -58,7 +58,7 @@ func main() {
 	grpcServer := grpc.NewServer()
 
 	trxLocalSvc := trxService.NewTrxService(services)
-	trx.RegisterTrxServiceServer(grpcServer, trxLocalSvc)
+	trxLocal.RegisterTrxServiceServer(grpcServer, trxLocalSvc)
 
 	boarding()
 	if err := grpcServer.Serve(listen); err != nil {
