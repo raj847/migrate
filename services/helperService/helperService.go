@@ -1060,7 +1060,7 @@ func CallSyncConfirmTrxToCloudCustom(ID *primitive.ObjectID, request models.Requ
 	return nil
 }
 
-func CallQRPayment(resultTrx *trxLocal.ResultFindTrxOutstanding, request *trxLocal.RequestInquiryWithoutCard, duration utils.ConvTime, svc services.UsecaseService) error {
+func CallQRPayment(resultTrx *models.ResultFindTrxOutstanding, request *trxLocal.RequestInquiryWithoutCard, duration utils.ConvTime, svc services.UsecaseService) error {
 	resultInquiryTrxWithCard := make(map[string]interface{})
 	resultInquiryTrxWithCard["duration"] = duration
 
@@ -1076,10 +1076,13 @@ func CallQRPayment(resultTrx *trxLocal.ResultFindTrxOutstanding, request *trxLoc
 		ChannelCallback: fmt.Sprintf("%s_%s", resultTrx.OuCode, constans.CHANNEL_CALLBACK_REDIS),
 	}
 
+	log.Println("REQUEST PUBLISH: ", utils.ToString(requestPublish))
 	if resultTrx.TrxInvoiceItem[0].TotalAmount > 0 {
 		trx, _ := json.Marshal(requestPublish)
+		log.Println("trx : ", utils.ToString(trx))
 		svc.RedisClient.Publish(constans.CHANNEL_PG_INQUIRY_PAYMENT, trx)
 
+		log.Println("TERMINAL ID : ", request.TerminalId)
 		dataTerminal := make(map[string]interface{})
 		dataTerminal["display"] = request.TerminalId + "-DISPLAY"
 		dataTerminal["confirm"] = request.TerminalId

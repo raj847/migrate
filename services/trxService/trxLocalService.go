@@ -771,6 +771,7 @@ func (svc trxLocalService) AddTrxWithoutCard(ctx context.Context, input *trx.Req
 		randomKey := utils.RandStringBytesMaskImprSrc(16)
 		encQrTxt, _ := utils.Encrypt(docNo, randomKey)
 		qrCode := fmt.Sprintf("%s%s", encQrTxt.Result, randomKey)
+		log.Println("ppp", qrCode, randomKey)
 
 		timeCheckInUnix := checkinDatetimeParse.Unix()
 		resultProductList, err := svc.Service.ProductRepo.GetPolicyOuProductList()
@@ -963,6 +964,8 @@ func (svc trxLocalService) InquiryTrxWithoutCard(ctx context.Context, input *trx
 	var result *trx.Response
 	var responseTrx *trx.ResultInquiryTrx
 	var ID string
+
+	log.Println("input", &input)
 
 	// if err := helpers.BindValidateStruct(input); err != nil {
 	// 	result = helpers.ResponseJSON(constans.FALSE_VALUE, constans.VALIDATE_ERROR_CODE, err.Error(), nil)
@@ -1160,7 +1163,7 @@ func (svc trxLocalService) InquiryTrxWithoutCard(ctx context.Context, input *trx
 		responseTrx.OuCode = merchantKey.OuCode
 
 	} else {
-
+		log.Println("SK", input.QrCode)
 		if len(input.QrCode) < 68 {
 			input.QrCode = constans.NONE_QRCODE
 		}
@@ -1176,6 +1179,8 @@ func (svc trxLocalService) InquiryTrxWithoutCard(ctx context.Context, input *trx
 			}, err
 		}
 
+		log.Println("Docno", docNo)
+
 		if input.ProductCode == constans.EMPTY_VALUE {
 			resultTrxOutstanding, exists, err := svc.Service.TrxMongoRepo.IsTrxOutstandingByDocNoForCustom(docNo)
 			if err != nil {
@@ -1185,138 +1190,7 @@ func (svc trxLocalService) InquiryTrxWithoutCard(ctx context.Context, input *trx
 				}, err
 			}
 
-			var tempTrxInvoiceItems []*trx.TrxInvoiceItem
-			for _, v := range resultTrxOutstanding.TrxInvoiceItem {
-				tempTrxInvoiceItem := &trx.TrxInvoiceItem{
-					DocNo:                  v.DocNo,
-					ProductId:              v.ProductId,
-					ProductCode:            v.ProductCode,
-					ProductName:            v.ProductName,
-					IsPctServiceFee:        v.IsPctServiceFee,
-					ServiceFee:             v.ServiceFee,
-					ServiceFeeMember:       v.ServiceFeeMember,
-					Price:                  v.Price,
-					BaseTime:               v.BaseTime,
-					ProgressiveTime:        v.ProgressiveTime,
-					ProgressivePrice:       v.ProgressivePrice,
-					IsPct:                  v.IsPct,
-					ProgressivePct:         v.ProgressivePct,
-					MaxPrice:               v.MaxPrice,
-					Is24H:                  v.Is24H,
-					OvernightTime:          v.OvernightTime,
-					OvernightPrice:         v.OvernightPrice,
-					GracePeriod:            v.GracePeriod,
-					FlgRepeat:              v.FlgRepeat,
-					TotalAmount:            v.TotalAmount,
-					TotalProgressiveAmount: v.TotalProgressiveAmount,
-				}
-				tempTrxInvoiceItems = append(tempTrxInvoiceItems, tempTrxInvoiceItem)
-			}
-			tempMemberData := &trx.TrxMember{
-				DocNo:       resultTrxOutstanding.MemberData.DocNo,
-				PartnerCode: resultTrxOutstanding.MemberData.PartnerCode,
-				FirstName:   resultTrxOutstanding.MemberData.FirstName,
-				LastName:    resultTrxOutstanding.MemberData.LastName,
-				RoleType:    resultTrxOutstanding.MemberData.RoleType,
-				PhoneNumber: resultTrxOutstanding.MemberData.PhoneNumber,
-				Email:       resultTrxOutstanding.MemberData.Email,
-				Active:      resultTrxOutstanding.MemberData.Active,
-				ActiveAt:    resultTrxOutstanding.MemberData.ActiveAt,
-				NonActiveAt: func() *wrapperspb.StringValue {
-					if resultTrxOutstanding.MemberData.NonActiveAt != nil {
-						return &wrapperspb.StringValue{Value: *resultTrxOutstanding.MemberData.NonActiveAt}
-					}
-					return nil
-				}(),
-				OuId:               resultTrxOutstanding.MemberData.OuId,
-				TypePartner:        resultTrxOutstanding.MemberData.TypePartner,
-				CardNumber:         resultTrxOutstanding.MemberData.CardNumber,
-				VehicleNumber:      resultTrxOutstanding.MemberData.VehicleNumber,
-				RegisteredDatetime: resultTrxOutstanding.MemberData.RegisteredDatetime,
-				DateFrom:           resultTrxOutstanding.MemberData.DateFrom,
-				DateTo:             resultTrxOutstanding.MemberData.DateTo,
-				ProductId:          resultTrxOutstanding.MemberData.ProductId,
-				ProductCode:        resultTrxOutstanding.MemberData.ProductCode,
-			}
-			convertedTrxAddInfo := make(map[string]*anypb.Any)
-			for k, v := range resultTrxOutstanding.TrxAddInfo {
-				if msg, ok := v.(goproto.Message); ok {
-					anyVal, err := anypb.New(msg)
-					if err != nil {
-						continue
-					}
-					convertedTrxAddInfo[k] = anyVal
-				}
-			}
-
-			tempRequestAddTrxInvoiceDetailItem := &trx.TrxInvoiceDetailItem{
-				DocNo:         resultTrxOutstanding.RequestAddTrxInvoiceDetailItem.DocNo,
-				ProductCode:   resultTrxOutstanding.RequestAddTrxInvoiceDetailItem.ProductCode,
-				InvoiceAmount: resultTrxOutstanding.RequestAddTrxInvoiceDetailItem.InvoiceAmount,
-				CreatedAt:     resultTrxOutstanding.RequestAddTrxInvoiceDetailItem.CreatedAt,
-				CreatedDate:   resultTrxOutstanding.RequestAddTrxInvoiceDetailItem.CreatedDate,
-			}
-
-			tempTrxOutstanding := &trx.Trx{
-				DocNo:                          resultTrxOutstanding.DocNo,
-				DocDate:                        resultTrxOutstanding.DocDate,
-				PaymentRefDocno:                resultTrxOutstanding.PaymentRefDocNo,
-				CheckinDateTime:                resultTrxOutstanding.CheckInDatetime,
-				CheckoutDateTime:               resultTrxOutstanding.CheckOutDatetime,
-				DeviceIdIn:                     resultTrxOutstanding.DeviceIdIn,
-				DeviceId:                       resultTrxOutstanding.DeviceId,
-				GetIn:                          resultTrxOutstanding.GateIn,
-				GetOut:                         resultTrxOutstanding.GateOut,
-				CardNumberUUIDIn:               resultTrxOutstanding.CardNumberUUIDIn,
-				CardNumberIn:                   resultTrxOutstanding.CardNumberIn,
-				CardNumberUUID:                 resultTrxOutstanding.CardNumberUUID,
-				CardNumber:                     resultTrxOutstanding.CardNumber,
-				TypeCard:                       resultTrxOutstanding.TypeCard,
-				BeginningBalance:               resultTrxOutstanding.BeginningBalance,
-				ExtLocalDateTime:               resultTrxOutstanding.ExtLocalDatetime,
-				ChargeAmount:                   resultTrxOutstanding.ChargeAmount,
-				GrandTotal:                     resultTrxOutstanding.GrandTotal,
-				ProductCode:                    resultTrxOutstanding.ProductCode,
-				ProductName:                    resultTrxOutstanding.ProductName,
-				ProductData:                    resultTrxOutstanding.ProductData,
-				RequestData:                    resultTrxOutstanding.RequestData,
-				RequestOutData:                 resultTrxOutstanding.RequestOutData,
-				OuId:                           resultTrxOutstanding.OuId,
-				OuName:                         resultTrxOutstanding.OuName,
-				OuCode:                         resultTrxOutstanding.OuCode,
-				OuSubBranchId:                  resultTrxOutstanding.OuSubBranchId,
-				USubBranchName:                 resultTrxOutstanding.OuSubBranchName,
-				OuSubBranchCode:                resultTrxOutstanding.OuSubBranchCode,
-				MainOuId:                       resultTrxOutstanding.MainOuId,
-				MainOuCode:                     resultTrxOutstanding.MainOuCode,
-				MainOuName:                     resultTrxOutstanding.MainOuName,
-				MemberCode:                     resultTrxOutstanding.MemberCode,
-				MemberName:                     resultTrxOutstanding.MemberName,
-				MemberType:                     resultTrxOutstanding.MemberType,
-				MemberStatus:                   resultTrxOutstanding.MemberStatus,
-				MemberExpiredDate:              resultTrxOutstanding.MemberExpiredDate,
-				CheckInTime:                    resultTrxOutstanding.CheckInTime,
-				CheckOutTime:                   resultTrxOutstanding.CheckOutTime,
-				DurationTime:                   resultTrxOutstanding.DurationTime,
-				VehicleNumberIn:                resultTrxOutstanding.VehicleNumberIn,
-				VehicleNumberOut:               resultTrxOutstanding.VehicleNumberOut,
-				LogTrans:                       resultTrxOutstanding.LogTrans,
-				MerchantKey:                    resultTrxOutstanding.MerchantKey,
-				QrText:                         resultTrxOutstanding.QrText,
-				QrA2P:                          resultTrxOutstanding.QrA2P,
-				QrTextPaymentOnline:            resultTrxOutstanding.QrTextPaymentOnline,
-				TrxInvoiceItem:                 tempTrxInvoiceItems,
-				FlagSyncData:                   resultTrxOutstanding.FlagSyncData,
-				MemberData:                     tempMemberData,
-				TrxAddInfo:                     convertedTrxAddInfo,
-				FlagTrxFromCloud:               resultTrxOutstanding.FlagTrxFromCloud,
-				IsRsyncDataTrx:                 resultTrxOutstanding.IsRsyncDataTrx,
-				ExcludeSf:                      resultTrxOutstanding.ExcludeSf,
-				FlagCharge:                     resultTrxOutstanding.FlagCharge,
-				ChargeType:                     resultTrxOutstanding.ChargeType,
-				RequestAddTrxInvoiceDetailItem: tempRequestAddTrxInvoiceDetailItem,
-				LastUpdatedAt:                  resultTrxOutstanding.LastUpdatedAt,
-			}
+			log.Println("RESULT OUTSTANDING: ", utils.ToString(resultTrxOutstanding))
 
 			if !exists {
 				result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, "Trx outstanding not found", nil)
@@ -1325,18 +1199,14 @@ func (svc trxLocalService) InquiryTrxWithoutCard(ctx context.Context, input *trx
 				}, err
 			}
 
-			input.ProductCode = tempTrxOutstanding.ProductCode
+			input.ProductCode = resultTrxOutstanding.ProductCode
 		}
 
 		productData, existsProduct := svc.Service.TrxMongoRepo.IsTrxProductCustomExistsByKeyword(docNo)
+		log.Println("aaa", productData)
 
-		tempProdDat := &trx.TrxProductCustom{
-			Keyword:     productData.Keyword,
-			ProductName: productData.ProductName,
-			ProductCode: productData.ProductCode,
-		}
 		if existsProduct {
-			input.ProductCode = tempProdDat.ProductCode
+			input.ProductCode = productData.ProductCode
 		}
 
 		resultTrx, exists, err := svc.Service.TrxMongoRepo.IsTrxOutstandingByDocNo(docNo, input.ProductCode)
@@ -1347,52 +1217,12 @@ func (svc trxLocalService) InquiryTrxWithoutCard(ctx context.Context, input *trx
 			}, err
 		}
 
-		tempTrxInvoiceItems := []*trx.TrxInvoiceItem{}
-		for _, v := range resultTrx.TrxInvoiceItem {
-			tempTrxInvoiceItem := &trx.TrxInvoiceItem{
-				DocNo:                  v.DocNo,
-				ProductId:              v.ProductId,
-				ProductCode:            v.ProductCode,
-				ProductName:            v.ProductName,
-				IsPctServiceFee:        v.IsPctServiceFee,
-				ServiceFee:             v.ServiceFee,
-				ServiceFeeMember:       v.ServiceFeeMember,
-				Price:                  v.Price,
-				BaseTime:               v.BaseTime,
-				ProgressiveTime:        v.ProgressiveTime,
-				ProgressivePrice:       v.ProgressivePrice,
-				IsPct:                  v.IsPct,
-				ProgressivePct:         v.ProgressivePct,
-				MaxPrice:               v.MaxPrice,
-				Is24H:                  v.Is24H,
-				OvernightTime:          v.OvernightTime,
-				OvernightPrice:         v.OvernightPrice,
-				GracePeriod:            v.GracePeriod,
-				FlgRepeat:              v.FlgRepeat,
-				TotalAmount:            v.TotalAmount,
-				TotalProgressiveAmount: v.TotalProgressiveAmount,
-			}
-			tempTrxInvoiceItems = append(tempTrxInvoiceItems, tempTrxInvoiceItem)
-		}
-
-		tempResultTrx := &trx.ResultFindTrxOutstanding{
-			Id:              resultTrx.ID.Hex(),
-			DocNo:           resultTrx.DocNo,
-			GrandTotal:      resultTrx.GrandTotal,
-			CheckInDatetime: resultTrx.CheckInDatetime,
-			OverNightPrice:  resultTrx.OverNightPrice,
-			Is24H:           resultTrx.Is24H,
-			CardNumber:      resultTrx.CardNumber,
-			CardNumberUUID:  resultTrx.CardNumberUUID,
-			OuCode:          resultTrx.OuCode,
-			VehicleNumberIn: resultTrx.VehicleNumberIn,
-			TrxInvoiceItem:  tempTrxInvoiceItems,
-		}
-
+		log.Println("result TRX: ", utils.ToString(resultTrx))
 		if !exists {
-
+			log.Println("DUDU123")
 			// If internet connected check trxLocal to cloud server
 			if utils.IsConnected() {
+				log.Println("DUDU321")
 				responseTrxCloud, err := helperService.CheckTrxCloudServer(docNo)
 				if err != nil {
 					result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, "Sesi Tidak Ditemukan", nil)
@@ -1400,197 +1230,16 @@ func (svc trxLocalService) InquiryTrxWithoutCard(ctx context.Context, input *trx
 						Response: result,
 					}, err
 				}
-				var tempTrxInvoiceItems []*trx.TrxInvoiceItem
-				for _, v := range responseTrxCloud.Result.Trx.TrxInvoiceItem {
-					tempTrxInvoiceItem := &trx.TrxInvoiceItem{
-						DocNo:                  v.DocNo,
-						ProductId:              v.ProductId,
-						ProductCode:            v.ProductCode,
-						ProductName:            v.ProductName,
-						IsPctServiceFee:        v.IsPctServiceFee,
-						ServiceFee:             v.ServiceFee,
-						ServiceFeeMember:       v.ServiceFeeMember,
-						Price:                  v.Price,
-						BaseTime:               v.BaseTime,
-						ProgressiveTime:        v.ProgressiveTime,
-						ProgressivePrice:       v.ProgressivePrice,
-						IsPct:                  v.IsPct,
-						ProgressivePct:         v.ProgressivePct,
-						MaxPrice:               v.MaxPrice,
-						Is24H:                  v.Is24H,
-						OvernightTime:          v.OvernightTime,
-						OvernightPrice:         v.OvernightPrice,
-						GracePeriod:            v.GracePeriod,
-						FlgRepeat:              v.FlgRepeat,
-						TotalAmount:            v.TotalAmount,
-						TotalProgressiveAmount: v.TotalProgressiveAmount,
-					}
-					tempTrxInvoiceItems = append(tempTrxInvoiceItems, tempTrxInvoiceItem)
-				}
-				tempMemberData := &trx.TrxMember{
-					DocNo:       responseTrxCloud.Result.Trx.MemberData.DocNo,
-					PartnerCode: responseTrxCloud.Result.Trx.MemberData.PartnerCode,
-					FirstName:   responseTrxCloud.Result.Trx.MemberData.FirstName,
-					LastName:    responseTrxCloud.Result.Trx.MemberData.LastName,
-					RoleType:    responseTrxCloud.Result.Trx.MemberData.RoleType,
-					PhoneNumber: responseTrxCloud.Result.Trx.MemberData.PhoneNumber,
-					Email:       responseTrxCloud.Result.Trx.MemberData.Email,
-					Active:      responseTrxCloud.Result.Trx.MemberData.Active,
-					ActiveAt:    responseTrxCloud.Result.Trx.MemberData.ActiveAt,
-					NonActiveAt: func() *wrapperspb.StringValue {
-						if responseTrxCloud.Result.Trx.MemberData.NonActiveAt != nil {
-							return &wrapperspb.StringValue{Value: *responseTrxCloud.Result.Trx.MemberData.NonActiveAt}
-						}
-						return nil
-					}(),
-					OuId:               responseTrxCloud.Result.Trx.MemberData.OuId,
-					TypePartner:        responseTrxCloud.Result.Trx.MemberData.TypePartner,
-					CardNumber:         responseTrxCloud.Result.Trx.MemberData.CardNumber,
-					VehicleNumber:      responseTrxCloud.Result.Trx.MemberData.VehicleNumber,
-					RegisteredDatetime: responseTrxCloud.Result.Trx.MemberData.RegisteredDatetime,
-					DateFrom:           responseTrxCloud.Result.Trx.MemberData.DateFrom,
-					DateTo:             responseTrxCloud.Result.Trx.MemberData.DateTo,
-					ProductId:          responseTrxCloud.Result.Trx.MemberData.ProductId,
-					ProductCode:        responseTrxCloud.Result.Trx.MemberData.ProductCode,
-				}
-				convertedTrxAddInfo := make(map[string]*anypb.Any)
-				for k, v := range responseTrxCloud.Result.Trx.TrxAddInfo {
-					if msg, ok := v.(goproto.Message); ok {
-						anyVal, err := anypb.New(msg)
-						if err != nil {
-							continue
-						}
-						convertedTrxAddInfo[k] = anyVal
-					}
-				}
-
-				tempRequestAddTrxInvoiceDetailItem := &trx.TrxInvoiceDetailItem{
-					DocNo:         responseTrxCloud.Result.Trx.RequestAddTrxInvoiceDetailItem.DocNo,
-					ProductCode:   responseTrxCloud.Result.Trx.RequestAddTrxInvoiceDetailItem.ProductCode,
-					InvoiceAmount: responseTrxCloud.Result.Trx.RequestAddTrxInvoiceDetailItem.InvoiceAmount,
-					CreatedAt:     responseTrxCloud.Result.Trx.RequestAddTrxInvoiceDetailItem.CreatedAt,
-					CreatedDate:   responseTrxCloud.Result.Trx.RequestAddTrxInvoiceDetailItem.CreatedDate,
-				}
-				result1 := &trx.Trx{
-					DocNo:                          responseTrxCloud.Result.Trx.DocNo,
-					DocDate:                        responseTrxCloud.Result.Trx.DocDate,
-					PaymentRefDocno:                responseTrxCloud.Result.Trx.PaymentRefDocNo,
-					CheckinDateTime:                responseTrxCloud.Result.Trx.CheckInDatetime,
-					CheckoutDateTime:               responseTrxCloud.Result.Trx.CheckOutDatetime,
-					DeviceIdIn:                     responseTrxCloud.Result.Trx.DeviceIdIn,
-					DeviceId:                       responseTrxCloud.Result.Trx.DeviceId,
-					GetIn:                          responseTrxCloud.Result.Trx.GateIn,
-					GetOut:                         responseTrxCloud.Result.Trx.GateOut,
-					CardNumberUUIDIn:               responseTrxCloud.Result.Trx.CardNumberUUIDIn,
-					CardNumberIn:                   responseTrxCloud.Result.Trx.CardNumberIn,
-					CardNumberUUID:                 responseTrxCloud.Result.Trx.CardNumberUUID,
-					CardNumber:                     responseTrxCloud.Result.Trx.CardNumber,
-					TypeCard:                       responseTrxCloud.Result.Trx.TypeCard,
-					BeginningBalance:               responseTrxCloud.Result.Trx.BeginningBalance,
-					ExtLocalDateTime:               responseTrxCloud.Result.Trx.ExtLocalDatetime,
-					ChargeAmount:                   responseTrxCloud.Result.Trx.ChargeAmount,
-					GrandTotal:                     responseTrxCloud.Result.Trx.GrandTotal,
-					ProductCode:                    responseTrxCloud.Result.Trx.ProductCode,
-					ProductName:                    responseTrxCloud.Result.Trx.ProductName,
-					ProductData:                    responseTrxCloud.Result.Trx.ProductData,
-					RequestData:                    responseTrxCloud.Result.Trx.RequestData,
-					RequestOutData:                 responseTrxCloud.Result.Trx.RequestOutData,
-					OuId:                           responseTrxCloud.Result.Trx.OuId,
-					OuName:                         responseTrxCloud.Result.Trx.OuName,
-					OuCode:                         responseTrxCloud.Result.Trx.OuCode,
-					OuSubBranchId:                  responseTrxCloud.Result.Trx.OuSubBranchId,
-					USubBranchName:                 responseTrxCloud.Result.Trx.OuSubBranchName,
-					OuSubBranchCode:                responseTrxCloud.Result.Trx.OuSubBranchCode,
-					MainOuId:                       responseTrxCloud.Result.Trx.MainOuId,
-					MainOuCode:                     responseTrxCloud.Result.Trx.MainOuCode,
-					MainOuName:                     responseTrxCloud.Result.Trx.MainOuName,
-					MemberCode:                     responseTrxCloud.Result.Trx.MemberCode,
-					MemberName:                     responseTrxCloud.Result.Trx.MemberName,
-					MemberType:                     responseTrxCloud.Result.Trx.MemberType,
-					MemberStatus:                   responseTrxCloud.Result.Trx.MemberStatus,
-					MemberExpiredDate:              responseTrxCloud.Result.Trx.MemberExpiredDate,
-					CheckInTime:                    responseTrxCloud.Result.Trx.CheckInTime,
-					CheckOutTime:                   responseTrxCloud.Result.Trx.CheckOutTime,
-					DurationTime:                   responseTrxCloud.Result.Trx.DurationTime,
-					VehicleNumberIn:                responseTrxCloud.Result.Trx.VehicleNumberIn,
-					VehicleNumberOut:               responseTrxCloud.Result.Trx.VehicleNumberOut,
-					LogTrans:                       responseTrxCloud.Result.Trx.LogTrans,
-					MerchantKey:                    responseTrxCloud.Result.Trx.MerchantKey,
-					QrText:                         responseTrxCloud.Result.Trx.QrText,
-					QrA2P:                          responseTrxCloud.Result.Trx.QrA2P,
-					QrTextPaymentOnline:            responseTrxCloud.Result.Trx.QrTextPaymentOnline,
-					FlagSyncData:                   responseTrxCloud.Result.Trx.FlagSyncData,
-					MemberData:                     tempMemberData,
-					TrxAddInfo:                     convertedTrxAddInfo,
-					FlagTrxFromCloud:               responseTrxCloud.Result.Trx.FlagTrxFromCloud,
-					IsRsyncDataTrx:                 responseTrxCloud.Result.Trx.IsRsyncDataTrx,
-					ExcludeSf:                      responseTrxCloud.Result.Trx.ExcludeSf,
-					FlagCharge:                     responseTrxCloud.Result.Trx.FlagCharge,
-					ChargeType:                     responseTrxCloud.Result.Trx.ChargeType,
-					RequestAddTrxInvoiceDetailItem: tempRequestAddTrxInvoiceDetailItem,
-					LastUpdatedAt:                  responseTrxCloud.Result.Trx.LastUpdatedAt,
-					TrxInvoiceItem:                 tempTrxInvoiceItems,
-				}
-				var tempTrxInvoiceItemss []*trx.TrxInvoiceItem
-				tempTII := responseTrxCloud.Result.TrxInvoiceItem.TrxInvoiceItem
-				for _, x := range tempTII {
-					tempTrxInvoiceItem := &trx.TrxInvoiceItem{
-						DocNo:                  x.DocNo,
-						ProductId:              x.ProductId,
-						ProductCode:            x.ProductCode,
-						ProductName:            x.ProductName,
-						IsPctServiceFee:        x.IsPctServiceFee,
-						ServiceFee:             x.ServiceFee,
-						ServiceFeeMember:       x.ServiceFeeMember,
-						Price:                  x.Price,
-						BaseTime:               x.BaseTime,
-						ProgressiveTime:        x.ProgressiveTime,
-						ProgressivePrice:       x.ProgressivePrice,
-						IsPct:                  x.IsPct,
-						ProgressivePct:         x.ProgressivePct,
-						MaxPrice:               x.MaxPrice,
-						Is24H:                  x.Is24H,
-						OvernightTime:          x.OvernightTime,
-						OvernightPrice:         x.OvernightPrice,
-						GracePeriod:            x.GracePeriod,
-						FlgRepeat:              x.FlgRepeat,
-						TotalAmount:            x.TotalAmount,
-						TotalProgressiveAmount: x.TotalProgressiveAmount,
-					}
-					tempTrxInvoiceItemss = append(tempTrxInvoiceItemss, tempTrxInvoiceItem)
-				}
-				TrxInvTemp := &trx.ResultFindTrxOutstanding{
-					Id:              responseTrxCloud.Result.TrxInvoiceItem.ID.Hex(),
-					DocNo:           responseTrxCloud.Result.TrxInvoiceItem.DocNo,
-					GrandTotal:      responseTrxCloud.Result.TrxInvoiceItem.GrandTotal,
-					CheckInDatetime: responseTrxCloud.Result.TrxInvoiceItem.CheckInDatetime,
-					OverNightPrice:  responseTrxCloud.Result.TrxInvoiceItem.OverNightPrice,
-					Is24H:           responseTrxCloud.Result.TrxInvoiceItem.Is24H,
-					CardNumber:      responseTrxCloud.Result.TrxInvoiceItem.CardNumber,
-					CardNumberUUID:  responseTrxCloud.Result.TrxInvoiceItem.CardNumberUUID,
-					OuCode:          responseTrxCloud.Result.TrxInvoiceItem.OuCode,
-					VehicleNumberIn: responseTrxCloud.Result.TrxInvoiceItem.VehicleNumberIn,
-					TrxInvoiceItem:  tempTrxInvoiceItemss,
-				}
-				resultx := &trx.Result{
-					Trx:            result1,
-					TrxInvoiceItem: TrxInvTemp,
-				}
-				tempResponseTrxCloud := &trx.ResponseTrxCloud{
-					StatusCode: responseTrxCloud.StatusCode,
-					Result:     resultx,
-					Success:    responseTrxCloud.Success,
-				}
-
-				if !tempResponseTrxCloud.Success {
+				log.Println("RESPONSE CLOUD : ", utils.ToString(responseTrxCloud))
+				if !responseTrxCloud.Success {
 					result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, "Sesi Tidak Ditemukan", nil)
 					return &trx.MyResponse{
 						Response: result,
 					}, err
 				}
 
-				dataTrx := utils.ToString(tempResponseTrxCloud.Result.Trx)
-				ID = fmt.Sprintf("%s#%s", "SERVER", tempResponseTrxCloud.Result.TrxInvoiceItem.Id)
+				dataTrx := utils.ToString(responseTrxCloud.Result.Trx)
+				ID = fmt.Sprintf("%s#%s", "SERVER", responseTrxCloud.Result.TrxInvoiceItem.ID)
 				redisStatus := svc.Service.RedisClientLocal.Set(ID, dataTrx, 5*time.Minute)
 				if redisStatus.Err() != nil {
 					result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, redisStatus.Err().Error(), nil)
@@ -1599,34 +1248,40 @@ func (svc trxLocalService) InquiryTrxWithoutCard(ctx context.Context, input *trx
 					}, err
 				}
 
-				tempResultTrx = tempResponseTrxCloud.Result.TrxInvoiceItem
-				input.ProductCode = tempResultTrx.TrxInvoiceItem[0].ProductCode
+				resultTrx = &responseTrxCloud.Result.TrxInvoiceItem
+				input.ProductCode = resultTrx.TrxInvoiceItem[0].ProductCode
 			}
 		} else {
-			ID = tempResultTrx.Id
+			ID = resultTrx.ID.Hex()
 		}
 
-		checkinDatetimeParse, _ := time.Parse("2006-01-02 15:04", tempResultTrx.CheckInDatetime[:len(tempResultTrx.CheckInDatetime)-3])
+		log.Println("ID", ID)
+		checkinDatetimeParse, _ := time.Parse("2006-01-02 15:04", resultTrx.CheckInDatetime[:len(resultTrx.CheckInDatetime)-3])
 		checkoutDatetimeParse, _ := time.Parse("2006-01-02 15:04", input.InquiryDateTime[:len(input.InquiryDateTime)-3])
 		duration := utils.ConvDiffTime(checkinDatetimeParse, checkoutDatetimeParse)
 
+		log.Println("duration: ", duration)
 		// Request QRIS to A2P
-		if config.QRISPayment == constans.YES && tempResultTrx.TrxInvoiceItem[0].TotalAmount > 0 {
-			go helperService.CallQRPayment(tempResultTrx, input, duration, svc.Service)
+		if config.QRISPayment == constans.YES && resultTrx.TrxInvoiceItem[0].TotalAmount > 0 {
+			log.Println("DUDU444")
+			go helperService.CallQRPayment(resultTrx, input, duration, svc.Service)
 		}
 		anyDuration, _ := anypb.New(duration)
 
+		log.Println("any duration: ", utils.ToString(anyDuration))
 		responseTrx.Id = ID
 		responseTrx.DocNo = docNo
-		responseTrx.Nominal = tempResultTrx.TrxInvoiceItem[0].TotalAmount
-		responseTrx.ProductCode = tempResultTrx.TrxInvoiceItem[0].ProductCode
-		responseTrx.ProductName = tempResultTrx.TrxInvoiceItem[0].ProductName
-		responseTrx.VehicleNumberIn = tempResultTrx.VehicleNumberIn
+		responseTrx.Nominal = resultTrx.TrxInvoiceItem[0].TotalAmount
+		responseTrx.ProductCode = resultTrx.TrxInvoiceItem[0].ProductCode
+		responseTrx.ProductName = resultTrx.TrxInvoiceItem[0].ProductName
+		responseTrx.VehicleNumberIn = resultTrx.VehicleNumberIn
 		responseTrx.QrCode = constans.EMPTY_VALUE
-		responseTrx.ExcludeSf = tempResultTrx.TrxInvoiceItem[0].TotalAmount == 0
+		responseTrx.ExcludeSf = resultTrx.TrxInvoiceItem[0].TotalAmount == 0
 		responseTrx.Duration = anyDuration
-		responseTrx.OuCode = tempResultTrx.OuCode
+		responseTrx.OuCode = resultTrx.OuCode
 	}
+
+	log.Println("RESPONSE TRX : ", utils.ToString(responseTrx))
 	anyResponseTrx, _ := anypb.New(responseTrx)
 
 	result = helpers.ResponseJSON(true, constans.SUCCESS_CODE, constans.EMPTY_VALUE, anyResponseTrx)
