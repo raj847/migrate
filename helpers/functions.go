@@ -114,19 +114,6 @@ func ResponseJSON(success bool, code string, msg string, result *anypb.Any) *trx
 	return response
 }
 
-func ResponseJSONs(success bool, code string, msg string, result interface{}) *trxLocal.Response {
-	tm := timestamppb.New(time.Now())
-	response := &trxLocal.Response{
-		Success:          success,
-		StatusCode:       code,
-		Result:           result,
-		Message:          msg,
-		ResponseDatetime: tm,
-	}
-
-	return response
-}
-
 func ConvOvernight24H(startDate time.Time, nextDate time.Time, currDatetime time.Time) int64 {
 	log.Println("Start Datetime:", startDate, "Next Datetime:", nextDate, "Current Datetime:", currDatetime, "24H")
 	getMinutesOvertime := (nextDate.Unix() - startDate.Unix()) / 60
