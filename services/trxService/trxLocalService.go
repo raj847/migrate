@@ -2235,19 +2235,6 @@ func (svc trxLocalService) ConfirmTrx(ctx context.Context, input *trx.RequestCon
 	var resultTrx *trx.Trx
 	var resultTrxs models.Trx
 
-	request := new(models.RequestConfirmTrx)
-	if err := helpers.BindValidateStruct(request); err != nil {
-		result = helpers.ResponseJSON(false, constans.VALIDATE_ERROR_CODE, err.Error(), nil)
-		return &trx.MyResponse{
-			Response: result,
-		}, err
-	}
-	if err := helpers.BindValidateStruct(input); err != nil {
-		result = helpers.ResponseJSON(false, constans.VALIDATE_ERROR_CODE, err.Error(), nil)
-		return &trx.MyResponse{
-			Response: result,
-		}, err
-	}
 
 	if input.Id == constans.TYPE_PARTNER_FREE_PASS {
 		redisStatus := svc.Service.RedisClientLocal.Get(input.UuidCard)

@@ -6,13 +6,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
-	"log"
-	"math"
-	"net/http"
-	"strconv"
-	"strings"
-	"time"
 	"github.com/raj847/togrpc/config"
 	"github.com/raj847/togrpc/constans"
 	"github.com/raj847/togrpc/helpers"
@@ -20,6 +13,13 @@ import (
 	"github.com/raj847/togrpc/proto/trxLocal"
 	"github.com/raj847/togrpc/services"
 	"github.com/raj847/togrpc/utils"
+	"io/ioutil"
+	"log"
+	"math"
+	"net/http"
+	"strconv"
+	"strings"
+	"time"
 
 	"github.com/go-redis/redis"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -588,7 +588,7 @@ func CallSyncConfirmTrxToCloud(ID *primitive.ObjectID, request models.RequestCon
 	return nil
 }
 
-func CallSyncConfirmTrxForMemberFreePass(request models.RequestConfirmTrx, resultTrx models.Trx, svc services.UsecaseService) error {
+func CallSyncConfirmTrxForMemberFreePass(request trxLocal.RequestConfirmTrx, resultTrx models.Trx, svc services.UsecaseService) error {
 	checkoutDatetimeParse, _ := time.Parse("2006-01-02 15:04:05", request.CheckOutDatetime)
 	timeCheckOutUnix := checkoutDatetimeParse.Unix()
 	durationTime := (timeCheckOutUnix - resultTrx.CheckInTime) / 60
@@ -599,7 +599,7 @@ func CallSyncConfirmTrxForMemberFreePass(request models.RequestConfirmTrx, resul
 	resultTrx.DocDate = utils.DateNow()
 	resultTrx.DeviceId = request.DeviceId
 	resultTrx.TypeCard = request.CardType
-	resultTrx.CardNumberUUID = request.UUIDCard
+	resultTrx.CardNumberUUID = request.UuidCard
 	resultTrx.CardNumber = request.CardNumber
 	resultTrx.GateOut = request.IpTerminal
 	resultTrx.ProductCode = request.ProductCode
