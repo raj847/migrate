@@ -6,13 +6,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/raj847/togrpc/config"
-	"github.com/raj847/togrpc/constans"
-	"github.com/raj847/togrpc/helpers"
-	"github.com/raj847/togrpc/models"
-	"github.com/raj847/togrpc/proto/trxLocal"
-	"github.com/raj847/togrpc/services"
-	"github.com/raj847/togrpc/utils"
 	"io/ioutil"
 	"log"
 	"math"
@@ -20,6 +13,14 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/raj847/togrpc/config"
+	"github.com/raj847/togrpc/constans"
+	"github.com/raj847/togrpc/helpers"
+	"github.com/raj847/togrpc/models"
+	"github.com/raj847/togrpc/proto/trxLocal"
+	"github.com/raj847/togrpc/services"
+	"github.com/raj847/togrpc/utils"
 
 	"github.com/go-redis/redis"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -196,7 +197,7 @@ func CallCheckTrxAlreadyExists(docNo string, svc services.UsecaseService) (errCo
 	return constans.SUCCESS_CODE, nil
 }
 
-func CallSyncConfirmTrxCustomCard(request models.RequestConfirmTrx, resultTrx models.Trx, svc services.UsecaseService) error {
+func CallSyncConfirmTrxCustomCard(request *trxLocal.RequestConfirmTrx, resultTrx models.Trx, svc services.UsecaseService) error {
 	requestDataOut, _ := json.Marshal(request)
 
 	cardNumber := constans.EMPTY_VALUE
@@ -205,7 +206,7 @@ func CallSyncConfirmTrxCustomCard(request models.RequestConfirmTrx, resultTrx mo
 	if request.LogTrans != constans.EMPTY_VALUE {
 		cardNumber = request.CardNumber
 		logTrans = request.LogTrans
-		uuidCard = request.UUIDCard
+		uuidCard = request.UuidCard
 	}
 
 	merchantKey, err := utils.DecryptMerchantKey(config.MERCHANT_KEY)
@@ -307,7 +308,7 @@ func CallSyncConfirmTrxCustomCard(request models.RequestConfirmTrx, resultTrx mo
 	}
 
 	inquiryDate := request.CheckOutDatetime[:len(request.CheckOutDatetime)-9]
-	resultMember, exists, err := svc.MemberRepo.IsMemberByAdvanceIndex(request.UUIDCard, constans.EMPTY_VALUE, inquiryDate, config.MEMBER_BY, false)
+	resultMember, exists, err := svc.MemberRepo.IsMemberByAdvanceIndex(request.UuidCard, constans.EMPTY_VALUE, inquiryDate, config.MEMBER_BY, false)
 	if err != nil {
 		log.Println("Error Service IsMemberByAdvanceIndex: ", err.Error())
 		return errors.New(fmt.Sprintf("%s:%s", "Error Service IsMemberByAdvanceIndex", err.Error()))
@@ -324,7 +325,7 @@ func CallSyncConfirmTrxCustomCard(request models.RequestConfirmTrx, resultTrx mo
 	}
 
 	if !isFreePass {
-		productData, existsProduct := svc.TrxMongoRepo.IsTrxProductCustomExistsByKeyword(request.UUIDCard)
+		productData, existsProduct := svc.TrxMongoRepo.IsTrxProductCustomExistsByKeyword(request.UuidCard)
 		if existsProduct {
 			request.ProductCode = productData.ProductCode
 		}
@@ -364,7 +365,7 @@ func CallSyncConfirmTrxCustomCard(request models.RequestConfirmTrx, resultTrx mo
 		svc.RedisClientLocal.Del(fmt.Sprintf("%s-%s", docNo, constans.MEMBER))
 		var resultTrxMemberList []models.TrxMember
 		if exists && !isSpecialMember {
-			resultActiveMemberList, err := svc.MemberRepo.GetMemberActiveListByPeriod(request.UUIDCard, constans.EMPTY_VALUE, checkinDate, inquiryDate, config.MEMBER_BY, false)
+			resultActiveMemberList, err := svc.MemberRepo.GetMemberActiveListByPeriod(request.UuidCard, constans.EMPTY_VALUE, checkinDate, inquiryDate, config.MEMBER_BY, false)
 			if err != nil {
 				log.Println("Error Service GetMemberActiveListByPeriod: ", err.Error())
 				return errors.New(fmt.Sprintf("%s", "Sesi Tidak Ditemukan"))
@@ -485,7 +486,7 @@ func CallSyncConfirmTrxCustomCard(request models.RequestConfirmTrx, resultTrx mo
 	return nil
 }
 
-func CallSyncConfirmTrxToCloud(ID *primitive.ObjectID, request models.RequestConfirmTrx, resultTrx models.Trx, svc services.UsecaseService) error {
+func CallSyncConfirmTrxToCloud(ID *primitive.ObjectID, request *trxLocal.RequestConfirmTrx, resultTrx models.Trx, svc services.UsecaseService) error {
 	requestDataOut, _ := json.Marshal(request)
 	checkoutDatetimeParse, _ := time.Parse("2006-01-02 15:04:05", request.CheckOutDatetime)
 	timeCheckOutUnix := checkoutDatetimeParse.Unix()
@@ -494,7 +495,7 @@ func CallSyncConfirmTrxToCloud(ID *primitive.ObjectID, request models.RequestCon
 	resultTrx.CheckOutDatetime = request.CheckOutDatetime
 	resultTrx.CheckOutTime = timeCheckOutUnix
 	resultTrx.DurationTime = durationTime
-	resultTrx.CardNumberUUID = request.UUIDCard
+	resultTrx.CardNumberUUID = request.UuidCard
 	resultTrx.CardNumber = request.CardNumber
 	resultTrx.TypeCard = request.CardType
 	resultTrx.DeviceId = request.DeviceId
@@ -575,7 +576,7 @@ func CallSyncConfirmTrxToCloud(ID *primitive.ObjectID, request models.RequestCon
 
 	}
 
-	redisStatus := svc.RedisClientLocal.Del(request.ID)
+	redisStatus := svc.RedisClientLocal.Del(request.Id)
 	if redisStatus.Err() != nil {
 		return redisStatus.Err()
 	}
@@ -588,7 +589,7 @@ func CallSyncConfirmTrxToCloud(ID *primitive.ObjectID, request models.RequestCon
 	return nil
 }
 
-func CallSyncConfirmTrxForMemberFreePass(request trxLocal.RequestConfirmTrx, resultTrx models.Trx, svc services.UsecaseService) error {
+func CallSyncConfirmTrxForMemberFreePass(request *trxLocal.RequestConfirmTrx, resultTrx models.Trx, svc services.UsecaseService) error {
 	checkoutDatetimeParse, _ := time.Parse("2006-01-02 15:04:05", request.CheckOutDatetime)
 	timeCheckOutUnix := checkoutDatetimeParse.Unix()
 	durationTime := (timeCheckOutUnix - resultTrx.CheckInTime) / 60
@@ -630,7 +631,7 @@ func CallSyncConfirmTrxForMemberFreePass(request trxLocal.RequestConfirmTrx, res
 		return err
 	}
 
-	redisStatus := svc.RedisClientLocal.Del(request.UUIDCard)
+	redisStatus := svc.RedisClientLocal.Del(request.UuidCard)
 	if redisStatus.Err() != nil {
 		return redisStatus.Err()
 	}

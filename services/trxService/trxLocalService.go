@@ -7,6 +7,9 @@ import (
 	"log"
 	"net/http"
 
+	"strings"
+	"time"
+
 	"github.com/raj847/togrpc/config"
 	"github.com/raj847/togrpc/constans"
 	"github.com/raj847/togrpc/helpers"
@@ -17,8 +20,6 @@ import (
 	"github.com/raj847/togrpc/services"
 	"github.com/raj847/togrpc/services/helperService"
 	"github.com/raj847/togrpc/utils"
-	"strings"
-	"time"
 
 	goproto "google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/anypb"
@@ -47,12 +48,12 @@ func (svc trxLocalService) AddTrxWithCard(ctx context.Context, input *trx.Reques
 	productName := constans.EMPTY_VALUE
 	productCode := constans.EMPTY_VALUE
 
-	if err := helpers.BindValidateStruct(input); err != nil {
-		result = helpers.ResponseJSON(false, constans.VALIDATE_ERROR_CODE, err.Error(), nil)
-		return &trx.MyResponse{
-			Response: result,
-		}, nil
-	}
+	// if err := helpers.BindValidateStruct(input); err != nil {
+	// 	result = helpers.ResponseJSON(false, constans.VALIDATE_ERROR_CODE, err.Error(), nil)
+	// 	return &trx.MyResponse{
+	// 		Response: result,
+	// 	}, nil
+	// }
 
 	merchantKey, err := utils.DecryptMerchantKey(config.MERCHANT_KEY)
 	if err != nil {
@@ -958,12 +959,12 @@ func (svc trxLocalService) InquiryTrxWithoutCard(ctx context.Context, input *trx
 	var responseTrx *trx.ResultInquiryTrx
 	var ID string
 
-	if err := helpers.BindValidateStruct(input); err != nil {
-		result = helpers.ResponseJSON(constans.FALSE_VALUE, constans.VALIDATE_ERROR_CODE, err.Error(), nil)
-		return &trx.MyResponse{
-			Response: result,
-		}, err
-	}
+	// if err := helpers.BindValidateStruct(input); err != nil {
+	// 	result = helpers.ResponseJSON(constans.FALSE_VALUE, constans.VALIDATE_ERROR_CODE, err.Error(), nil)
+	// 	return &trx.MyResponse{
+	// 		Response: result,
+	// 	}, err
+	// }
 
 	if strings.ToUpper(input.QrCode) == "P3" {
 		// Get P3/Manual status
@@ -1636,12 +1637,12 @@ func (svc trxLocalService) InquiryTrxWithCard(ctx context.Context, input *trx.Re
 	resultInquiryTrxWithCard["memberName"] = constans.EMPTY_VALUE
 	resultInquiryTrxWithCard["memberType"] = constans.EMPTY_VALUE
 
-	if err := helpers.BindValidateStruct(input); err != nil {
-		result = helpers.ResponseJSON(false, constans.VALIDATE_ERROR_CODE, err.Error(), nil)
-		return &trx.MyResponse{
-			Response: result,
-		}, err
-	}
+	// if err := helpers.BindValidateStruct(input); err != nil {
+	// 	result = helpers.ResponseJSON(false, constans.VALIDATE_ERROR_CODE, err.Error(), nil)
+	// 	return &trx.MyResponse{
+	// 		Response: result,
+	// 	}, err
+	// }
 
 	inquiryDate := input.InquiryDateTime[:len(input.InquiryDateTime)-9]
 	resultMember, exists, err := svc.Service.MemberRepo.IsMemberByAdvanceIndex(input.UuidCard, constans.EMPTY_VALUE, inquiryDate, config.MEMBER_BY, false)
@@ -2235,7 +2236,6 @@ func (svc trxLocalService) ConfirmTrx(ctx context.Context, input *trx.RequestCon
 	var resultTrx *trx.Trx
 	var resultTrxs models.Trx
 
-
 	if input.Id == constans.TYPE_PARTNER_FREE_PASS {
 		redisStatus := svc.Service.RedisClientLocal.Get(input.UuidCard)
 		if redisStatus.Err() != nil {
@@ -2259,7 +2259,7 @@ func (svc trxLocalService) ConfirmTrx(ctx context.Context, input *trx.RequestCon
 			}, err
 		}
 
-		go helperService.CallSyncConfirmTrxForMemberFreePass(*request, resultTrxs, svc.Service)
+		go helperService.CallSyncConfirmTrxForMemberFreePass(input, resultTrxs, svc.Service)
 	} else if strings.Contains(input.Id, "SERVER") {
 		redisStatus := svc.Service.RedisClientLocal.Get(input.Id)
 		if redisStatus.Err() != nil {
@@ -2283,9 +2283,9 @@ func (svc trxLocalService) ConfirmTrx(ctx context.Context, input *trx.RequestCon
 			}, err
 		}
 
-		go helperService.CallSyncConfirmTrxToCloud(nil, *request, resultTrxs, svc.Service)
+		go helperService.CallSyncConfirmTrxToCloud(nil, input, resultTrxs, svc.Service)
 	} else {
-		ID, _ := primitive.ObjectIDFromHex(request.ID)
+		ID, _ := primitive.ObjectIDFromHex(input.Id)
 
 		resultDataTrx, err := svc.Service.TrxMongoRepo.FindTrxOutstandingByID(ID)
 		if err != nil {
@@ -2297,7 +2297,7 @@ func (svc trxLocalService) ConfirmTrx(ctx context.Context, input *trx.RequestCon
 
 		resultTrxs = resultDataTrx
 
-		go helperService.CallSyncConfirmTrxToCloud(&ID, *request, resultTrxs, svc.Service)
+		go helperService.CallSyncConfirmTrxToCloud(&ID, input, resultTrxs, svc.Service)
 	}
 
 	ipAddr, _ := helpers.GetPrivateIPLocal()
@@ -2334,12 +2334,12 @@ func (svc trxLocalService) ConfirmTrxByPass(ctx context.Context, input *trx.Conf
 	var result *trx.Response
 	var trxs *trx.Trx
 
-	if err := helpers.BindValidateStruct(input); err != nil {
-		result = helpers.ResponseJSON(false, constans.VALIDATE_ERROR_CODE, err.Error(), nil)
-		return &trx.MyResponse{
-			Response: result,
-		}, err
-	}
+	// if err := helpers.BindValidateStruct(input); err != nil {
+	// 	result = helpers.ResponseJSON(false, constans.VALIDATE_ERROR_CODE, err.Error(), nil)
+	// 	return &trx.MyResponse{
+	// 		Response: result,
+	// 	}, err
+	// }
 
 	merchantKey, err := utils.DecryptMerchantKey(config.MERCHANT_KEY)
 	if err != nil {
@@ -2974,12 +2974,12 @@ func (svc trxLocalService) ConfirmSyncTrxToCloud(ctx context.Context, input *trx
 func (svc trxLocalService) InquiryPayment(ctx context.Context, input *trx.RequestInquiryPayment) (*trx.MyResponse, error) {
 	var result *trx.Response
 
-	if err := helpers.BindValidateStruct(input); err != nil {
-		result = helpers.ResponseJSON(false, constans.VALIDATE_ERROR_CODE, err.Error(), nil)
-		return &trx.MyResponse{
-			Response: result,
-		}, err
-	}
+	// if err := helpers.BindValidateStruct(input); err != nil {
+	// 	result = helpers.ResponseJSON(false, constans.VALIDATE_ERROR_CODE, err.Error(), nil)
+	// 	return &trx.MyResponse{
+	// 		Response: result,
+	// 	}, err
+	// }
 
 	resultTrx, exists, err := svc.Service.TrxMongoRepo.IsTrxOutstandingByDocNoForCustom(input.DocNo)
 	if err != nil {
@@ -3194,12 +3194,12 @@ func (svc trxLocalService) InquiryWithCardP3(ctx context.Context, input *trx.Req
 	resultInquiryTrxWithCard["memberName"] = constans.EMPTY_VALUE
 	resultInquiryTrxWithCard["memberType"] = constans.EMPTY_VALUE
 
-	if err := helpers.BindValidateStruct(input); err != nil {
-		result = helpers.ResponseJSON(false, constans.VALIDATE_ERROR_CODE, err.Error(), nil)
-		return &trx.MyResponse{
-			Response: result,
-		}, err
-	}
+	// if err := helpers.BindValidateStruct(input); err != nil {
+	// 	result = helpers.ResponseJSON(false, constans.VALIDATE_ERROR_CODE, err.Error(), nil)
+	// 	return &trx.MyResponse{
+	// 		Response: result,
+	// 	}, err
+	// }
 
 	resultRedis := svc.Service.RedisClientLocal.Get("P3")
 	if resultRedis.Err() != nil || resultRedis.Val() == constans.EMPTY_VALUE || resultRedis.Val() == "0" {
@@ -3710,12 +3710,12 @@ func (svc trxLocalService) InquiryPaymentP3(ctx context.Context, input *trx.Requ
 	requestInquiry := make(map[string]interface{})
 	channelCallback := make(map[string]interface{})
 
-	if err := helpers.BindValidateStruct(input); err != nil {
-		result = helpers.ResponseJSON(false, constans.VALIDATE_ERROR_CODE, err.Error(), nil)
-		return &trx.MyResponse{
-			Response: result,
-		}, err
-	}
+	// if err := helpers.BindValidateStruct(input); err != nil {
+	// 	result = helpers.ResponseJSON(false, constans.VALIDATE_ERROR_CODE, err.Error(), nil)
+	// 	return &trx.MyResponse{
+	// 		Response: result,
+	// 	}, err
+	// }
 
 	merchantKey, err := utils.DecryptMerchantKey(config.MERCHANT_KEY)
 	if err != nil {
@@ -4293,16 +4293,16 @@ func (svc trxLocalService) ConfirmTrxP3(ctx context.Context, input *trx.RequestC
 	var result *trx.Response
 	var resultTrx models.Trx
 
-	request := new(models.RequestConfirmTrx)
-	if err := helpers.BindValidateStruct(request); err != nil {
-		result = helpers.ResponseJSON(false, constans.VALIDATE_ERROR_CODE, err.Error(), nil)
-		return &trx.MyResponse{
-			Response: result,
-		}, err
-	}
+	// request := new(models.RequestConfirmTrx)
+	// if err := helpers.BindValidateStruct(request); err != nil {
+	// 	result = helpers.ResponseJSON(false, constans.VALIDATE_ERROR_CODE, err.Error(), nil)
+	// 	return &trx.MyResponse{
+	// 		Response: result,
+	// 	}, err
+	// }
 
-	if request.ID == constans.TYPE_PARTNER_FREE_PASS {
-		redisStatus := svc.Service.RedisClientLocal.Get(request.UUIDCard)
+	if input.Id == constans.TYPE_PARTNER_FREE_PASS {
+		redisStatus := svc.Service.RedisClientLocal.Get(input.UuidCard)
 		if redisStatus.Err() != nil {
 			result = helpers.ResponseJSON(false, constans.DATA_ERROR_CODE, redisStatus.Err().Error(), nil)
 			return &trx.MyResponse{
@@ -4317,9 +4317,9 @@ func (svc trxLocalService) ConfirmTrxP3(ctx context.Context, input *trx.RequestC
 			}, err
 		}
 
-		go helperService.CallSyncConfirmTrxForMemberFreePass(*request, resultTrx, svc.Service)
-	} else if strings.Contains(request.ID, "SERVER") {
-		redisStatus := svc.Service.RedisClientLocal.Get(request.ID)
+		go helperService.CallSyncConfirmTrxForMemberFreePass(input, resultTrx, svc.Service)
+	} else if strings.Contains(input.Id, "SERVER") {
+		redisStatus := svc.Service.RedisClientLocal.Get(input.Id)
 		if redisStatus.Err() != nil {
 			result = helpers.ResponseJSON(false, constans.DATA_ERROR_CODE, redisStatus.Err().Error(), nil)
 			return &trx.MyResponse{
@@ -4334,9 +4334,9 @@ func (svc trxLocalService) ConfirmTrxP3(ctx context.Context, input *trx.RequestC
 			}, err
 		}
 
-		go helperService.CallSyncConfirmTrxToCloud(nil, *request, resultTrx, svc.Service)
+		go helperService.CallSyncConfirmTrxToCloud(nil, input, resultTrx, svc.Service)
 	} else {
-		ID, _ := primitive.ObjectIDFromHex(request.ID)
+		ID, _ := primitive.ObjectIDFromHex(input.Id)
 
 		resultDataTrx, err := svc.Service.TrxMongoRepo.FindTrxOutstandingByID(ID)
 		if err != nil {
@@ -4348,11 +4348,11 @@ func (svc trxLocalService) ConfirmTrxP3(ctx context.Context, input *trx.RequestC
 
 		resultTrx = resultDataTrx
 
-		if request.CardType == constans.SETTLEMENT_CODE_QRIS {
-			go helperService.CallSyncConfirmTrxToCloud(&ID, *request, resultTrx, svc.Service)
+		if input.CardType == constans.SETTLEMENT_CODE_QRIS {
+			go helperService.CallSyncConfirmTrxToCloud(&ID, input, resultTrx, svc.Service)
 
 		} else {
-			go helperService.CallSyncConfirmTrxCustomCard(*request, resultTrx, svc.Service)
+			go helperService.CallSyncConfirmTrxCustomCard(input, resultTrx, svc.Service)
 		}
 	}
 
@@ -4361,17 +4361,17 @@ func (svc trxLocalService) ConfirmTrxP3(ctx context.Context, input *trx.RequestC
 	responseConfirm := &trx.ResponseConfirm{
 		DocNo:            resultTrx.DocNo,
 		ProductData:      resultTrx.ProductData,
-		ProductName:      request.ProductName,
+		ProductName:      input.ProductName,
 		CardType:         resultTrx.TypeCard,
-		CardNumber:       request.CardNumber,
+		CardNumber:       input.CardNumber,
 		CheckInDatetime:  resultTrx.CheckInDatetime,
-		CheckOutDatetime: request.CheckOutDatetime,
-		VehicleNumberIn:  request.VehicleNumber,
-		VehicleNumberOut: request.VehicleNumber,
-		UuidCard:         request.UUIDCard,
+		CheckOutDatetime: input.CheckOutDatetime,
+		VehicleNumberIn:  input.VehicleNumber,
+		VehicleNumberOut: input.VehicleNumber,
+		UuidCard:         input.UuidCard,
 		ShowQRISArea:     constans.EMPTY_VALUE,
-		CurrentBalance:   request.CurrentBalance,
-		GrandTotal:       request.GrandTotal,
+		CurrentBalance:   input.CurrentBalance,
+		GrandTotal:       input.GrandTotal,
 		OuCode:           resultTrx.OuCode,
 		OuName:           resultTrx.OuName,
 		Address:          config.ADDRESS,
@@ -4748,12 +4748,12 @@ func (svc trxLocalService) UpdateProductPrice(ctx context.Context, input *trx.Re
 	ouId := r.Context().Value("id").(float64)
 	var keyword string
 
-	if err := helpers.BindValidateStruct(input); err != nil {
-		result = helpers.ResponseJSON(false, constans.VALIDATE_ERROR_CODE, err.Error(), nil)
-		return &trx.MyResponse{
-			Response: result,
-		}, err
-	}
+	// if err := helpers.BindValidateStruct(input); err != nil {
+	// 	result = helpers.ResponseJSON(false, constans.VALIDATE_ERROR_CODE, err.Error(), nil)
+	// 	return &trx.MyResponse{
+	// 		Response: result,
+	// 	}, err
+	// }
 
 	dataUser, err := svc.Service.UserMongoRepo.FindUserByIndex(input.Username)
 	if err != nil {
@@ -4914,12 +4914,12 @@ func (svc trxLocalService) RegisterMember(ctx context.Context, input *trx.Reques
 	var trxOutstandings *trx.ResultFindTrxOutstanding
 	var err error
 
-	if err := helpers.BindValidateStruct(input); err != nil {
-		result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, err.Error(), nil)
-		return &trx.MyResponse{
-			Response: result,
-		}, err
-	}
+	// if err := helpers.BindValidateStruct(input); err != nil {
+	// 	result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, err.Error(), nil)
+	// 	return &trx.MyResponse{
+	// 		Response: result,
+	// 	}, err
+	// }
 
 	if len(input.Keyword) == 14 {
 		trxOutstanding, err = svc.Service.TrxMongoRepo.FindTrxOutstandingByUUIDCustom(input.Keyword)
@@ -5066,12 +5066,12 @@ func (svc trxLocalService) RegisterMember(ctx context.Context, input *trx.Reques
 func (svc trxLocalService) DecryptMKey(ctx context.Context, input *trx.Decrypt) (*trx.MyResponse, error) {
 	var result *trx.Response
 
-	if err := helpers.BindValidateStruct(input); err != nil {
-		result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, err.Error(), nil)
-		return &trx.MyResponse{
-			Response: result,
-		}, err
-	}
+	// if err := helpers.BindValidateStruct(input); err != nil {
+	// 	result = helpers.ResponseJSON(false, constans.MALFUNCTION_SYSTEM_CODE, err.Error(), nil)
+	// 	return &trx.MyResponse{
+	// 		Response: result,
+	// 	}, err
+	// }
 
 	merchantKey, err := utils.DecryptMerchantKey(input.Keyword)
 	if err != nil {
