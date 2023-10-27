@@ -4,15 +4,16 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"log"
+	"net"
+	"net/http"
+
 	"github.com/raj847/togrpc/constans"
 	"github.com/raj847/togrpc/models"
 	"github.com/raj847/togrpc/proto/trxLocal"
 	"github.com/raj847/togrpc/services"
 	"github.com/raj847/togrpc/utils"
 	"github.com/raj847/togrpc/validate"
-	"log"
-	"net"
-	"net/http"
 
 	"reflect"
 	"strconv"
@@ -38,6 +39,10 @@ func InArray(v interface{}, in interface{}) (ok bool, i int) {
 		}
 	}
 	return
+}
+
+func BindValidateStructs(data []byte, obj interface{}) error {
+	return json.Unmarshal(data, obj)
 }
 
 func BindValidateStruct(i interface{}) error {
@@ -97,6 +102,19 @@ func ConvNextInvoiceForTime(checkinDatetimeStr, checkoutDatetimeStr string, curr
 }
 
 func ResponseJSON(success bool, code string, msg string, result *anypb.Any) *trxLocal.Response {
+	tm := timestamppb.New(time.Now())
+	response := &trxLocal.Response{
+		Success:          success,
+		StatusCode:       code,
+		Result:           result,
+		Message:          msg,
+		ResponseDatetime: tm,
+	}
+
+	return response
+}
+
+func ResponseJSONs(success bool, code string, msg string, result interface{}) *trxLocal.Response {
 	tm := timestamppb.New(time.Now())
 	response := &trxLocal.Response{
 		Success:          success,

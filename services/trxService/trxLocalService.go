@@ -948,6 +948,11 @@ func (svc trxLocalService) AddTrxWithoutCard(ctx context.Context, input *trx.Req
 
 	anyResponseTrx, _ := anypb.New(&responseTrx)
 
+	if err := anyResponseTrx.UnmarshalTo(&responseTrx); err != nil {
+		log.Fatalf("Failed to decode: %v", err)
+	}
+	log.Println("abc", &responseTrx)
+
 	result = helpers.ResponseJSON(true, constans.SUCCESS_CODE, constans.EMPTY_VALUE, anyResponseTrx)
 	return &trx.MyResponse{
 		Response: result,
