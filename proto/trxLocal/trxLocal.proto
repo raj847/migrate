@@ -10,12 +10,12 @@ message MyResponse {
 }
 
 message ConvTimeMessage {
-    int64 date1 = 1;
-    int64 date2 = 2;
-    int32 days = 3;
-    int32 hours = 4;
-    int32 minutes = 5;
-    int32 second = 6;
+  int64 date1 = 1;
+  int64 date2 = 2;
+  int32 days = 3;
+  int32 hours = 4;
+  int32 minutes = 5;
+  int32 second = 6;
 }
 
 message TrxMember {
