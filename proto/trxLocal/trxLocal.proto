@@ -987,7 +987,7 @@ message Results {
 }
 
 
-service TrxService {
+service trxLocalService {
   rpc AddTrxWithCard(RequestTrxCheckin) returns (MyResponse) {}
   rpc AddTrxWithoutCard(RequestTrxCheckInWithoutCard) returns (MyResponse) {}
   rpc InquiryTrxWithoutCard(RequestInquiryWithoutCard) returns (MyResponse) {}

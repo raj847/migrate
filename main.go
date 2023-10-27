@@ -57,8 +57,8 @@ func main() {
 
 	grpcServer := grpc.NewServer()
 
-	trxLocalSvc := trxService.NewTrxService(services)
-	trxLocal.RegisterTrxServiceServer(grpcServer, trxLocalSvc)
+	trxLocalSvc := trxLocalService.NewTrxLocalService(services)
+	trxLocal.RegisterTrxLocalServiceServer(grpcServer, trxLocalSvc)
 
 	boarding()
 	if err := grpcServer.Serve(listen); err != nil {

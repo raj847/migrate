@@ -10629,81 +10629,81 @@ var file_trxLocal_proto_rawDesc = []byte{
 	0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x74, 0x79, 0x70, 0x65, 0x12, 0x28, 0x0a,
 	0x0f, 0x70, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x66, 0x44, 0x6f, 0x63, 0x4e, 0x6f,
 	0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0f, 0x70, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x52,
-	0x65, 0x66, 0x44, 0x6f, 0x63, 0x4e, 0x6f, 0x32, 0x87, 0x09, 0x0a, 0x0a, 0x54, 0x72, 0x78, 0x53,
-	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x3b, 0x0a, 0x0e, 0x41, 0x64, 0x64, 0x54, 0x72, 0x78,
-	0x57, 0x69, 0x74, 0x68, 0x43, 0x61, 0x72, 0x64, 0x12, 0x16, 0x2e, 0x74, 0x72, 0x78, 0x2e, 0x52,
-	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x54, 0x72, 0x78, 0x43, 0x68, 0x65, 0x63, 0x6b, 0x69, 0x6e,
+	0x65, 0x66, 0x44, 0x6f, 0x63, 0x4e, 0x6f, 0x32, 0x8c, 0x09, 0x0a, 0x0f, 0x74, 0x72, 0x78, 0x4c,
+	0x6f, 0x63, 0x61, 0x6c, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x3b, 0x0a, 0x0e, 0x41,
+	0x64, 0x64, 0x54, 0x72, 0x78, 0x57, 0x69, 0x74, 0x68, 0x43, 0x61, 0x72, 0x64, 0x12, 0x16, 0x2e,
+	0x74, 0x72, 0x78, 0x2e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x54, 0x72, 0x78, 0x43, 0x68,
+	0x65, 0x63, 0x6b, 0x69, 0x6e, 0x1a, 0x0f, 0x2e, 0x74, 0x72, 0x78, 0x2e, 0x4d, 0x79, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x49, 0x0a, 0x11, 0x41, 0x64, 0x64, 0x54,
+	0x72, 0x78, 0x57, 0x69, 0x74, 0x68, 0x6f, 0x75, 0x74, 0x43, 0x61, 0x72, 0x64, 0x12, 0x21, 0x2e,
+	0x74, 0x72, 0x78, 0x2e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x54, 0x72, 0x78, 0x43, 0x68,
+	0x65, 0x63, 0x6b, 0x49, 0x6e, 0x57, 0x69, 0x74, 0x68, 0x6f, 0x75, 0x74, 0x43, 0x61, 0x72, 0x64,
 	0x1a, 0x0f, 0x2e, 0x74, 0x72, 0x78, 0x2e, 0x4d, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
-	0x65, 0x22, 0x00, 0x12, 0x49, 0x0a, 0x11, 0x41, 0x64, 0x64, 0x54, 0x72, 0x78, 0x57, 0x69, 0x74,
-	0x68, 0x6f, 0x75, 0x74, 0x43, 0x61, 0x72, 0x64, 0x12, 0x21, 0x2e, 0x74, 0x72, 0x78, 0x2e, 0x52,
-	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x54, 0x72, 0x78, 0x43, 0x68, 0x65, 0x63, 0x6b, 0x49, 0x6e,
-	0x57, 0x69, 0x74, 0x68, 0x6f, 0x75, 0x74, 0x43, 0x61, 0x72, 0x64, 0x1a, 0x0f, 0x2e, 0x74, 0x72,
-	0x78, 0x2e, 0x4d, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x4a,
-	0x0a, 0x15, 0x49, 0x6e, 0x71, 0x75, 0x69, 0x72, 0x79, 0x54, 0x72, 0x78, 0x57, 0x69, 0x74, 0x68,
-	0x6f, 0x75, 0x74, 0x43, 0x61, 0x72, 0x64, 0x12, 0x1e, 0x2e, 0x74, 0x72, 0x78, 0x2e, 0x52, 0x65,
-	0x71, 0x75, 0x65, 0x73, 0x74, 0x49, 0x6e, 0x71, 0x75, 0x69, 0x72, 0x79, 0x57, 0x69, 0x74, 0x68,
-	0x6f, 0x75, 0x74, 0x43, 0x61, 0x72, 0x64, 0x1a, 0x0f, 0x2e, 0x74, 0x72, 0x78, 0x2e, 0x4d, 0x79,
-	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x44, 0x0a, 0x12, 0x49, 0x6e,
-	0x71, 0x75, 0x69, 0x72, 0x79, 0x54, 0x72, 0x78, 0x57, 0x69, 0x74, 0x68, 0x43, 0x61, 0x72, 0x64,
-	0x12, 0x1b, 0x2e, 0x74, 0x72, 0x78, 0x2e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x49, 0x6e,
-	0x71, 0x75, 0x69, 0x72, 0x79, 0x57, 0x69, 0x74, 0x68, 0x43, 0x61, 0x72, 0x64, 0x1a, 0x0f, 0x2e,
-	0x74, 0x72, 0x78, 0x2e, 0x4d, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00,
-	0x12, 0x37, 0x0a, 0x0a, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x72, 0x6d, 0x54, 0x72, 0x78, 0x12, 0x16,
-	0x2e, 0x74, 0x72, 0x78, 0x2e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x43, 0x6f, 0x6e, 0x66,
-	0x69, 0x72, 0x6d, 0x54, 0x72, 0x78, 0x1a, 0x0f, 0x2e, 0x74, 0x72, 0x78, 0x2e, 0x4d, 0x79, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x43, 0x0a, 0x10, 0x43, 0x6f, 0x6e,
-	0x66, 0x69, 0x72, 0x6d, 0x54, 0x72, 0x78, 0x42, 0x79, 0x50, 0x61, 0x73, 0x73, 0x12, 0x1c, 0x2e,
-	0x74, 0x72, 0x78, 0x2e, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x72, 0x6d, 0x54, 0x72, 0x78, 0x42, 0x79,
-	0x50, 0x61, 0x73, 0x73, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x1a, 0x0f, 0x2e, 0x74, 0x72,
-	0x78, 0x2e, 0x4d, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x36,
-	0x0a, 0x15, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x72, 0x6d, 0x53, 0x79, 0x6e, 0x63, 0x54, 0x72, 0x78,
-	0x54, 0x6f, 0x43, 0x6c, 0x6f, 0x75, 0x64, 0x12, 0x0a, 0x2e, 0x74, 0x72, 0x78, 0x2e, 0x45, 0x6d,
-	0x70, 0x74, 0x79, 0x1a, 0x0f, 0x2e, 0x74, 0x72, 0x78, 0x2e, 0x4d, 0x79, 0x52, 0x65, 0x73, 0x70,
-	0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x3f, 0x0a, 0x0e, 0x49, 0x6e, 0x71, 0x75, 0x69, 0x72,
-	0x79, 0x50, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x12, 0x1a, 0x2e, 0x74, 0x72, 0x78, 0x2e, 0x52,
-	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x49, 0x6e, 0x71, 0x75, 0x69, 0x72, 0x79, 0x50, 0x61, 0x79,
-	0x6d, 0x65, 0x6e, 0x74, 0x1a, 0x0f, 0x2e, 0x74, 0x72, 0x78, 0x2e, 0x4d, 0x79, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x45, 0x0a, 0x11, 0x49, 0x6e, 0x71, 0x75, 0x69,
-	0x72, 0x79, 0x57, 0x69, 0x74, 0x68, 0x43, 0x61, 0x72, 0x64, 0x50, 0x33, 0x12, 0x1d, 0x2e, 0x74,
+	0x65, 0x22, 0x00, 0x12, 0x4a, 0x0a, 0x15, 0x49, 0x6e, 0x71, 0x75, 0x69, 0x72, 0x79, 0x54, 0x72,
+	0x78, 0x57, 0x69, 0x74, 0x68, 0x6f, 0x75, 0x74, 0x43, 0x61, 0x72, 0x64, 0x12, 0x1e, 0x2e, 0x74,
 	0x72, 0x78, 0x2e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x49, 0x6e, 0x71, 0x75, 0x69, 0x72,
-	0x79, 0x57, 0x69, 0x74, 0x68, 0x43, 0x61, 0x72, 0x64, 0x50, 0x33, 0x1a, 0x0f, 0x2e, 0x74, 0x72,
+	0x79, 0x57, 0x69, 0x74, 0x68, 0x6f, 0x75, 0x74, 0x43, 0x61, 0x72, 0x64, 0x1a, 0x0f, 0x2e, 0x74,
+	0x72, 0x78, 0x2e, 0x4d, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12,
+	0x44, 0x0a, 0x12, 0x49, 0x6e, 0x71, 0x75, 0x69, 0x72, 0x79, 0x54, 0x72, 0x78, 0x57, 0x69, 0x74,
+	0x68, 0x43, 0x61, 0x72, 0x64, 0x12, 0x1b, 0x2e, 0x74, 0x72, 0x78, 0x2e, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x49, 0x6e, 0x71, 0x75, 0x69, 0x72, 0x79, 0x57, 0x69, 0x74, 0x68, 0x43, 0x61,
+	0x72, 0x64, 0x1a, 0x0f, 0x2e, 0x74, 0x72, 0x78, 0x2e, 0x4d, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x37, 0x0a, 0x0a, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x72, 0x6d,
+	0x54, 0x72, 0x78, 0x12, 0x16, 0x2e, 0x74, 0x72, 0x78, 0x2e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x72, 0x6d, 0x54, 0x72, 0x78, 0x1a, 0x0f, 0x2e, 0x74, 0x72,
 	0x78, 0x2e, 0x4d, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x43,
-	0x0a, 0x10, 0x49, 0x6e, 0x71, 0x75, 0x69, 0x72, 0x79, 0x50, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74,
-	0x50, 0x33, 0x12, 0x1c, 0x2e, 0x74, 0x72, 0x78, 0x2e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
-	0x49, 0x6e, 0x71, 0x75, 0x69, 0x72, 0x79, 0x50, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x50, 0x33,
+	0x0a, 0x10, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x72, 0x6d, 0x54, 0x72, 0x78, 0x42, 0x79, 0x50, 0x61,
+	0x73, 0x73, 0x12, 0x1c, 0x2e, 0x74, 0x72, 0x78, 0x2e, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x72, 0x6d,
+	0x54, 0x72, 0x78, 0x42, 0x79, 0x50, 0x61, 0x73, 0x73, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65,
 	0x1a, 0x0f, 0x2e, 0x74, 0x72, 0x78, 0x2e, 0x4d, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
-	0x65, 0x22, 0x00, 0x12, 0x35, 0x0a, 0x14, 0x47, 0x65, 0x74, 0x54, 0x72, 0x78, 0x4c, 0x69, 0x73,
-	0x74, 0x46, 0x6f, 0x72, 0x44, 0x6f, 0x63, 0x44, 0x61, 0x74, 0x65, 0x12, 0x0a, 0x2e, 0x74, 0x72,
-	0x78, 0x2e, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x1a, 0x0f, 0x2e, 0x74, 0x72, 0x78, 0x2e, 0x4d, 0x79,
-	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x36, 0x0a, 0x15, 0x55, 0x70,
-	0x64, 0x61, 0x74, 0x65, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x4d, 0x61, 0x6e, 0x75, 0x61, 0x6c,
-	0x54, 0x72, 0x78, 0x12, 0x0a, 0x2e, 0x74, 0x72, 0x78, 0x2e, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x1a,
-	0x0f, 0x2e, 0x74, 0x72, 0x78, 0x2e, 0x4d, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x22, 0x00, 0x12, 0x3a, 0x0a, 0x19, 0x46, 0x69, 0x6e, 0x64, 0x54, 0x72, 0x78, 0x4f, 0x75, 0x74,
-	0x73, 0x74, 0x61, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x42, 0x79, 0x49, 0x6e, 0x64, 0x65, 0x78, 0x12,
-	0x0a, 0x2e, 0x74, 0x72, 0x78, 0x2e, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x1a, 0x0f, 0x2e, 0x74, 0x72,
-	0x78, 0x2e, 0x4d, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x47,
-	0x0a, 0x12, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x50,
-	0x72, 0x69, 0x63, 0x65, 0x12, 0x1e, 0x2e, 0x74, 0x72, 0x78, 0x2e, 0x52, 0x65, 0x71, 0x75, 0x65,
-	0x73, 0x74, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x50,
-	0x72, 0x69, 0x63, 0x65, 0x1a, 0x0f, 0x2e, 0x74, 0x72, 0x78, 0x2e, 0x4d, 0x79, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x48, 0x0a, 0x0e, 0x52, 0x65, 0x67, 0x69, 0x73,
-	0x74, 0x65, 0x72, 0x4d, 0x65, 0x6d, 0x62, 0x65, 0x72, 0x12, 0x23, 0x2e, 0x74, 0x72, 0x78, 0x2e,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x72, 0x61, 0x74,
-	0x69, 0x6f, 0x6e, 0x4d, 0x65, 0x6d, 0x62, 0x65, 0x72, 0x4c, 0x6f, 0x63, 0x61, 0x6c, 0x1a, 0x0f,
-	0x2e, 0x74, 0x72, 0x78, 0x2e, 0x4d, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22,
-	0x00, 0x12, 0x2e, 0x0a, 0x0b, 0x44, 0x65, 0x63, 0x72, 0x79, 0x70, 0x74, 0x4d, 0x4b, 0x65, 0x79,
-	0x12, 0x0c, 0x2e, 0x74, 0x72, 0x78, 0x2e, 0x44, 0x65, 0x63, 0x72, 0x79, 0x70, 0x74, 0x1a, 0x0f,
-	0x2e, 0x74, 0x72, 0x78, 0x2e, 0x4d, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22,
-	0x00, 0x12, 0x33, 0x0a, 0x12, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x41, 0x75, 0x74, 0x6f, 0x43,
-	0x6c, 0x65, 0x61, 0x72, 0x54, 0x72, 0x78, 0x12, 0x0a, 0x2e, 0x74, 0x72, 0x78, 0x2e, 0x50, 0x61,
-	0x72, 0x61, 0x6d, 0x1a, 0x0f, 0x2e, 0x74, 0x72, 0x78, 0x2e, 0x4d, 0x79, 0x52, 0x65, 0x73, 0x70,
-	0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x39, 0x0a, 0x0c, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x72,
-	0x6d, 0x54, 0x72, 0x78, 0x50, 0x33, 0x12, 0x16, 0x2e, 0x74, 0x72, 0x78, 0x2e, 0x52, 0x65, 0x71,
-	0x75, 0x65, 0x73, 0x74, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x72, 0x6d, 0x54, 0x72, 0x78, 0x1a, 0x0f,
-	0x2e, 0x74, 0x72, 0x78, 0x2e, 0x4d, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22,
-	0x00, 0x42, 0x0c, 0x5a, 0x0a, 0x2f, 0x3b, 0x74, 0x72, 0x78, 0x4c, 0x6f, 0x63, 0x61, 0x6c, 0x62,
-	0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x65, 0x22, 0x00, 0x12, 0x36, 0x0a, 0x15, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x72, 0x6d, 0x53, 0x79,
+	0x6e, 0x63, 0x54, 0x72, 0x78, 0x54, 0x6f, 0x43, 0x6c, 0x6f, 0x75, 0x64, 0x12, 0x0a, 0x2e, 0x74,
+	0x72, 0x78, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x1a, 0x0f, 0x2e, 0x74, 0x72, 0x78, 0x2e, 0x4d,
+	0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x3f, 0x0a, 0x0e, 0x49,
+	0x6e, 0x71, 0x75, 0x69, 0x72, 0x79, 0x50, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x12, 0x1a, 0x2e,
+	0x74, 0x72, 0x78, 0x2e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x49, 0x6e, 0x71, 0x75, 0x69,
+	0x72, 0x79, 0x50, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x1a, 0x0f, 0x2e, 0x74, 0x72, 0x78, 0x2e,
+	0x4d, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x45, 0x0a, 0x11,
+	0x49, 0x6e, 0x71, 0x75, 0x69, 0x72, 0x79, 0x57, 0x69, 0x74, 0x68, 0x43, 0x61, 0x72, 0x64, 0x50,
+	0x33, 0x12, 0x1d, 0x2e, 0x74, 0x72, 0x78, 0x2e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x49,
+	0x6e, 0x71, 0x75, 0x69, 0x72, 0x79, 0x57, 0x69, 0x74, 0x68, 0x43, 0x61, 0x72, 0x64, 0x50, 0x33,
+	0x1a, 0x0f, 0x2e, 0x74, 0x72, 0x78, 0x2e, 0x4d, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
+	0x65, 0x22, 0x00, 0x12, 0x43, 0x0a, 0x10, 0x49, 0x6e, 0x71, 0x75, 0x69, 0x72, 0x79, 0x50, 0x61,
+	0x79, 0x6d, 0x65, 0x6e, 0x74, 0x50, 0x33, 0x12, 0x1c, 0x2e, 0x74, 0x72, 0x78, 0x2e, 0x52, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x49, 0x6e, 0x71, 0x75, 0x69, 0x72, 0x79, 0x50, 0x61, 0x79, 0x6d,
+	0x65, 0x6e, 0x74, 0x50, 0x33, 0x1a, 0x0f, 0x2e, 0x74, 0x72, 0x78, 0x2e, 0x4d, 0x79, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x35, 0x0a, 0x14, 0x47, 0x65, 0x74, 0x54,
+	0x72, 0x78, 0x4c, 0x69, 0x73, 0x74, 0x46, 0x6f, 0x72, 0x44, 0x6f, 0x63, 0x44, 0x61, 0x74, 0x65,
+	0x12, 0x0a, 0x2e, 0x74, 0x72, 0x78, 0x2e, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x1a, 0x0f, 0x2e, 0x74,
+	0x72, 0x78, 0x2e, 0x4d, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12,
+	0x36, 0x0a, 0x15, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x4d,
+	0x61, 0x6e, 0x75, 0x61, 0x6c, 0x54, 0x72, 0x78, 0x12, 0x0a, 0x2e, 0x74, 0x72, 0x78, 0x2e, 0x50,
+	0x61, 0x72, 0x61, 0x6d, 0x1a, 0x0f, 0x2e, 0x74, 0x72, 0x78, 0x2e, 0x4d, 0x79, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x3a, 0x0a, 0x19, 0x46, 0x69, 0x6e, 0x64, 0x54,
+	0x72, 0x78, 0x4f, 0x75, 0x74, 0x73, 0x74, 0x61, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x42, 0x79, 0x49,
+	0x6e, 0x64, 0x65, 0x78, 0x12, 0x0a, 0x2e, 0x74, 0x72, 0x78, 0x2e, 0x50, 0x61, 0x72, 0x61, 0x6d,
+	0x1a, 0x0f, 0x2e, 0x74, 0x72, 0x78, 0x2e, 0x4d, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
+	0x65, 0x22, 0x00, 0x12, 0x47, 0x0a, 0x12, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x72, 0x6f,
+	0x64, 0x75, 0x63, 0x74, 0x50, 0x72, 0x69, 0x63, 0x65, 0x12, 0x1e, 0x2e, 0x74, 0x72, 0x78, 0x2e,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x72, 0x6f,
+	0x64, 0x75, 0x63, 0x74, 0x50, 0x72, 0x69, 0x63, 0x65, 0x1a, 0x0f, 0x2e, 0x74, 0x72, 0x78, 0x2e,
+	0x4d, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x48, 0x0a, 0x0e,
+	0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x65, 0x72, 0x4d, 0x65, 0x6d, 0x62, 0x65, 0x72, 0x12, 0x23,
+	0x2e, 0x74, 0x72, 0x78, 0x2e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x65, 0x67, 0x69,
+	0x73, 0x74, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x4d, 0x65, 0x6d, 0x62, 0x65, 0x72, 0x4c, 0x6f,
+	0x63, 0x61, 0x6c, 0x1a, 0x0f, 0x2e, 0x74, 0x72, 0x78, 0x2e, 0x4d, 0x79, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x2e, 0x0a, 0x0b, 0x44, 0x65, 0x63, 0x72, 0x79, 0x70,
+	0x74, 0x4d, 0x4b, 0x65, 0x79, 0x12, 0x0c, 0x2e, 0x74, 0x72, 0x78, 0x2e, 0x44, 0x65, 0x63, 0x72,
+	0x79, 0x70, 0x74, 0x1a, 0x0f, 0x2e, 0x74, 0x72, 0x78, 0x2e, 0x4d, 0x79, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x33, 0x0a, 0x12, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65,
+	0x41, 0x75, 0x74, 0x6f, 0x43, 0x6c, 0x65, 0x61, 0x72, 0x54, 0x72, 0x78, 0x12, 0x0a, 0x2e, 0x74,
+	0x72, 0x78, 0x2e, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x1a, 0x0f, 0x2e, 0x74, 0x72, 0x78, 0x2e, 0x4d,
+	0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x39, 0x0a, 0x0c, 0x43,
+	0x6f, 0x6e, 0x66, 0x69, 0x72, 0x6d, 0x54, 0x72, 0x78, 0x50, 0x33, 0x12, 0x16, 0x2e, 0x74, 0x72,
+	0x78, 0x2e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x72, 0x6d,
+	0x54, 0x72, 0x78, 0x1a, 0x0f, 0x2e, 0x74, 0x72, 0x78, 0x2e, 0x4d, 0x79, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x42, 0x0c, 0x5a, 0x0a, 0x2f, 0x3b, 0x74, 0x72, 0x78, 0x4c,
+	0x6f, 0x63, 0x61, 0x6c, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -10843,42 +10843,42 @@ var file_trxLocal_proto_depIdxs = []int32{
 	76, // 40: trx.ResponseMap.ResponseEntry.value:type_name -> google.protobuf.Any
 	76, // 41: trx.Trx.TrxAddInfoEntry.value:type_name -> google.protobuf.Any
 	76, // 42: trx.TrxWithId.TrxAddInfoEntry.value:type_name -> google.protobuf.Any
-	7,  // 43: trx.TrxService.AddTrxWithCard:input_type -> trx.RequestTrxCheckin
-	9,  // 44: trx.TrxService.AddTrxWithoutCard:input_type -> trx.RequestTrxCheckInWithoutCard
-	12, // 45: trx.TrxService.InquiryTrxWithoutCard:input_type -> trx.RequestInquiryWithoutCard
-	15, // 46: trx.TrxService.InquiryTrxWithCard:input_type -> trx.RequestInquiryWithCard
-	23, // 47: trx.TrxService.ConfirmTrx:input_type -> trx.RequestConfirmTrx
-	35, // 48: trx.TrxService.ConfirmTrxByPass:input_type -> trx.ConfirmTrxByPassMessage
-	4,  // 49: trx.TrxService.ConfirmSyncTrxToCloud:input_type -> trx.Empty
-	36, // 50: trx.TrxService.InquiryPayment:input_type -> trx.RequestInquiryPayment
-	16, // 51: trx.TrxService.InquiryWithCardP3:input_type -> trx.RequestInquiryWithCardP3
-	37, // 52: trx.TrxService.InquiryPaymentP3:input_type -> trx.RequestInquiryPaymentP3
-	5,  // 53: trx.TrxService.GetTrxListForDocDate:input_type -> trx.Param
-	5,  // 54: trx.TrxService.UpdateStatusManualTrx:input_type -> trx.Param
-	5,  // 55: trx.TrxService.FindTrxOutstandingByIndex:input_type -> trx.Param
-	40, // 56: trx.TrxService.UpdateProductPrice:input_type -> trx.RequestUpdateProductPrice
-	42, // 57: trx.TrxService.RegisterMember:input_type -> trx.RequestRegistrationMemberLocal
-	53, // 58: trx.TrxService.DecryptMKey:input_type -> trx.Decrypt
-	5,  // 59: trx.TrxService.UpdateAutoClearTrx:input_type -> trx.Param
-	23, // 60: trx.TrxService.ConfirmTrxP3:input_type -> trx.RequestConfirmTrx
-	0,  // 61: trx.TrxService.AddTrxWithCard:output_type -> trx.MyResponse
-	0,  // 62: trx.TrxService.AddTrxWithoutCard:output_type -> trx.MyResponse
-	0,  // 63: trx.TrxService.InquiryTrxWithoutCard:output_type -> trx.MyResponse
-	0,  // 64: trx.TrxService.InquiryTrxWithCard:output_type -> trx.MyResponse
-	0,  // 65: trx.TrxService.ConfirmTrx:output_type -> trx.MyResponse
-	0,  // 66: trx.TrxService.ConfirmTrxByPass:output_type -> trx.MyResponse
-	0,  // 67: trx.TrxService.ConfirmSyncTrxToCloud:output_type -> trx.MyResponse
-	0,  // 68: trx.TrxService.InquiryPayment:output_type -> trx.MyResponse
-	0,  // 69: trx.TrxService.InquiryWithCardP3:output_type -> trx.MyResponse
-	0,  // 70: trx.TrxService.InquiryPaymentP3:output_type -> trx.MyResponse
-	0,  // 71: trx.TrxService.GetTrxListForDocDate:output_type -> trx.MyResponse
-	0,  // 72: trx.TrxService.UpdateStatusManualTrx:output_type -> trx.MyResponse
-	0,  // 73: trx.TrxService.FindTrxOutstandingByIndex:output_type -> trx.MyResponse
-	0,  // 74: trx.TrxService.UpdateProductPrice:output_type -> trx.MyResponse
-	0,  // 75: trx.TrxService.RegisterMember:output_type -> trx.MyResponse
-	0,  // 76: trx.TrxService.DecryptMKey:output_type -> trx.MyResponse
-	0,  // 77: trx.TrxService.UpdateAutoClearTrx:output_type -> trx.MyResponse
-	0,  // 78: trx.TrxService.ConfirmTrxP3:output_type -> trx.MyResponse
+	7,  // 43: trx.trxLocalService.AddTrxWithCard:input_type -> trx.RequestTrxCheckin
+	9,  // 44: trx.trxLocalService.AddTrxWithoutCard:input_type -> trx.RequestTrxCheckInWithoutCard
+	12, // 45: trx.trxLocalService.InquiryTrxWithoutCard:input_type -> trx.RequestInquiryWithoutCard
+	15, // 46: trx.trxLocalService.InquiryTrxWithCard:input_type -> trx.RequestInquiryWithCard
+	23, // 47: trx.trxLocalService.ConfirmTrx:input_type -> trx.RequestConfirmTrx
+	35, // 48: trx.trxLocalService.ConfirmTrxByPass:input_type -> trx.ConfirmTrxByPassMessage
+	4,  // 49: trx.trxLocalService.ConfirmSyncTrxToCloud:input_type -> trx.Empty
+	36, // 50: trx.trxLocalService.InquiryPayment:input_type -> trx.RequestInquiryPayment
+	16, // 51: trx.trxLocalService.InquiryWithCardP3:input_type -> trx.RequestInquiryWithCardP3
+	37, // 52: trx.trxLocalService.InquiryPaymentP3:input_type -> trx.RequestInquiryPaymentP3
+	5,  // 53: trx.trxLocalService.GetTrxListForDocDate:input_type -> trx.Param
+	5,  // 54: trx.trxLocalService.UpdateStatusManualTrx:input_type -> trx.Param
+	5,  // 55: trx.trxLocalService.FindTrxOutstandingByIndex:input_type -> trx.Param
+	40, // 56: trx.trxLocalService.UpdateProductPrice:input_type -> trx.RequestUpdateProductPrice
+	42, // 57: trx.trxLocalService.RegisterMember:input_type -> trx.RequestRegistrationMemberLocal
+	53, // 58: trx.trxLocalService.DecryptMKey:input_type -> trx.Decrypt
+	5,  // 59: trx.trxLocalService.UpdateAutoClearTrx:input_type -> trx.Param
+	23, // 60: trx.trxLocalService.ConfirmTrxP3:input_type -> trx.RequestConfirmTrx
+	0,  // 61: trx.trxLocalService.AddTrxWithCard:output_type -> trx.MyResponse
+	0,  // 62: trx.trxLocalService.AddTrxWithoutCard:output_type -> trx.MyResponse
+	0,  // 63: trx.trxLocalService.InquiryTrxWithoutCard:output_type -> trx.MyResponse
+	0,  // 64: trx.trxLocalService.InquiryTrxWithCard:output_type -> trx.MyResponse
+	0,  // 65: trx.trxLocalService.ConfirmTrx:output_type -> trx.MyResponse
+	0,  // 66: trx.trxLocalService.ConfirmTrxByPass:output_type -> trx.MyResponse
+	0,  // 67: trx.trxLocalService.ConfirmSyncTrxToCloud:output_type -> trx.MyResponse
+	0,  // 68: trx.trxLocalService.InquiryPayment:output_type -> trx.MyResponse
+	0,  // 69: trx.trxLocalService.InquiryWithCardP3:output_type -> trx.MyResponse
+	0,  // 70: trx.trxLocalService.InquiryPaymentP3:output_type -> trx.MyResponse
+	0,  // 71: trx.trxLocalService.GetTrxListForDocDate:output_type -> trx.MyResponse
+	0,  // 72: trx.trxLocalService.UpdateStatusManualTrx:output_type -> trx.MyResponse
+	0,  // 73: trx.trxLocalService.FindTrxOutstandingByIndex:output_type -> trx.MyResponse
+	0,  // 74: trx.trxLocalService.UpdateProductPrice:output_type -> trx.MyResponse
+	0,  // 75: trx.trxLocalService.RegisterMember:output_type -> trx.MyResponse
+	0,  // 76: trx.trxLocalService.DecryptMKey:output_type -> trx.MyResponse
+	0,  // 77: trx.trxLocalService.UpdateAutoClearTrx:output_type -> trx.MyResponse
+	0,  // 78: trx.trxLocalService.ConfirmTrxP3:output_type -> trx.MyResponse
 	61, // [61:79] is the sub-list for method output_type
 	43, // [43:61] is the sub-list for method input_type
 	43, // [43:43] is the sub-list for extension type_name
@@ -11785,10 +11785,10 @@ var _ grpc.ClientConnInterface
 // is compatible with the grpc package it is being compiled against.
 const _ = grpc.SupportPackageIsVersion6
 
-// TrxServiceClient is the client API for TrxService service.
+// TrxLocalServiceClient is the client API for TrxLocalService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
-type TrxServiceClient interface {
+type TrxLocalServiceClient interface {
 	AddTrxWithCard(ctx context.Context, in *RequestTrxCheckin, opts ...grpc.CallOption) (*MyResponse, error)
 	AddTrxWithoutCard(ctx context.Context, in *RequestTrxCheckInWithoutCard, opts ...grpc.CallOption) (*MyResponse, error)
 	InquiryTrxWithoutCard(ctx context.Context, in *RequestInquiryWithoutCard, opts ...grpc.CallOption) (*MyResponse, error)
@@ -11809,178 +11809,178 @@ type TrxServiceClient interface {
 	ConfirmTrxP3(ctx context.Context, in *RequestConfirmTrx, opts ...grpc.CallOption) (*MyResponse, error)
 }
 
-type trxServiceClient struct {
+type trxLocalServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewTrxServiceClient(cc grpc.ClientConnInterface) TrxServiceClient {
-	return &trxServiceClient{cc}
+func NewTrxLocalServiceClient(cc grpc.ClientConnInterface) TrxLocalServiceClient {
+	return &trxLocalServiceClient{cc}
 }
 
-func (c *trxServiceClient) AddTrxWithCard(ctx context.Context, in *RequestTrxCheckin, opts ...grpc.CallOption) (*MyResponse, error) {
+func (c *trxLocalServiceClient) AddTrxWithCard(ctx context.Context, in *RequestTrxCheckin, opts ...grpc.CallOption) (*MyResponse, error) {
 	out := new(MyResponse)
-	err := c.cc.Invoke(ctx, "/trx.TrxService/AddTrxWithCard", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/trx.trxLocalService/AddTrxWithCard", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *trxServiceClient) AddTrxWithoutCard(ctx context.Context, in *RequestTrxCheckInWithoutCard, opts ...grpc.CallOption) (*MyResponse, error) {
+func (c *trxLocalServiceClient) AddTrxWithoutCard(ctx context.Context, in *RequestTrxCheckInWithoutCard, opts ...grpc.CallOption) (*MyResponse, error) {
 	out := new(MyResponse)
-	err := c.cc.Invoke(ctx, "/trx.TrxService/AddTrxWithoutCard", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/trx.trxLocalService/AddTrxWithoutCard", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *trxServiceClient) InquiryTrxWithoutCard(ctx context.Context, in *RequestInquiryWithoutCard, opts ...grpc.CallOption) (*MyResponse, error) {
+func (c *trxLocalServiceClient) InquiryTrxWithoutCard(ctx context.Context, in *RequestInquiryWithoutCard, opts ...grpc.CallOption) (*MyResponse, error) {
 	out := new(MyResponse)
-	err := c.cc.Invoke(ctx, "/trx.TrxService/InquiryTrxWithoutCard", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/trx.trxLocalService/InquiryTrxWithoutCard", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *trxServiceClient) InquiryTrxWithCard(ctx context.Context, in *RequestInquiryWithCard, opts ...grpc.CallOption) (*MyResponse, error) {
+func (c *trxLocalServiceClient) InquiryTrxWithCard(ctx context.Context, in *RequestInquiryWithCard, opts ...grpc.CallOption) (*MyResponse, error) {
 	out := new(MyResponse)
-	err := c.cc.Invoke(ctx, "/trx.TrxService/InquiryTrxWithCard", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/trx.trxLocalService/InquiryTrxWithCard", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *trxServiceClient) ConfirmTrx(ctx context.Context, in *RequestConfirmTrx, opts ...grpc.CallOption) (*MyResponse, error) {
+func (c *trxLocalServiceClient) ConfirmTrx(ctx context.Context, in *RequestConfirmTrx, opts ...grpc.CallOption) (*MyResponse, error) {
 	out := new(MyResponse)
-	err := c.cc.Invoke(ctx, "/trx.TrxService/ConfirmTrx", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/trx.trxLocalService/ConfirmTrx", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *trxServiceClient) ConfirmTrxByPass(ctx context.Context, in *ConfirmTrxByPassMessage, opts ...grpc.CallOption) (*MyResponse, error) {
+func (c *trxLocalServiceClient) ConfirmTrxByPass(ctx context.Context, in *ConfirmTrxByPassMessage, opts ...grpc.CallOption) (*MyResponse, error) {
 	out := new(MyResponse)
-	err := c.cc.Invoke(ctx, "/trx.TrxService/ConfirmTrxByPass", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/trx.trxLocalService/ConfirmTrxByPass", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *trxServiceClient) ConfirmSyncTrxToCloud(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*MyResponse, error) {
+func (c *trxLocalServiceClient) ConfirmSyncTrxToCloud(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*MyResponse, error) {
 	out := new(MyResponse)
-	err := c.cc.Invoke(ctx, "/trx.TrxService/ConfirmSyncTrxToCloud", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/trx.trxLocalService/ConfirmSyncTrxToCloud", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *trxServiceClient) InquiryPayment(ctx context.Context, in *RequestInquiryPayment, opts ...grpc.CallOption) (*MyResponse, error) {
+func (c *trxLocalServiceClient) InquiryPayment(ctx context.Context, in *RequestInquiryPayment, opts ...grpc.CallOption) (*MyResponse, error) {
 	out := new(MyResponse)
-	err := c.cc.Invoke(ctx, "/trx.TrxService/InquiryPayment", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/trx.trxLocalService/InquiryPayment", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *trxServiceClient) InquiryWithCardP3(ctx context.Context, in *RequestInquiryWithCardP3, opts ...grpc.CallOption) (*MyResponse, error) {
+func (c *trxLocalServiceClient) InquiryWithCardP3(ctx context.Context, in *RequestInquiryWithCardP3, opts ...grpc.CallOption) (*MyResponse, error) {
 	out := new(MyResponse)
-	err := c.cc.Invoke(ctx, "/trx.TrxService/InquiryWithCardP3", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/trx.trxLocalService/InquiryWithCardP3", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *trxServiceClient) InquiryPaymentP3(ctx context.Context, in *RequestInquiryPaymentP3, opts ...grpc.CallOption) (*MyResponse, error) {
+func (c *trxLocalServiceClient) InquiryPaymentP3(ctx context.Context, in *RequestInquiryPaymentP3, opts ...grpc.CallOption) (*MyResponse, error) {
 	out := new(MyResponse)
-	err := c.cc.Invoke(ctx, "/trx.TrxService/InquiryPaymentP3", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/trx.trxLocalService/InquiryPaymentP3", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *trxServiceClient) GetTrxListForDocDate(ctx context.Context, in *Param, opts ...grpc.CallOption) (*MyResponse, error) {
+func (c *trxLocalServiceClient) GetTrxListForDocDate(ctx context.Context, in *Param, opts ...grpc.CallOption) (*MyResponse, error) {
 	out := new(MyResponse)
-	err := c.cc.Invoke(ctx, "/trx.TrxService/GetTrxListForDocDate", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/trx.trxLocalService/GetTrxListForDocDate", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *trxServiceClient) UpdateStatusManualTrx(ctx context.Context, in *Param, opts ...grpc.CallOption) (*MyResponse, error) {
+func (c *trxLocalServiceClient) UpdateStatusManualTrx(ctx context.Context, in *Param, opts ...grpc.CallOption) (*MyResponse, error) {
 	out := new(MyResponse)
-	err := c.cc.Invoke(ctx, "/trx.TrxService/UpdateStatusManualTrx", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/trx.trxLocalService/UpdateStatusManualTrx", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *trxServiceClient) FindTrxOutstandingByIndex(ctx context.Context, in *Param, opts ...grpc.CallOption) (*MyResponse, error) {
+func (c *trxLocalServiceClient) FindTrxOutstandingByIndex(ctx context.Context, in *Param, opts ...grpc.CallOption) (*MyResponse, error) {
 	out := new(MyResponse)
-	err := c.cc.Invoke(ctx, "/trx.TrxService/FindTrxOutstandingByIndex", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/trx.trxLocalService/FindTrxOutstandingByIndex", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *trxServiceClient) UpdateProductPrice(ctx context.Context, in *RequestUpdateProductPrice, opts ...grpc.CallOption) (*MyResponse, error) {
+func (c *trxLocalServiceClient) UpdateProductPrice(ctx context.Context, in *RequestUpdateProductPrice, opts ...grpc.CallOption) (*MyResponse, error) {
 	out := new(MyResponse)
-	err := c.cc.Invoke(ctx, "/trx.TrxService/UpdateProductPrice", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/trx.trxLocalService/UpdateProductPrice", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *trxServiceClient) RegisterMember(ctx context.Context, in *RequestRegistrationMemberLocal, opts ...grpc.CallOption) (*MyResponse, error) {
+func (c *trxLocalServiceClient) RegisterMember(ctx context.Context, in *RequestRegistrationMemberLocal, opts ...grpc.CallOption) (*MyResponse, error) {
 	out := new(MyResponse)
-	err := c.cc.Invoke(ctx, "/trx.TrxService/RegisterMember", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/trx.trxLocalService/RegisterMember", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *trxServiceClient) DecryptMKey(ctx context.Context, in *Decrypt, opts ...grpc.CallOption) (*MyResponse, error) {
+func (c *trxLocalServiceClient) DecryptMKey(ctx context.Context, in *Decrypt, opts ...grpc.CallOption) (*MyResponse, error) {
 	out := new(MyResponse)
-	err := c.cc.Invoke(ctx, "/trx.TrxService/DecryptMKey", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/trx.trxLocalService/DecryptMKey", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *trxServiceClient) UpdateAutoClearTrx(ctx context.Context, in *Param, opts ...grpc.CallOption) (*MyResponse, error) {
+func (c *trxLocalServiceClient) UpdateAutoClearTrx(ctx context.Context, in *Param, opts ...grpc.CallOption) (*MyResponse, error) {
 	out := new(MyResponse)
-	err := c.cc.Invoke(ctx, "/trx.TrxService/UpdateAutoClearTrx", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/trx.trxLocalService/UpdateAutoClearTrx", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *trxServiceClient) ConfirmTrxP3(ctx context.Context, in *RequestConfirmTrx, opts ...grpc.CallOption) (*MyResponse, error) {
+func (c *trxLocalServiceClient) ConfirmTrxP3(ctx context.Context, in *RequestConfirmTrx, opts ...grpc.CallOption) (*MyResponse, error) {
 	out := new(MyResponse)
-	err := c.cc.Invoke(ctx, "/trx.TrxService/ConfirmTrxP3", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/trx.trxLocalService/ConfirmTrxP3", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// TrxServiceServer is the server API for TrxService service.
-type TrxServiceServer interface {
+// TrxLocalServiceServer is the server API for TrxLocalService service.
+type TrxLocalServiceServer interface {
 	AddTrxWithCard(context.Context, *RequestTrxCheckin) (*MyResponse, error)
 	AddTrxWithoutCard(context.Context, *RequestTrxCheckInWithoutCard) (*MyResponse, error)
 	InquiryTrxWithoutCard(context.Context, *RequestInquiryWithoutCard) (*MyResponse, error)
@@ -12001,468 +12001,468 @@ type TrxServiceServer interface {
 	ConfirmTrxP3(context.Context, *RequestConfirmTrx) (*MyResponse, error)
 }
 
-// UnimplementedTrxServiceServer can be embedded to have forward compatible implementations.
-type UnimplementedTrxServiceServer struct {
+// UnimplementedTrxLocalServiceServer can be embedded to have forward compatible implementations.
+type UnimplementedTrxLocalServiceServer struct {
 }
 
-func (*UnimplementedTrxServiceServer) AddTrxWithCard(context.Context, *RequestTrxCheckin) (*MyResponse, error) {
+func (*UnimplementedTrxLocalServiceServer) AddTrxWithCard(context.Context, *RequestTrxCheckin) (*MyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddTrxWithCard not implemented")
 }
-func (*UnimplementedTrxServiceServer) AddTrxWithoutCard(context.Context, *RequestTrxCheckInWithoutCard) (*MyResponse, error) {
+func (*UnimplementedTrxLocalServiceServer) AddTrxWithoutCard(context.Context, *RequestTrxCheckInWithoutCard) (*MyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddTrxWithoutCard not implemented")
 }
-func (*UnimplementedTrxServiceServer) InquiryTrxWithoutCard(context.Context, *RequestInquiryWithoutCard) (*MyResponse, error) {
+func (*UnimplementedTrxLocalServiceServer) InquiryTrxWithoutCard(context.Context, *RequestInquiryWithoutCard) (*MyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method InquiryTrxWithoutCard not implemented")
 }
-func (*UnimplementedTrxServiceServer) InquiryTrxWithCard(context.Context, *RequestInquiryWithCard) (*MyResponse, error) {
+func (*UnimplementedTrxLocalServiceServer) InquiryTrxWithCard(context.Context, *RequestInquiryWithCard) (*MyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method InquiryTrxWithCard not implemented")
 }
-func (*UnimplementedTrxServiceServer) ConfirmTrx(context.Context, *RequestConfirmTrx) (*MyResponse, error) {
+func (*UnimplementedTrxLocalServiceServer) ConfirmTrx(context.Context, *RequestConfirmTrx) (*MyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ConfirmTrx not implemented")
 }
-func (*UnimplementedTrxServiceServer) ConfirmTrxByPass(context.Context, *ConfirmTrxByPassMessage) (*MyResponse, error) {
+func (*UnimplementedTrxLocalServiceServer) ConfirmTrxByPass(context.Context, *ConfirmTrxByPassMessage) (*MyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ConfirmTrxByPass not implemented")
 }
-func (*UnimplementedTrxServiceServer) ConfirmSyncTrxToCloud(context.Context, *Empty) (*MyResponse, error) {
+func (*UnimplementedTrxLocalServiceServer) ConfirmSyncTrxToCloud(context.Context, *Empty) (*MyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ConfirmSyncTrxToCloud not implemented")
 }
-func (*UnimplementedTrxServiceServer) InquiryPayment(context.Context, *RequestInquiryPayment) (*MyResponse, error) {
+func (*UnimplementedTrxLocalServiceServer) InquiryPayment(context.Context, *RequestInquiryPayment) (*MyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method InquiryPayment not implemented")
 }
-func (*UnimplementedTrxServiceServer) InquiryWithCardP3(context.Context, *RequestInquiryWithCardP3) (*MyResponse, error) {
+func (*UnimplementedTrxLocalServiceServer) InquiryWithCardP3(context.Context, *RequestInquiryWithCardP3) (*MyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method InquiryWithCardP3 not implemented")
 }
-func (*UnimplementedTrxServiceServer) InquiryPaymentP3(context.Context, *RequestInquiryPaymentP3) (*MyResponse, error) {
+func (*UnimplementedTrxLocalServiceServer) InquiryPaymentP3(context.Context, *RequestInquiryPaymentP3) (*MyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method InquiryPaymentP3 not implemented")
 }
-func (*UnimplementedTrxServiceServer) GetTrxListForDocDate(context.Context, *Param) (*MyResponse, error) {
+func (*UnimplementedTrxLocalServiceServer) GetTrxListForDocDate(context.Context, *Param) (*MyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetTrxListForDocDate not implemented")
 }
-func (*UnimplementedTrxServiceServer) UpdateStatusManualTrx(context.Context, *Param) (*MyResponse, error) {
+func (*UnimplementedTrxLocalServiceServer) UpdateStatusManualTrx(context.Context, *Param) (*MyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateStatusManualTrx not implemented")
 }
-func (*UnimplementedTrxServiceServer) FindTrxOutstandingByIndex(context.Context, *Param) (*MyResponse, error) {
+func (*UnimplementedTrxLocalServiceServer) FindTrxOutstandingByIndex(context.Context, *Param) (*MyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindTrxOutstandingByIndex not implemented")
 }
-func (*UnimplementedTrxServiceServer) UpdateProductPrice(context.Context, *RequestUpdateProductPrice) (*MyResponse, error) {
+func (*UnimplementedTrxLocalServiceServer) UpdateProductPrice(context.Context, *RequestUpdateProductPrice) (*MyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateProductPrice not implemented")
 }
-func (*UnimplementedTrxServiceServer) RegisterMember(context.Context, *RequestRegistrationMemberLocal) (*MyResponse, error) {
+func (*UnimplementedTrxLocalServiceServer) RegisterMember(context.Context, *RequestRegistrationMemberLocal) (*MyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RegisterMember not implemented")
 }
-func (*UnimplementedTrxServiceServer) DecryptMKey(context.Context, *Decrypt) (*MyResponse, error) {
+func (*UnimplementedTrxLocalServiceServer) DecryptMKey(context.Context, *Decrypt) (*MyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DecryptMKey not implemented")
 }
-func (*UnimplementedTrxServiceServer) UpdateAutoClearTrx(context.Context, *Param) (*MyResponse, error) {
+func (*UnimplementedTrxLocalServiceServer) UpdateAutoClearTrx(context.Context, *Param) (*MyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateAutoClearTrx not implemented")
 }
-func (*UnimplementedTrxServiceServer) ConfirmTrxP3(context.Context, *RequestConfirmTrx) (*MyResponse, error) {
+func (*UnimplementedTrxLocalServiceServer) ConfirmTrxP3(context.Context, *RequestConfirmTrx) (*MyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ConfirmTrxP3 not implemented")
 }
 
-func RegisterTrxServiceServer(s *grpc.Server, srv TrxServiceServer) {
-	s.RegisterService(&_TrxService_serviceDesc, srv)
+func RegisterTrxLocalServiceServer(s *grpc.Server, srv TrxLocalServiceServer) {
+	s.RegisterService(&_TrxLocalService_serviceDesc, srv)
 }
 
-func _TrxService_AddTrxWithCard_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _TrxLocalService_AddTrxWithCard_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(RequestTrxCheckin)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TrxServiceServer).AddTrxWithCard(ctx, in)
+		return srv.(TrxLocalServiceServer).AddTrxWithCard(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/trx.TrxService/AddTrxWithCard",
+		FullMethod: "/trx.trxLocalService/AddTrxWithCard",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TrxServiceServer).AddTrxWithCard(ctx, req.(*RequestTrxCheckin))
+		return srv.(TrxLocalServiceServer).AddTrxWithCard(ctx, req.(*RequestTrxCheckin))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TrxService_AddTrxWithoutCard_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _TrxLocalService_AddTrxWithoutCard_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(RequestTrxCheckInWithoutCard)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TrxServiceServer).AddTrxWithoutCard(ctx, in)
+		return srv.(TrxLocalServiceServer).AddTrxWithoutCard(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/trx.TrxService/AddTrxWithoutCard",
+		FullMethod: "/trx.trxLocalService/AddTrxWithoutCard",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TrxServiceServer).AddTrxWithoutCard(ctx, req.(*RequestTrxCheckInWithoutCard))
+		return srv.(TrxLocalServiceServer).AddTrxWithoutCard(ctx, req.(*RequestTrxCheckInWithoutCard))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TrxService_InquiryTrxWithoutCard_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _TrxLocalService_InquiryTrxWithoutCard_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(RequestInquiryWithoutCard)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TrxServiceServer).InquiryTrxWithoutCard(ctx, in)
+		return srv.(TrxLocalServiceServer).InquiryTrxWithoutCard(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/trx.TrxService/InquiryTrxWithoutCard",
+		FullMethod: "/trx.trxLocalService/InquiryTrxWithoutCard",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TrxServiceServer).InquiryTrxWithoutCard(ctx, req.(*RequestInquiryWithoutCard))
+		return srv.(TrxLocalServiceServer).InquiryTrxWithoutCard(ctx, req.(*RequestInquiryWithoutCard))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TrxService_InquiryTrxWithCard_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _TrxLocalService_InquiryTrxWithCard_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(RequestInquiryWithCard)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TrxServiceServer).InquiryTrxWithCard(ctx, in)
+		return srv.(TrxLocalServiceServer).InquiryTrxWithCard(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/trx.TrxService/InquiryTrxWithCard",
+		FullMethod: "/trx.trxLocalService/InquiryTrxWithCard",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TrxServiceServer).InquiryTrxWithCard(ctx, req.(*RequestInquiryWithCard))
+		return srv.(TrxLocalServiceServer).InquiryTrxWithCard(ctx, req.(*RequestInquiryWithCard))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TrxService_ConfirmTrx_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _TrxLocalService_ConfirmTrx_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(RequestConfirmTrx)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TrxServiceServer).ConfirmTrx(ctx, in)
+		return srv.(TrxLocalServiceServer).ConfirmTrx(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/trx.TrxService/ConfirmTrx",
+		FullMethod: "/trx.trxLocalService/ConfirmTrx",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TrxServiceServer).ConfirmTrx(ctx, req.(*RequestConfirmTrx))
+		return srv.(TrxLocalServiceServer).ConfirmTrx(ctx, req.(*RequestConfirmTrx))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TrxService_ConfirmTrxByPass_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _TrxLocalService_ConfirmTrxByPass_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ConfirmTrxByPassMessage)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TrxServiceServer).ConfirmTrxByPass(ctx, in)
+		return srv.(TrxLocalServiceServer).ConfirmTrxByPass(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/trx.TrxService/ConfirmTrxByPass",
+		FullMethod: "/trx.trxLocalService/ConfirmTrxByPass",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TrxServiceServer).ConfirmTrxByPass(ctx, req.(*ConfirmTrxByPassMessage))
+		return srv.(TrxLocalServiceServer).ConfirmTrxByPass(ctx, req.(*ConfirmTrxByPassMessage))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TrxService_ConfirmSyncTrxToCloud_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _TrxLocalService_ConfirmSyncTrxToCloud_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TrxServiceServer).ConfirmSyncTrxToCloud(ctx, in)
+		return srv.(TrxLocalServiceServer).ConfirmSyncTrxToCloud(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/trx.TrxService/ConfirmSyncTrxToCloud",
+		FullMethod: "/trx.trxLocalService/ConfirmSyncTrxToCloud",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TrxServiceServer).ConfirmSyncTrxToCloud(ctx, req.(*Empty))
+		return srv.(TrxLocalServiceServer).ConfirmSyncTrxToCloud(ctx, req.(*Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TrxService_InquiryPayment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _TrxLocalService_InquiryPayment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(RequestInquiryPayment)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TrxServiceServer).InquiryPayment(ctx, in)
+		return srv.(TrxLocalServiceServer).InquiryPayment(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/trx.TrxService/InquiryPayment",
+		FullMethod: "/trx.trxLocalService/InquiryPayment",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TrxServiceServer).InquiryPayment(ctx, req.(*RequestInquiryPayment))
+		return srv.(TrxLocalServiceServer).InquiryPayment(ctx, req.(*RequestInquiryPayment))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TrxService_InquiryWithCardP3_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _TrxLocalService_InquiryWithCardP3_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(RequestInquiryWithCardP3)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TrxServiceServer).InquiryWithCardP3(ctx, in)
+		return srv.(TrxLocalServiceServer).InquiryWithCardP3(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/trx.TrxService/InquiryWithCardP3",
+		FullMethod: "/trx.trxLocalService/InquiryWithCardP3",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TrxServiceServer).InquiryWithCardP3(ctx, req.(*RequestInquiryWithCardP3))
+		return srv.(TrxLocalServiceServer).InquiryWithCardP3(ctx, req.(*RequestInquiryWithCardP3))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TrxService_InquiryPaymentP3_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _TrxLocalService_InquiryPaymentP3_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(RequestInquiryPaymentP3)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TrxServiceServer).InquiryPaymentP3(ctx, in)
+		return srv.(TrxLocalServiceServer).InquiryPaymentP3(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/trx.TrxService/InquiryPaymentP3",
+		FullMethod: "/trx.trxLocalService/InquiryPaymentP3",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TrxServiceServer).InquiryPaymentP3(ctx, req.(*RequestInquiryPaymentP3))
+		return srv.(TrxLocalServiceServer).InquiryPaymentP3(ctx, req.(*RequestInquiryPaymentP3))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TrxService_GetTrxListForDocDate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _TrxLocalService_GetTrxListForDocDate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Param)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TrxServiceServer).GetTrxListForDocDate(ctx, in)
+		return srv.(TrxLocalServiceServer).GetTrxListForDocDate(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/trx.TrxService/GetTrxListForDocDate",
+		FullMethod: "/trx.trxLocalService/GetTrxListForDocDate",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TrxServiceServer).GetTrxListForDocDate(ctx, req.(*Param))
+		return srv.(TrxLocalServiceServer).GetTrxListForDocDate(ctx, req.(*Param))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TrxService_UpdateStatusManualTrx_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _TrxLocalService_UpdateStatusManualTrx_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Param)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TrxServiceServer).UpdateStatusManualTrx(ctx, in)
+		return srv.(TrxLocalServiceServer).UpdateStatusManualTrx(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/trx.TrxService/UpdateStatusManualTrx",
+		FullMethod: "/trx.trxLocalService/UpdateStatusManualTrx",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TrxServiceServer).UpdateStatusManualTrx(ctx, req.(*Param))
+		return srv.(TrxLocalServiceServer).UpdateStatusManualTrx(ctx, req.(*Param))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TrxService_FindTrxOutstandingByIndex_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _TrxLocalService_FindTrxOutstandingByIndex_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Param)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TrxServiceServer).FindTrxOutstandingByIndex(ctx, in)
+		return srv.(TrxLocalServiceServer).FindTrxOutstandingByIndex(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/trx.TrxService/FindTrxOutstandingByIndex",
+		FullMethod: "/trx.trxLocalService/FindTrxOutstandingByIndex",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TrxServiceServer).FindTrxOutstandingByIndex(ctx, req.(*Param))
+		return srv.(TrxLocalServiceServer).FindTrxOutstandingByIndex(ctx, req.(*Param))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TrxService_UpdateProductPrice_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _TrxLocalService_UpdateProductPrice_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(RequestUpdateProductPrice)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TrxServiceServer).UpdateProductPrice(ctx, in)
+		return srv.(TrxLocalServiceServer).UpdateProductPrice(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/trx.TrxService/UpdateProductPrice",
+		FullMethod: "/trx.trxLocalService/UpdateProductPrice",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TrxServiceServer).UpdateProductPrice(ctx, req.(*RequestUpdateProductPrice))
+		return srv.(TrxLocalServiceServer).UpdateProductPrice(ctx, req.(*RequestUpdateProductPrice))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TrxService_RegisterMember_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _TrxLocalService_RegisterMember_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(RequestRegistrationMemberLocal)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TrxServiceServer).RegisterMember(ctx, in)
+		return srv.(TrxLocalServiceServer).RegisterMember(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/trx.TrxService/RegisterMember",
+		FullMethod: "/trx.trxLocalService/RegisterMember",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TrxServiceServer).RegisterMember(ctx, req.(*RequestRegistrationMemberLocal))
+		return srv.(TrxLocalServiceServer).RegisterMember(ctx, req.(*RequestRegistrationMemberLocal))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TrxService_DecryptMKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _TrxLocalService_DecryptMKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Decrypt)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TrxServiceServer).DecryptMKey(ctx, in)
+		return srv.(TrxLocalServiceServer).DecryptMKey(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/trx.TrxService/DecryptMKey",
+		FullMethod: "/trx.trxLocalService/DecryptMKey",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TrxServiceServer).DecryptMKey(ctx, req.(*Decrypt))
+		return srv.(TrxLocalServiceServer).DecryptMKey(ctx, req.(*Decrypt))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TrxService_UpdateAutoClearTrx_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _TrxLocalService_UpdateAutoClearTrx_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Param)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TrxServiceServer).UpdateAutoClearTrx(ctx, in)
+		return srv.(TrxLocalServiceServer).UpdateAutoClearTrx(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/trx.TrxService/UpdateAutoClearTrx",
+		FullMethod: "/trx.trxLocalService/UpdateAutoClearTrx",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TrxServiceServer).UpdateAutoClearTrx(ctx, req.(*Param))
+		return srv.(TrxLocalServiceServer).UpdateAutoClearTrx(ctx, req.(*Param))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TrxService_ConfirmTrxP3_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _TrxLocalService_ConfirmTrxP3_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(RequestConfirmTrx)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TrxServiceServer).ConfirmTrxP3(ctx, in)
+		return srv.(TrxLocalServiceServer).ConfirmTrxP3(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/trx.TrxService/ConfirmTrxP3",
+		FullMethod: "/trx.trxLocalService/ConfirmTrxP3",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TrxServiceServer).ConfirmTrxP3(ctx, req.(*RequestConfirmTrx))
+		return srv.(TrxLocalServiceServer).ConfirmTrxP3(ctx, req.(*RequestConfirmTrx))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-var _TrxService_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "trx.TrxService",
-	HandlerType: (*TrxServiceServer)(nil),
+var _TrxLocalService_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "trx.trxLocalService",
+	HandlerType: (*TrxLocalServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "AddTrxWithCard",
-			Handler:    _TrxService_AddTrxWithCard_Handler,
+			Handler:    _TrxLocalService_AddTrxWithCard_Handler,
 		},
 		{
 			MethodName: "AddTrxWithoutCard",
-			Handler:    _TrxService_AddTrxWithoutCard_Handler,
+			Handler:    _TrxLocalService_AddTrxWithoutCard_Handler,
 		},
 		{
 			MethodName: "InquiryTrxWithoutCard",
-			Handler:    _TrxService_InquiryTrxWithoutCard_Handler,
+			Handler:    _TrxLocalService_InquiryTrxWithoutCard_Handler,
 		},
 		{
 			MethodName: "InquiryTrxWithCard",
-			Handler:    _TrxService_InquiryTrxWithCard_Handler,
+			Handler:    _TrxLocalService_InquiryTrxWithCard_Handler,
 		},
 		{
 			MethodName: "ConfirmTrx",
-			Handler:    _TrxService_ConfirmTrx_Handler,
+			Handler:    _TrxLocalService_ConfirmTrx_Handler,
 		},
 		{
 			MethodName: "ConfirmTrxByPass",
-			Handler:    _TrxService_ConfirmTrxByPass_Handler,
+			Handler:    _TrxLocalService_ConfirmTrxByPass_Handler,
 		},
 		{
 			MethodName: "ConfirmSyncTrxToCloud",
-			Handler:    _TrxService_ConfirmSyncTrxToCloud_Handler,
+			Handler:    _TrxLocalService_ConfirmSyncTrxToCloud_Handler,
 		},
 		{
 			MethodName: "InquiryPayment",
-			Handler:    _TrxService_InquiryPayment_Handler,
+			Handler:    _TrxLocalService_InquiryPayment_Handler,
 		},
 		{
 			MethodName: "InquiryWithCardP3",
-			Handler:    _TrxService_InquiryWithCardP3_Handler,
+			Handler:    _TrxLocalService_InquiryWithCardP3_Handler,
 		},
 		{
 			MethodName: "InquiryPaymentP3",
-			Handler:    _TrxService_InquiryPaymentP3_Handler,
+			Handler:    _TrxLocalService_InquiryPaymentP3_Handler,
 		},
 		{
 			MethodName: "GetTrxListForDocDate",
-			Handler:    _TrxService_GetTrxListForDocDate_Handler,
+			Handler:    _TrxLocalService_GetTrxListForDocDate_Handler,
 		},
 		{
 			MethodName: "UpdateStatusManualTrx",
-			Handler:    _TrxService_UpdateStatusManualTrx_Handler,
+			Handler:    _TrxLocalService_UpdateStatusManualTrx_Handler,
 		},
 		{
 			MethodName: "FindTrxOutstandingByIndex",
-			Handler:    _TrxService_FindTrxOutstandingByIndex_Handler,
+			Handler:    _TrxLocalService_FindTrxOutstandingByIndex_Handler,
 		},
 		{
 			MethodName: "UpdateProductPrice",
-			Handler:    _TrxService_UpdateProductPrice_Handler,
+			Handler:    _TrxLocalService_UpdateProductPrice_Handler,
 		},
 		{
 			MethodName: "RegisterMember",
-			Handler:    _TrxService_RegisterMember_Handler,
+			Handler:    _TrxLocalService_RegisterMember_Handler,
 		},
 		{
 			MethodName: "DecryptMKey",
-			Handler:    _TrxService_DecryptMKey_Handler,
+			Handler:    _TrxLocalService_DecryptMKey_Handler,
 		},
 		{
 			MethodName: "UpdateAutoClearTrx",
-			Handler:    _TrxService_UpdateAutoClearTrx_Handler,
+			Handler:    _TrxLocalService_UpdateAutoClearTrx_Handler,
 		},
 		{
 			MethodName: "ConfirmTrxP3",
-			Handler:    _TrxService_ConfirmTrxP3_Handler,
+			Handler:    _TrxLocalService_ConfirmTrxP3_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

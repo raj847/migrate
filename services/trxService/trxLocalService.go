@@ -1,4 +1,4 @@
-package trxService
+package trxLocalService
 
 import (
 	"context"
@@ -30,17 +30,17 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-type trxService struct {
+type trxLocalService struct {
 	Service services.UsecaseService
 }
 
-func NewTrxService(service services.UsecaseService) trxService {
-	return trxService{
+func NewTrxLocalService(service services.UsecaseService) trxLocalService {
+	return trxLocalService{
 		Service: service,
 	}
 }
 
-func (svc trxService) AddTrxWithCard(ctx context.Context, input *trx.RequestTrxCheckin) (*trx.MyResponse, error) {
+func (svc trxLocalService) AddTrxWithCard(ctx context.Context, input *trx.RequestTrxCheckin) (*trx.MyResponse, error) {
 	var result *trx.Response
 	var resultProduct *prod.PolicyOuProductWithRules
 	resultProduct = nil
@@ -668,19 +668,20 @@ func (svc trxService) AddTrxWithCard(ctx context.Context, input *trx.RequestTrxC
 	}, nil
 }
 
-func (svc trxService) AddTrxWithoutCard(ctx context.Context, input *trx.RequestTrxCheckInWithoutCard) (*trx.MyResponse, error) {
+func (svc trxLocalService) AddTrxWithoutCard(ctx context.Context, input *trx.RequestTrxCheckInWithoutCard) (*trx.MyResponse, error) {
 	var result *trx.Response
 	var resultProduct *prod.PolicyOuProductWithRules
 	resultProduct = nil
 	productName := constans.EMPTY_VALUE
 	productCode := constans.EMPTY_VALUE
 
-	if err := helpers.BindValidateStruct(input); err != nil {
-		result = helpers.ResponseJSON(false, constans.VALIDATE_ERROR_CODE, err.Error(), nil)
-		return &trx.MyResponse{
-			Response: result,
-		}, err
-	}
+	log.Println("INPUT : ", utils.ToString(input))
+	//if err := helpers.BindValidateStruct(input); err != nil {
+	//	result = helpers.ResponseJSON(false, constans.VALIDATE_ERROR_CODE, err.Error(), nil)
+	//	return &trx.MyResponse{
+	//		Response: result,
+	//	}, err
+	//}
 
 	merchantKey, err := utils.DecryptMerchantKey(config.MERCHANT_KEY)
 	if err != nil {
@@ -952,7 +953,7 @@ func (svc trxService) AddTrxWithoutCard(ctx context.Context, input *trx.RequestT
 	}, nil
 }
 
-func (svc trxService) InquiryTrxWithoutCard(ctx context.Context, input *trx.RequestInquiryWithoutCard) (*trx.MyResponse, error) {
+func (svc trxLocalService) InquiryTrxWithoutCard(ctx context.Context, input *trx.RequestInquiryWithoutCard) (*trx.MyResponse, error) {
 	var result *trx.Response
 	var responseTrx *trx.ResultInquiryTrx
 	var ID string
@@ -1628,7 +1629,7 @@ func (svc trxService) InquiryTrxWithoutCard(ctx context.Context, input *trx.Requ
 	}, nil
 }
 
-func (svc trxService) InquiryTrxWithCard(ctx context.Context, input *trx.RequestInquiryWithCard) (*trx.MyResponse, error) {
+func (svc trxLocalService) InquiryTrxWithCard(ctx context.Context, input *trx.RequestInquiryWithCard) (*trx.MyResponse, error) {
 	var result *trx.Response
 	resultInquiryTrxWithCard := make(map[string]interface{})
 	resultInquiryTrxWithCard["memberCode"] = constans.EMPTY_VALUE
@@ -2229,7 +2230,7 @@ func (svc trxService) InquiryTrxWithCard(ctx context.Context, input *trx.Request
 	}, nil
 }
 
-func (svc trxService) ConfirmTrx(ctx context.Context, input *trx.RequestConfirmTrx) (*trx.MyResponse, error) {
+func (svc trxLocalService) ConfirmTrx(ctx context.Context, input *trx.RequestConfirmTrx) (*trx.MyResponse, error) {
 	var result *trx.Response
 	var resultTrx *trx.Trx
 	var resultTrxs models.Trx
@@ -2342,7 +2343,7 @@ func (svc trxService) ConfirmTrx(ctx context.Context, input *trx.RequestConfirmT
 	}, nil
 }
 
-func (svc trxService) ConfirmTrxByPass(ctx context.Context, input *trx.ConfirmTrxByPassMessage) (*trx.MyResponse, error) {
+func (svc trxLocalService) ConfirmTrxByPass(ctx context.Context, input *trx.ConfirmTrxByPassMessage) (*trx.MyResponse, error) {
 	var result *trx.Response
 	var trxs *trx.Trx
 
@@ -2790,7 +2791,7 @@ func (svc trxService) ConfirmTrxByPass(ctx context.Context, input *trx.ConfirmTr
 	}, nil
 }
 
-func (svc trxService) ConfirmSyncTrxToCloud(ctx context.Context, input *trx.Empty) (*trx.MyResponse, error) {
+func (svc trxLocalService) ConfirmSyncTrxToCloud(ctx context.Context, input *trx.Empty) (*trx.MyResponse, error) {
 	var result *trx.Response
 	var trxLists []*trx.Trx
 
@@ -2983,7 +2984,7 @@ func (svc trxService) ConfirmSyncTrxToCloud(ctx context.Context, input *trx.Empt
 	}, nil
 }
 
-func (svc trxService) InquiryPayment(ctx context.Context, input *trx.RequestInquiryPayment) (*trx.MyResponse, error) {
+func (svc trxLocalService) InquiryPayment(ctx context.Context, input *trx.RequestInquiryPayment) (*trx.MyResponse, error) {
 	var result *trx.Response
 
 	if err := helpers.BindValidateStruct(input); err != nil {
@@ -3197,7 +3198,7 @@ func (svc trxService) InquiryPayment(ctx context.Context, input *trx.RequestInqu
 	}, nil
 }
 
-func (svc trxService) InquiryWithCardP3(ctx context.Context, input *trx.RequestInquiryWithCardP3) (*trx.MyResponse, error) {
+func (svc trxLocalService) InquiryWithCardP3(ctx context.Context, input *trx.RequestInquiryWithCardP3) (*trx.MyResponse, error) {
 	var result *trx.Response
 	var resultProducts *prod.PolicyOuProductWithRules
 	var resultProduct models.PolicyOuProductWithRules
@@ -3716,7 +3717,7 @@ func (svc trxService) InquiryWithCardP3(ctx context.Context, input *trx.RequestI
 	}, nil
 }
 
-func (svc trxService) InquiryPaymentP3(ctx context.Context, input *trx.RequestInquiryPaymentP3) (*trx.MyResponse, error) {
+func (svc trxLocalService) InquiryPaymentP3(ctx context.Context, input *trx.RequestInquiryPaymentP3) (*trx.MyResponse, error) {
 	var result *trx.Response
 	//var responseTrx models.ResultInquiryTrx
 	requestInquiry := make(map[string]interface{})
@@ -4301,7 +4302,7 @@ func (svc trxService) InquiryPaymentP3(ctx context.Context, input *trx.RequestIn
 	}, nil
 }
 
-func (svc trxService) ConfirmTrxP3(ctx context.Context, input *trx.RequestConfirmTrx) (*trx.MyResponse, error) { //ppp
+func (svc trxLocalService) ConfirmTrxP3(ctx context.Context, input *trx.RequestConfirmTrx) (*trx.MyResponse, error) { //ppp
 	var result *trx.Response
 	var resultTrx models.Trx
 
@@ -4397,7 +4398,7 @@ func (svc trxService) ConfirmTrxP3(ctx context.Context, input *trx.RequestConfir
 	}, nil
 }
 
-func (svc trxService) GetTrxListForDocDate(ctx context.Context, docDate *trx.Param) (*trx.MyResponse, error) {
+func (svc trxLocalService) GetTrxListForDocDate(ctx context.Context, docDate *trx.Param) (*trx.MyResponse, error) {
 	var result *trx.Response
 	var tempTrxOutstanding *trx.Trx
 	var tempTrxOutstandings []*trx.Trx
@@ -4583,7 +4584,7 @@ func (svc trxService) GetTrxListForDocDate(ctx context.Context, docDate *trx.Par
 	}, nil
 }
 
-func (svc trxService) UpdateStatusManualTrx(ctx context.Context, status *trx.Param) (*trx.MyResponse, error) {
+func (svc trxLocalService) UpdateStatusManualTrx(ctx context.Context, status *trx.Param) (*trx.MyResponse, error) {
 	var result *trx.Response
 
 	var r *http.Request
@@ -4604,7 +4605,7 @@ func (svc trxService) UpdateStatusManualTrx(ctx context.Context, status *trx.Par
 	}, nil
 }
 
-func (svc trxService) UpdateAutoClearTrx(ctx context.Context, status *trx.Param) (*trx.MyResponse, error) {
+func (svc trxLocalService) UpdateAutoClearTrx(ctx context.Context, status *trx.Param) (*trx.MyResponse, error) {
 	var result *trx.Response
 
 	var r *http.Request
@@ -4625,7 +4626,7 @@ func (svc trxService) UpdateAutoClearTrx(ctx context.Context, status *trx.Param)
 	}, nil
 }
 
-func (svc trxService) FindTrxOutstandingByIndex(ctx context.Context, param *trx.Param) (*trx.MyResponse, error) {
+func (svc trxLocalService) FindTrxOutstandingByIndex(ctx context.Context, param *trx.Param) (*trx.MyResponse, error) {
 	var result *trx.Response
 	var r *http.Request
 
@@ -4754,7 +4755,7 @@ func (svc trxService) FindTrxOutstandingByIndex(ctx context.Context, param *trx.
 	}, nil
 }
 
-func (svc trxService) UpdateProductPrice(ctx context.Context, input *trx.RequestUpdateProductPrice) (*trx.MyResponse, error) {
+func (svc trxLocalService) UpdateProductPrice(ctx context.Context, input *trx.RequestUpdateProductPrice) (*trx.MyResponse, error) {
 	var result *trx.Response
 	var r *http.Request
 	ouId := r.Context().Value("id").(float64)
@@ -4917,7 +4918,7 @@ func (svc trxService) UpdateProductPrice(ctx context.Context, input *trx.Request
 	}, nil
 }
 
-func (svc trxService) RegisterMember(ctx context.Context, input *trx.RequestRegistrationMemberLocal) (*trx.MyResponse, error) {
+func (svc trxLocalService) RegisterMember(ctx context.Context, input *trx.RequestRegistrationMemberLocal) (*trx.MyResponse, error) {
 	var result *trx.Response
 	var r *http.Request
 	username := r.Context().Value("id").(string)
@@ -5075,7 +5076,7 @@ func (svc trxService) RegisterMember(ctx context.Context, input *trx.RequestRegi
 	}, nil
 }
 
-func (svc trxService) DecryptMKey(ctx context.Context, input *trx.Decrypt) (*trx.MyResponse, error) {
+func (svc trxLocalService) DecryptMKey(ctx context.Context, input *trx.Decrypt) (*trx.MyResponse, error) {
 	var result *trx.Response
 
 	if err := helpers.BindValidateStruct(input); err != nil {
