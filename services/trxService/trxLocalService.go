@@ -962,7 +962,7 @@ func (svc trxLocalService) AddTrxWithoutCard(ctx context.Context, input *trx.Req
 
 func (svc trxLocalService) InquiryTrxWithoutCard(ctx context.Context, input *trx.RequestInquiryWithoutCard) (*trx.MyResponse, error) {
 	var result *trx.Response
-	var responseTrx *trx.ResultInquiryTrx
+	responseTrx := &trx.ResultInquiryTrx{}
 	var ID string
 
 	log.Println("input", &input)
@@ -1203,8 +1203,6 @@ func (svc trxLocalService) InquiryTrxWithoutCard(ctx context.Context, input *trx
 		}
 
 		productData, existsProduct := svc.Service.TrxMongoRepo.IsTrxProductCustomExistsByKeyword(docNo)
-		log.Println("aaa", productData)
-
 		if existsProduct {
 			input.ProductCode = productData.ProductCode
 		}
@@ -1215,6 +1213,10 @@ func (svc trxLocalService) InquiryTrxWithoutCard(ctx context.Context, input *trx
 			return &trx.MyResponse{
 				Response: result,
 			}, err
+		}
+
+		if resultTrx == nil {
+			log.Println("nil coy")
 		}
 
 		log.Println("result TRX: ", utils.ToString(resultTrx))
@@ -1259,6 +1261,8 @@ func (svc trxLocalService) InquiryTrxWithoutCard(ctx context.Context, input *trx
 		checkinDatetimeParse, _ := time.Parse("2006-01-02 15:04", resultTrx.CheckInDatetime[:len(resultTrx.CheckInDatetime)-3])
 		checkoutDatetimeParse, _ := time.Parse("2006-01-02 15:04", input.InquiryDateTime[:len(input.InquiryDateTime)-3])
 		duration := utils.ConvDiffTime(checkinDatetimeParse, checkoutDatetimeParse)
+		waktu := utils.ConvTimeToProto(duration)
+		anyDuration, _ := anypb.New(waktu)
 
 		log.Println("duration: ", duration)
 		// Request QRIS to A2P
@@ -1266,9 +1270,8 @@ func (svc trxLocalService) InquiryTrxWithoutCard(ctx context.Context, input *trx
 			log.Println("DUDU444")
 			go helperService.CallQRPayment(resultTrx, input, duration, svc.Service)
 		}
-		anyDuration, _ := anypb.New(duration)
 
-		log.Println("any duration: ", utils.ToString(anyDuration))
+		// log.Println("any duration: ", utils.ToString(anyDuration))
 		responseTrx.Id = ID
 		responseTrx.DocNo = docNo
 		responseTrx.Nominal = resultTrx.TrxInvoiceItem[0].TotalAmount

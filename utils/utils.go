@@ -13,8 +13,10 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
 	"github.com/raj847/togrpc/constans"
 	"github.com/raj847/togrpc/models"
+	"github.com/raj847/togrpc/proto/trxLocal"
 
 	"google.golang.org/protobuf/reflect/protoreflect"
 
@@ -208,7 +210,25 @@ type ConvTime struct {
 	Second  int
 }
 
+func ConvTimeToProto(ct ConvTime) *trxLocal.ConvTimeMessage {
+	return &trxLocal.ConvTimeMessage{
+		Date1:   ct.Date1.Unix(),
+		Date2:   ct.Date2.Unix(),
+		Days:    int32(ct.Days),
+		Hours:   int32(ct.Hours),
+		Minutes: int32(ct.Minutes),
+		Second:  int32(ct.Second),
+	}
+}
+
+func handleRecovery() {
+	if r := recover(); r != nil {
+		fmt.Println("Recovered in ProtoReflect:", r)
+	}
+}
+
 func (c ConvTime) ProtoReflect() protoreflect.Message {
+	defer handleRecovery()
 	panic("implement me")
 }
 
