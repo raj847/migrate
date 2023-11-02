@@ -1215,6 +1215,8 @@ func (svc trxLocalService) InquiryTrxWithoutCard(ctx context.Context, input *trx
 			}, err
 		}
 
+		log.Println(resultTrx, "daur")
+
 		if resultTrx == nil {
 			log.Println("nil coy")
 		}
@@ -1899,7 +1901,10 @@ func (svc trxLocalService) ConfirmTrx(ctx context.Context, input *trx.RequestCon
 	var resultTrx *trx.Trx
 	var resultTrxs models.Trx
 
+	log.Println("INPUT : ", input)
+
 	if input.Id == constans.TYPE_PARTNER_FREE_PASS {
+		log.Println("freepass")
 		redisStatus := svc.Service.RedisClientLocal.Get(input.UuidCard)
 		if redisStatus.Err() != nil {
 			result = helpers.ResponseJSON(false, constans.DATA_ERROR_CODE, redisStatus.Err().Error(), nil)
@@ -1924,6 +1929,7 @@ func (svc trxLocalService) ConfirmTrx(ctx context.Context, input *trx.RequestCon
 
 		go helperService.CallSyncConfirmTrxForMemberFreePass(input, resultTrxs, svc.Service)
 	} else if strings.Contains(input.Id, "SERVER") {
+		log.Println("bukan")
 		redisStatus := svc.Service.RedisClientLocal.Get(input.Id)
 		if redisStatus.Err() != nil {
 			result = helpers.ResponseJSON(false, constans.DATA_ERROR_CODE, redisStatus.Err().Error(), nil)
@@ -1948,6 +1954,7 @@ func (svc trxLocalService) ConfirmTrx(ctx context.Context, input *trx.RequestCon
 
 		go helperService.CallSyncConfirmTrxToCloud(nil, input, resultTrxs, svc.Service)
 	} else {
+		log.Println("bukan2")
 		ID, _ := primitive.ObjectIDFromHex(input.Id)
 
 		resultDataTrx, err := svc.Service.TrxMongoRepo.FindTrxOutstandingByID(ID)
@@ -1959,6 +1966,7 @@ func (svc trxLocalService) ConfirmTrx(ctx context.Context, input *trx.RequestCon
 		}
 
 		resultTrxs = resultDataTrx
+		log.Println("result", resultTrxs)
 
 		go helperService.CallSyncConfirmTrxToCloud(&ID, input, resultTrxs, svc.Service)
 	}
@@ -1966,12 +1974,12 @@ func (svc trxLocalService) ConfirmTrx(ctx context.Context, input *trx.RequestCon
 	ipAddr, _ := helpers.GetPrivateIPLocal()
 
 	responseConfirm := &trx.ResponseConfirm{
-		DocNo:            resultTrx.DocNo,
-		ProductData:      resultTrx.ProductData,
+		DocNo:            resultTrxs.DocNo,
+		ProductData:      resultTrxs.ProductData,
 		ProductName:      input.ProductName,
-		CardType:         resultTrx.TypeCard,
+		CardType:         resultTrxs.TypeCard,
 		CardNumber:       input.CardNumber,
-		CheckInDatetime:  resultTrx.CheckinDateTime,
+		CheckInDatetime:  resultTrxs.CheckInDatetime,
 		CheckOutDatetime: input.CheckOutDatetime,
 		VehicleNumberIn:  input.VehicleNumber,
 		VehicleNumberOut: input.VehicleNumber,
@@ -1979,8 +1987,8 @@ func (svc trxLocalService) ConfirmTrx(ctx context.Context, input *trx.RequestCon
 		ShowQRISArea:     constans.EMPTY_VALUE,
 		CurrentBalance:   input.CurrentBalance,
 		GrandTotal:       input.GrandTotal,
-		OuCode:           resultTrx.OuCode,
-		OuName:           resultTrx.OuName,
+		OuCode:           resultTrxs.OuCode,
+		OuName:           resultTrxs.OuName,
 		Address:          config.ADDRESS,
 		IpAddr:           ipAddr,
 	}
@@ -4571,8 +4579,8 @@ func (svc trxLocalService) UpdateProductPrice(ctx context.Context, input *trx.Re
 func (svc trxLocalService) RegisterMember(ctx context.Context, input *trx.RequestRegistrationMemberLocal) (*trx.MyResponse, error) {
 	var result *trx.Response
 	var r *http.Request
-	username := r.Context().Value("id").(string)
-	ouId := r.Context().Value("id").(float64)
+	username := r.Context().Value("username").(string)
+	ouId := r.Context().Value("isAdmin").(float64)
 	var trxOutstanding *models.ResultFindTrxOutstanding
 	var trxOutstandings *trx.ResultFindTrxOutstanding
 	var err error

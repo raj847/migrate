@@ -1015,6 +1015,9 @@ service trxLocalService {
   rpc DecryptMKey(Decrypt) returns (MyResponse) {}
   rpc UpdateAutoClearTrx(Param) returns (MyResponse) {}
   rpc ConfirmTrxP3(RequestConfirmTrx) returns(MyResponse) {}
+  rpc AddTrxWithoutCardCustom(RequestTrxCheckInWithoutCard) returns(MyResponse) {}
+  rpc InquiryTrxCardCustom(RequestInquiryWithCardCustom) returns(MyResponse) {}
+  rpc ConfirmTrxCustom(RequestConfirmTrx) returns(MyResponse) {}
 }
 
 option go_package = "/;trxLocal";
