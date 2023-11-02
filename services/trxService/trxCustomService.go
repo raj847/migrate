@@ -603,19 +603,19 @@ func (svc trxCustomService) InquiryTrxCardCustom(ctx context.Context, input *trx
 		OuCode:          documentInq["ouCode"].(string),
 	}
 
-	checkinDatetimeParse, _ := time.Parse("2006-01-02 15:04", documentInq["checkinDatetime"].(string)[:len(documentInq["checkinDatetime"].(string))-3])
-	checkoutDatetimeParse, _ := time.Parse("2006-01-02 15:04", input.InquiryDateTime[:len(input.InquiryDateTime)-3])
-	duration := utils.ConvDiffTime(checkinDatetimeParse, checkoutDatetimeParse)
+	// checkinDatetimeParse, _ := time.Parse("2006-01-02 15:04", documentInq["checkinDatetime"].(string)[:len(documentInq["checkinDatetime"].(string))-3])
+	// checkoutDatetimeParse, _ := time.Parse("2006-01-02 15:04", input.InquiryDateTime[:len(input.InquiryDateTime)-3])
+	// duration := utils.ConvDiffTime(checkinDatetimeParse, checkoutDatetimeParse)
 
-	responseTrx.Duration = duration
+	// responseTrx.Duration = duration
 
 	if documentInq["lastCheckInDatetime"].(string) != constans.EMPTY_VALUE {
-		layout := "2006-01-02 15:04"
-		lastCheckInDatetimeFormat, _ := time.Parse(layout, documentInq["lastCheckInDatetime"].(string)[:len(documentInq["lastCheckInDatetime"].(string))-3])
-		inquiryDatetimeFormat, _ := time.Parse(layout, input.InquiryDateTime[:len(input.InquiryDateTime)-3])
-		duration24h := utils.ConvDiffTime(lastCheckInDatetimeFormat, inquiryDatetimeFormat)
+		// layout := "2006-01-02 15:04"
+		// lastCheckInDatetimeFormat, _ := time.Parse(layout, documentInq["lastCheckInDatetime"].(string)[:len(documentInq["lastCheckInDatetime"].(string))-3])
+		// inquiryDatetimeFormat, _ := time.Parse(layout, input.InquiryDateTime[:len(input.InquiryDateTime)-3])
+		// duration24h := utils.ConvDiffTime(lastCheckInDatetimeFormat, inquiryDatetimeFormat)
 
-		responseTrx.Duration24H = duration24h
+		// responseTrx.Duration24H = duration24h
 	}
 
 	anyResponseTrx, _ := anypb.New(responseTrx)
